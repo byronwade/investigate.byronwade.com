@@ -1,0 +1,746 @@
+---
+globs: core/**/*.ts
+description: "Core business logic organization and patterns for InvestigatAI domain layer"
+---
+
+# InvestigatAI Core Business Logic Standards
+
+## Domain-Driven Design Patterns
+
+### 1. Entity Design
+Entities represent core business objects with identity:
+
+```typescript
+// core/investigation/entities/investigation.ts
+export class Investigation {
+  private constructor(
+    private readonly _id: string,
+    private _name: string,
+    private _description: string | null,
+    private _status: InvestigationStatus,
+    private readonly _createdBy: string,
+    private readonly _createdAt: Date,
+    private _updatedAt: Date,
+    private _evidenceFiles: EvidenceFile[] = [],
+    private _timeline: TimelineEvent[] = []
+  ) {}
+  
+  // Factory method for creation
+  static create(data: CreateInvestigationData): Investigation {
+    const id = generateId();
+    const now = new Date();
+    
+    return new Investigation(
+      id,
+      data.name,
+      data.description || null,
+      InvestigationStatus.DRAFT,
+      data.createdBy,
+      now,
+      now
+    );
+  }
+  
+  // Factory method for reconstruction from database
+  static fromPersistence(data: InvestigationPersistenceData): Investigation {
+    return new Investigation(
+      data.id,
+      data.name,
+      data.description,
+      data.status,
+      data.created_by,
+      new Date(data.created_at),
+      new Date(data.updated_at),
+      data.evidence_files?.map(EvidenceFile.fromPersistence) || [],
+      data.timeline_events?.map(TimelineEvent.fromPersistence) || []
+    );
+  }
+  
+  // Getters for immutable access
+  get id(): string { return this._id; }
+  get name(): string { return this._name; }
+  get status(): InvestigationStatus { return this._status; }
+  get createdBy(): string { return this._createdBy; }
+  get evidenceFiles(): ReadonlyArray<EvidenceFile> { return this._evidenceFiles; }
+  
+  // Business methods
+  updateName(newName: string): void {
+    this.validateName(newName);
+    this._name = newName;
+    this._updatedAt = new Date();
+  }
+  
+  addEvidenceFile(file: EvidenceFile): void {
+    if (this._status === InvestigationStatus.ARCHIVED) {
+      throw new DomainError("Cannot add evidence to archived investigation");
+    }
+    
+    this._evidenceFiles.push(file);
+    this._updatedAt = new Date();
+  }
+  
+  startAnalysis(): void {
+    if (this._status !== InvestigationStatus.DRAFT) {
+      throw new DomainError("Investigation must be in draft status to start analysis");
+    }
+    
+    if (this._evidenceFiles.length === 0) {
+      throw new DomainError("Cannot start analysis without evidence files");
+    }
+    
+    this._status = InvestigationStatus.ACTIVE;
+    this._updatedAt = new Date();
+  }
+  
+  private validateName(name: string): void {
+    if (!name || name.trim().length === 0) {
+      throw new DomainError("Investigation name cannot be empty");
+    }
+    
+    if (name.length > 100) {
+      throw new DomainError("Investigation name cannot exceed 100 characters");
+    }
+  }
+  
+  // Convert to persistence format
+  toPersistence(): InvestigationPersistenceData {
+    return {
+      id: this._id,
+      name: this._name,
+      description: this._description,
+      status: this._status,
+      created_by: this._createdBy,
+      created_at: this._createdAt.toISOString(),
+      updated_at: this._updatedAt.toISOString()
+    };
+  }
+}
+```
+
+### 2. Value Objects
+Value objects represent concepts without identity:
+
+```typescript
+// core/evidence/value-objects/file-metadata.ts
+export class FileMetadata {
+  constructor(
+    private readonly _originalName: string,
+    private readonly _mimeType: string,
+    private readonly _size: number,
+    private readonly _checksum: string,
+    private readonly _uploadedAt: Date,
+    private readonly _exifData?: Record<string, any>,
+    private readonly _gpsCoordinates?: GPSCoordinates
+  ) {
+    this.validate();
+  }
+  
+  get originalName(): string { return this._originalName; }
+  get mimeType(): string { return this._mimeType; }
+  get size(): number { return this._size; }
+  get checksum(): string { return this._checksum; }
+  get uploadedAt(): Date { return this._uploadedAt; }
+  get gpsCoordinates(): GPSCoordinates | undefined { return this._gpsCoordinates; }
+  
+  isImage(): boolean {
+    return this._mimeType.startsWith("image/");
+  }
+  
+  isVideo(): boolean {
+    return this._mimeType.startsWith("video/");
+  }
+  
+  isDocument(): boolean {
+    return this._mimeType.includes("pdf") || this._mimeType.includes("document");
+  }
+  
+  equals(other: FileMetadata): boolean {
+    return (
+      this._originalName === other._originalName &&
+      this._mimeType === other._mimeType &&
+      this._size === other._size &&
+      this._checksum === other._checksum
+    );
+  }
+  
+  private validate(): void {
+    if (!this._originalName || this._originalName.trim().length === 0) {
+      throw new DomainError("File name cannot be empty");
+    }
+    
+    if (this._size <= 0) {
+      throw new DomainError("File size must be positive");
+    }
+    
+    if (!this._checksum || this._checksum.length !== 64) {
+      throw new DomainError("Invalid checksum format");
+    }
+  }
+}
+
+export class GPSCoordinates {
+  constructor(
+    private readonly _latitude: number,
+    private readonly _longitude: number,
+    private readonly _altitude?: number
+  ) {
+    this.validate();
+  }
+  
+  get latitude(): number { return this._latitude; }
+  get longitude(): number { return this._longitude; }
+  get altitude(): number | undefined { return this._altitude; }
+  
+  distanceTo(other: GPSCoordinates): number {
+    // Calculate distance using Haversine formula
+    const R = 6371; // Earth's radius in kilometers
+    const dLat = this.toRadians(other._latitude - this._latitude);
+    const dLon = this.toRadians(other._longitude - this._longitude);
+    
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(this.toRadians(this._latitude)) * Math.cos(this.toRadians(other._latitude)) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  }
+  
+  private toRadians(degrees: number): number {
+    return degrees * (Math.PI / 180);
+  }
+  
+  private validate(): void {
+    if (this._latitude < -90 || this._latitude > 90) {
+      throw new DomainError("Latitude must be between -90 and 90 degrees");
+    }
+    
+    if (this._longitude < -180 || this._longitude > 180) {
+      throw new DomainError("Longitude must be between -180 and 180 degrees");
+    }
+  }
+}
+```
+
+### 3. Domain Services
+Handle business logic that doesn't belong to a single entity:
+
+```typescript
+// core/investigation/services/investigation-analyzer.ts
+export class InvestigationAnalyzer {
+  constructor(
+    private readonly aiService: AIAnalysisService,
+    private readonly timelineService: TimelineService,
+    private readonly entityService: EntityExtractionService
+  ) {}
+  
+  async analyzeEvidence(
+    investigation: Investigation,
+    evidenceFile: EvidenceFile
+  ): Promise<AnalysisResult> {
+    // 1. Validate preconditions
+    if (!investigation.canAnalyzeEvidence()) {
+      throw new DomainError("Investigation is not in a state that allows analysis");
+    }
+    
+    if (!evidenceFile.isReadyForAnalysis()) {
+      throw new DomainError("Evidence file is not ready for analysis");
+    }
+    
+    // 2. Perform AI analysis based on file type
+    const analysisResults: AIAnalysisResult[] = [];
+    
+    if (evidenceFile.metadata.isImage()) {
+      const ocrResult = await this.aiService.performOCR(evidenceFile);
+      const objectDetection = await this.aiService.detectObjects(evidenceFile);
+      const faceRecognition = await this.aiService.recognizeFaces(evidenceFile);
+      
+      analysisResults.push(ocrResult, objectDetection, faceRecognition);
+    } else if (evidenceFile.metadata.isVideo()) {
+      const videoAnalysis = await this.aiService.analyzeVideo(evidenceFile);
+      analysisResults.push(videoAnalysis);
+    } else if (evidenceFile.metadata.isDocument()) {
+      const textExtraction = await this.aiService.extractText(evidenceFile);
+      const metadataExtraction = await this.aiService.extractMetadata(evidenceFile);
+      
+      analysisResults.push(textExtraction, metadataExtraction);
+    }
+    
+    // 3. Extract entities and timeline events
+    const entities = await this.extractEntities(analysisResults);
+    const timelineEvents = await this.extractTimelineEvents(evidenceFile, analysisResults);
+    
+    // 4. Update investigation with findings
+    entities.forEach(entity => investigation.addEntity(entity));
+    timelineEvents.forEach(event => investigation.addTimelineEvent(event));
+    
+    // 5. Generate analysis summary
+    return new AnalysisResult(
+      evidenceFile.id,
+      analysisResults,
+      entities,
+      timelineEvents,
+      this.calculateConfidenceScore(analysisResults)
+    );
+  }
+  
+  private async extractEntities(analysisResults: AIAnalysisResult[]): Promise<Entity[]> {
+    const entities: Entity[] = [];
+    
+    for (const result of analysisResults) {
+      if (result.type === "face_recognition") {
+        result.faces.forEach(face => {
+          entities.push(new PersonEntity(
+            face.id,
+            face.name || "Unknown Person",
+            face.confidence,
+            face.boundingBox
+          ));
+        });
+      }
+      
+      if (result.type === "text_extraction") {
+        const extractedEntities = await this.entityService.extractFromText(result.text);
+        entities.push(...extractedEntities);
+      }
+    }
+    
+    return entities;
+  }
+  
+  private async extractTimelineEvents(
+    evidenceFile: EvidenceFile,
+    analysisResults: AIAnalysisResult[]
+  ): Promise<TimelineEvent[]> {
+    const events: TimelineEvent[] = [];
+    
+    // Extract timestamp from file metadata
+    const fileTimestamp = evidenceFile.metadata.uploadedAt;
+    events.push(new TimelineEvent(
+      generateId(),
+      fileTimestamp,
+      "Evidence Collected",
+      `File ${evidenceFile.metadata.originalName} was added to investigation`,
+      evidenceFile.id
+    ));
+    
+    // Extract events from GPS data if available
+    if (evidenceFile.metadata.gpsCoordinates) {
+      events.push(new TimelineEvent(
+        generateId(),
+        fileTimestamp,
+        "Location Recorded",
+        `Evidence collected at ${evidenceFile.metadata.gpsCoordinates.latitude}, ${evidenceFile.metadata.gpsCoordinates.longitude}`,
+        evidenceFile.id
+      ));
+    }
+    
+    // Extract events from AI analysis
+    for (const result of analysisResults) {
+      if (result.timestamps) {
+        result.timestamps.forEach(timestamp => {
+          events.push(new TimelineEvent(
+            generateId(),
+            timestamp.dateTime,
+            timestamp.event,
+            timestamp.description,
+            evidenceFile.id
+          ));
+        });
+      }
+    }
+    
+    return events;
+  }
+  
+  private calculateConfidenceScore(analysisResults: AIAnalysisResult[]): number {
+    if (analysisResults.length === 0) return 0;
+    
+    const totalConfidence = analysisResults.reduce(
+      (sum, result) => sum + result.confidence,
+      0
+    );
+    
+    return totalConfidence / analysisResults.length;
+  }
+}
+```
+
+### 4. Repository Interfaces
+Define contracts for data access:
+
+```typescript
+// core/investigation/repositories/investigation-repository.ts
+export interface InvestigationRepository {
+  findById(id: string): Promise<Investigation | null>;
+  findByUserId(userId: string): Promise<Investigation[]>;
+  findByStatus(status: InvestigationStatus): Promise<Investigation[]>;
+  save(investigation: Investigation): Promise<Investigation>;
+  delete(id: string): Promise<void>;
+  
+  // Query methods
+  findWithFilters(filters: InvestigationFilters): Promise<PaginatedResult<Investigation>>;
+  searchByKeyword(keyword: string, userId: string): Promise<Investigation[]>;
+  findRecentlyUpdated(userId: string, limit: number): Promise<Investigation[]>;
+}
+
+export interface InvestigationFilters {
+  userId?: string;
+  status?: InvestigationStatus;
+  createdAfter?: Date;
+  createdBefore?: Date;
+  keyword?: string;
+  pagination?: PaginationOptions;
+}
+
+export interface PaginationOptions {
+  page: number;
+  limit: number;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+}
+
+export interface PaginatedResult<T> {
+  items: T[];
+  totalCount: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+```
+
+### 5. Application Services
+Orchestrate business workflows:
+
+```typescript
+// core/investigation/services/investigation-service.ts
+export class InvestigationService {
+  constructor(
+    private readonly investigationRepo: InvestigationRepository,
+    private readonly evidenceRepo: EvidenceFileRepository,
+    private readonly analyzer: InvestigationAnalyzer,
+    private readonly authService: AuthorizationService,
+    private readonly eventPublisher: DomainEventPublisher
+  ) {}
+  
+  async createInvestigation(
+    data: CreateInvestigationCommand,
+    userId: string
+  ): Promise<Investigation> {
+    // 1. Authorization check
+    await this.authService.checkPermission(userId, "investigation:create");
+    
+    // 2. Validate business rules
+    await this.validateCreateInvestigation(data, userId);
+    
+    // 3. Create domain entity
+    const investigation = Investigation.create({
+      name: data.name,
+      description: data.description,
+      createdBy: userId
+    });
+    
+    // 4. Persist to database
+    const savedInvestigation = await this.investigationRepo.save(investigation);
+    
+    // 5. Publish domain event
+    await this.eventPublisher.publish(new InvestigationCreatedEvent(
+      savedInvestigation.id,
+      savedInvestigation.name,
+      userId
+    ));
+    
+    return savedInvestigation;
+  }
+  
+  async addEvidenceToInvestigation(
+    investigationId: string,
+    evidenceFile: EvidenceFile,
+    userId: string
+  ): Promise<void> {
+    // 1. Load investigation
+    const investigation = await this.investigationRepo.findById(investigationId);
+    if (!investigation) {
+      throw new NotFoundError("Investigation not found");
+    }
+    
+    // 2. Authorization check
+    await this.authService.checkInvestigationAccess(
+      userId, 
+      investigationId, 
+      "evidence:add"
+    );
+    
+    // 3. Business logic
+    investigation.addEvidenceFile(evidenceFile);
+    
+    // 4. Persist changes
+    await this.investigationRepo.save(investigation);
+    await this.evidenceRepo.save(evidenceFile);
+    
+    // 5. Trigger analysis
+    await this.queueAnalysis(investigation, evidenceFile);
+    
+    // 6. Publish event
+    await this.eventPublisher.publish(new EvidenceAddedEvent(
+      investigationId,
+      evidenceFile.id,
+      userId
+    ));
+  }
+  
+  async analyzeEvidence(
+    investigationId: string,
+    evidenceFileId: string,
+    userId: string
+  ): Promise<AnalysisResult> {
+    // 1. Load entities
+    const investigation = await this.investigationRepo.findById(investigationId);
+    const evidenceFile = await this.evidenceRepo.findById(evidenceFileId);
+    
+    if (!investigation || !evidenceFile) {
+      throw new NotFoundError("Investigation or evidence file not found");
+    }
+    
+    // 2. Authorization
+    await this.authService.checkInvestigationAccess(
+      userId,
+      investigationId,
+      "evidence:analyze"
+    );
+    
+    // 3. Perform analysis
+    const result = await this.analyzer.analyzeEvidence(investigation, evidenceFile);
+    
+    // 4. Update evidence file status
+    evidenceFile.markAsAnalyzed(result);
+    
+    // 5. Persist changes
+    await this.investigationRepo.save(investigation);
+    await this.evidenceRepo.save(evidenceFile);
+    
+    // 6. Publish event
+    await this.eventPublisher.publish(new EvidenceAnalyzedEvent(
+      investigationId,
+      evidenceFileId,
+      result.confidence,
+      userId
+    ));
+    
+    return result;
+  }
+  
+  private async validateCreateInvestigation(
+    data: CreateInvestigationCommand,
+    userId: string
+  ): Promise<void> {
+    // Check user investigation limits
+    const userInvestigations = await this.investigationRepo.findByUserId(userId);
+    const activeInvestigations = userInvestigations.filter(
+      inv => inv.status === InvestigationStatus.ACTIVE
+    );
+    
+    if (activeInvestigations.length >= 10) {
+      throw new DomainError("Maximum active investigations limit reached");
+    }
+    
+    // Check for duplicate names
+    const duplicateName = userInvestigations.some(
+      inv => inv.name.toLowerCase() === data.name.toLowerCase()
+    );
+    
+    if (duplicateName) {
+      throw new DomainError("Investigation name already exists");
+    }
+  }
+  
+  private async queueAnalysis(
+    investigation: Investigation,
+    evidenceFile: EvidenceFile
+  ): Promise<void> {
+    // Queue analysis job for background processing
+    await this.eventPublisher.publish(new AnalysisRequestedEvent(
+      investigation.id,
+      evidenceFile.id,
+      evidenceFile.metadata.mimeType
+    ));
+  }
+}
+```
+
+## Domain Events
+
+### 1. Event Definition
+```typescript
+// core/shared/events/domain-events.ts
+export abstract class DomainEvent {
+  constructor(
+    public readonly aggregateId: string,
+    public readonly occurredAt: Date = new Date(),
+    public readonly eventId: string = generateId()
+  ) {}
+  
+  abstract get eventType(): string;
+}
+
+export class InvestigationCreatedEvent extends DomainEvent {
+  constructor(
+    investigationId: string,
+    public readonly name: string,
+    public readonly createdBy: string
+  ) {
+    super(investigationId);
+  }
+  
+  get eventType(): string {
+    return "investigation.created";
+  }
+}
+
+export class EvidenceAnalyzedEvent extends DomainEvent {
+  constructor(
+    investigationId: string,
+    public readonly evidenceFileId: string,
+    public readonly confidence: number,
+    public readonly analyzedBy: string
+  ) {
+    super(investigationId);
+  }
+  
+  get eventType(): string {
+    return "evidence.analyzed";
+  }
+}
+```
+
+### 2. Event Publisher
+```typescript
+// core/shared/events/event-publisher.ts
+export interface DomainEventPublisher {
+  publish(event: DomainEvent): Promise<void>;
+  publishBatch(events: DomainEvent[]): Promise<void>;
+}
+
+export class EventPublisher implements DomainEventPublisher {
+  constructor(
+    private readonly eventStore: EventStore,
+    private readonly handlers: Map<string, DomainEventHandler[]>
+  ) {}
+  
+  async publish(event: DomainEvent): Promise<void> {
+    // 1. Store event
+    await this.eventStore.append(event);
+    
+    // 2. Notify handlers
+    const handlers = this.handlers.get(event.eventType) || [];
+    await Promise.all(
+      handlers.map(handler => handler.handle(event))
+    );
+  }
+  
+  registerHandler(eventType: string, handler: DomainEventHandler): void {
+    if (!this.handlers.has(eventType)) {
+      this.handlers.set(eventType, []);
+    }
+    this.handlers.get(eventType)!.push(handler);
+  }
+}
+```
+
+## Error Handling
+
+### 1. Domain Errors
+```typescript
+// core/shared/errors/domain-errors.ts
+export abstract class DomainError extends Error {
+  constructor(
+    message: string,
+    public readonly code: string
+  ) {
+    super(message);
+    this.name = this.constructor.name;
+  }
+}
+
+export class InvestigationNotFoundError extends DomainError {
+  constructor(investigationId: string) {
+    super(
+      `Investigation with ID ${investigationId} not found`,
+      "INVESTIGATION_NOT_FOUND"
+    );
+  }
+}
+
+export class UnauthorizedAccessError extends DomainError {
+  constructor(userId: string, resource: string) {
+    super(
+      `User ${userId} does not have access to ${resource}`,
+      "UNAUTHORIZED_ACCESS"
+    );
+  }
+}
+
+export class InvalidInvestigationStateError extends DomainError {
+  constructor(currentState: string, operation: string) {
+    super(
+      `Cannot perform ${operation} on investigation in ${currentState} state`,
+      "INVALID_INVESTIGATION_STATE"
+    );
+  }
+}
+```
+
+## Testing Standards
+
+### 1. Domain Entity Tests
+```typescript
+// core/investigation/entities/__tests__/investigation.test.ts
+describe("Investigation Entity", () => {
+  describe("creation", () => {
+    it("should create investigation with valid data", () => {
+      const data = {
+        name: "Test Investigation",
+        description: "Test description",
+        createdBy: "user-123"
+      };
+      
+      const investigation = Investigation.create(data);
+      
+      expect(investigation.name).toBe(data.name);
+      expect(investigation.status).toBe(InvestigationStatus.DRAFT);
+      expect(investigation.createdBy).toBe(data.createdBy);
+    });
+    
+    it("should throw error for invalid name", () => {
+      const data = {
+        name: "",
+        description: "Test description", 
+        createdBy: "user-123"
+      };
+      
+      expect(() => Investigation.create(data))
+        .toThrow(DomainError);
+    });
+  });
+  
+  describe("evidence management", () => {
+    it("should add evidence file to draft investigation", () => {
+      const investigation = createTestInvestigation();
+      const evidenceFile = createTestEvidenceFile();
+      
+      investigation.addEvidenceFile(evidenceFile);
+      
+      expect(investigation.evidenceFiles).toHaveLength(1);
+      expect(investigation.evidenceFiles[0]).toBe(evidenceFile);
+    });
+    
+    it("should not allow adding evidence to archived investigation", () => {
+      const investigation = createTestInvestigation();
+      investigation.archive();
+      const evidenceFile = createTestEvidenceFile();
+      
+      expect(() => investigation.addEvidenceFile(evidenceFile))
+        .toThrow(DomainError);
+    });
+  });
+});
+```
