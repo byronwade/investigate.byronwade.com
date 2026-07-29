@@ -1,0 +1,222 @@
+# DESIGN.md
+
+Authoritative design system for Investigate.
+
+**Every AI agent and contributor must read this file before creating or modifying user-facing UI.**
+
+Tokens live in `src/styles/tokens.css`. Prefer CSS variables over hardcoded Tailwind color/spacing values.
+
+## Product design principles
+
+1. **Clarity over decoration** — one job per section
+2. **Brand first** — product name is a hero-level signal on branded surfaces
+3. **Calm density** — professional SaaS, not dashboard clutter in marketing views
+4. **Token-driven** — no one-off hardcoded styling when a token should exist
+5. **Accessible by default** — keyboard, contrast, focus-visible, reduced motion
+6. **Progressive enhancement** — useful without excessive client JS
+
+## Visual hierarchy
+
+- Display headings use `--font-display` (Fraunces)
+- Body uses `--font-sans` (Source Sans 3)
+- Code/meta uses `--font-mono` (IBM Plex Mono)
+- One primary CTA per viewport
+- Muted text for supporting copy (`--color-fg-muted`)
+
+## Spacing system
+
+4px base scale via tokens: `--space-1` … `--space-24`.
+
+Common patterns:
+
+- Section vertical padding: `--space-12` / `--space-16`
+- Stack gaps: `--space-3` / `--space-4`
+- Inline control gaps: `--space-2` / `--space-3`
+
+## Typography scale
+
+| Token | Size | Use |
+| --- | --- | --- |
+| `--text-xs` | 12px | Labels, meta |
+| `--text-sm` | 14px | Secondary UI |
+| `--text-base` | 16px | Body |
+| `--text-lg` | 18px | Lead paragraphs |
+| `--text-xl`–`--text-5xl` | 20–48px | Headings |
+
+Line heights: tight for display, normal for UI, relaxed for long reading.
+
+## Color-token strategy
+
+- Brand greens (`--color-brand-*`) for primary actions
+- Cool neutrals (`--color-neutral-*`) — avoid warm cream defaults
+- Accent blue for informational emphasis — not purple gradients
+- Semantic colors for danger/warning/success
+
+## Semantic design tokens
+
+Use semantic tokens in components:
+
+- `--color-bg`, `--color-bg-elevated`, `--color-fg`, `--color-fg-muted`
+- `--color-border`, `--color-primary`, `--color-primary-fg`
+- `--color-danger`, `--color-warning`, `--color-success`
+- `--color-focus-ring`
+
+## Light and dark theme rules
+
+- Default follows system preference via `theme-boot.js`, overridable by toggle
+- Theme attribute: `html[data-theme='light'|'dark']`
+- Do not invent separate one-off dark colors in components — extend tokens
+
+## Border radius
+
+- `--radius-sm` controls
+- `--radius-md` buttons/inputs
+- `--radius-lg` surfaces
+- Avoid pill-everywhere patterns
+
+## Elevation and shadows
+
+- Prefer border + subtle `--shadow-sm` for surfaces
+- `--shadow-md` / `--shadow-lg` sparingly for overlays
+- No multi-layer neon/glow aesthetics
+
+## Layout width conventions
+
+- Content: `--width-content` (72rem) via `.container-content`
+- Narrow reading/forms: `--width-narrow` via `.container-narrow`
+- Header height: `--header-height`
+
+## Responsive breakpoints
+
+Mobile-first. Practical Tailwind breakpoints:
+
+- `sm`: 640px
+- `md`: 768px
+- `lg`: 1024px
+- `xl`: 1280px
+
+Primary nav may collapse on small screens; ensure equivalent access exists.
+
+## Mobile-first behavior
+
+- Stack before splitting columns
+- Touch targets ≥ 44px where practical (`h-11` buttons)
+- Avoid horizontal overflow
+
+## Navigation conventions
+
+- Landmark `<nav aria-label="Primary">`
+- Active route indication via router `active` class styling
+- Skip link to `#main-content`
+- Focus main content on route change
+
+## Form layout rules
+
+- Label above control
+- One primary submit action
+- Group related fields with spacing, not heavy cards inside cards
+- Use `noValidate` only when custom accessible validation is provided
+
+## Validation and error presentation
+
+- Inline errors adjacent to fields
+- `aria-invalid` + `aria-describedby` linking to error text
+- `role="alert"` for errors; `role="status"` for success
+- Never rely on color alone
+
+## State patterns
+
+| State | Guidance |
+| --- | --- |
+| Loading | Calm text or pending route component; `aria-live` |
+| Empty | Explain next action |
+| Success | Short confirmation in status region |
+| Warning | Use warning tokens |
+| Error | Specific, recoverable messaging |
+
+## Tables and density
+
+- Prefer readable density over cramped grids
+- Sticky header optional for long tables
+- Align numeric columns consistently when tables are introduced
+
+## Overlay conventions
+
+- Modal/sheet: focus trap, Esc to close, restore focus
+- Popover/menu: keyboard arrow support via accessible primitives when added
+- Tooltip: supplemental only — never required information
+- Default: no cards in heroes; surfaces only when they aid interaction
+
+## Animation and motion
+
+- Use `--duration-*` and `--ease-standard`
+- Intentional motion only (fade/fade-up helpers)
+- No decorative perpetual animation
+
+## Reduced motion
+
+- Tokens collapse durations under `prefers-reduced-motion`
+- Utility animations disabled in CSS
+
+## Keyboard accessibility
+
+- All interactive controls focusable
+- Logical tab order
+- No keyboard traps outside modals
+
+## Focus-visible styling
+
+Global `:focus-visible` uses `--color-focus-ring`. Do not remove outlines without an equivalent.
+
+## Contrast
+
+Aim for WCAG 2.2 AA for text and interactive contrast. Prefer semantic tokens already tuned for light/dark.
+
+## Icon usage
+
+- Prefer sparse icons with text labels
+- Decorative icons: `aria-hidden="true"`
+- Do not use emoji as UI icons
+
+## Image usage
+
+- Meaningful images need descriptive `alt`
+- Decorative images: empty `alt`
+- Prefer modern formats; size appropriately
+
+## Content tone
+
+- Direct, professional, concise
+- Avoid hype and fake product copy
+- Prefer concrete guidance
+
+## Component reuse
+
+- Check `src/components/ui` and `src/features` before creating new UI
+- Extend primitives instead of cloning
+- Keep features owning feature-specific UI
+
+## Hardcoding prohibition
+
+Do not hardcode colors, radii, or shadows when a token exists.
+If a new value is needed, add a token and document it here.
+
+## Extending the design system
+
+1. Add/adjust tokens in `src/styles/tokens.css`
+2. Document the change in this file
+3. Prefer semantic tokens over new brand steps when possible
+4. Add a visual example in the starter UI if the pattern is shared
+
+## UI review checklist
+
+- [ ] Read this file before implementation
+- [ ] Brand/product name hierarchy correct
+- [ ] Tokens used instead of one-offs
+- [ ] Light and dark verified
+- [ ] Spacing matches scale
+- [ ] Focus-visible and keyboard paths verified
+- [ ] Forms have labels and accessible errors
+- [ ] Reduced motion respected
+- [ ] No unnecessary cards/pills/glow
+- [ ] Mobile layout works without horizontal scroll

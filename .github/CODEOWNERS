@@ -1,0 +1,9 @@
+# Replace @byronwade with your GitHub team or usernames.
+# CODEOWNERS requires GitHub plan features for enforcement via branch protection.
+
+* @byronwade
+
+/.github/ @byronwade
+/docs/ @byronwade
+/DESIGN.md @byronwade
+/AGENTS.md @byronwade

@@ -1,0 +1,25 @@
+# Escape hatch: LEFTHOOK=0 git commit / LEFTHOOK=0 git push
+# Bypassing hooks never bypasses CI requirements.
+
+pre-commit:
+  parallel: true
+  commands:
+    biome:
+      glob: "*.{js,jsx,ts,tsx,json,jsonc}"
+      run: pnpm exec biome check --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
+      stage_fixed: true
+
+commit-msg:
+  commands:
+    conventional:
+      run: pnpm exec commitlint --edit {1}
+
+pre-push:
+  parallel: false
+  commands:
+    typecheck:
+      run: pnpm typecheck
+    lint:
+      run: pnpm check
+    unit:
+      run: pnpm test:unit
