@@ -6,13 +6,23 @@ import { z } from 'zod';
  * - Server vars: only read via getServerEnv() from server-only modules.
  */
 
+/** Treat missing/blank Vite env values as undefined so Zod defaults apply. */
+export function emptyToUndefined(value: unknown): unknown {
+  if (value === undefined || value === null) return undefined;
+  if (typeof value === 'string' && value.trim() === '') return undefined;
+  return value;
+}
+
 const publicEnvSchema = z.object({
-  VITE_APP_NAME: z.string().min(1).default('Investigate'),
-  VITE_APP_URL: z.string().url().default('http://localhost:3000'),
-  VITE_ENABLE_ANALYTICS: z
-    .enum(['true', 'false'])
-    .default('false')
-    .transform((value) => value === 'true'),
+  VITE_APP_NAME: z.preprocess(emptyToUndefined, z.string().min(1).default('Investigate')),
+  VITE_APP_URL: z.preprocess(emptyToUndefined, z.string().url().default('http://localhost:3000')),
+  VITE_ENABLE_ANALYTICS: z.preprocess(
+    emptyToUndefined,
+    z
+      .enum(['true', 'false'])
+      .default('false')
+      .transform((value) => value === 'true'),
+  ),
 });
 
 const serverEnvSchema = z.object({
@@ -32,20 +42,28 @@ function formatZodError(error: z.ZodError): string {
     .join('; ');
 }
 
+/** Parse public env from an explicit input map (also used by tests). */
+export function parsePublicEnv(input: {
+  VITE_APP_NAME?: string | undefined;
+  VITE_APP_URL?: string | undefined;
+  VITE_ENABLE_ANALYTICS?: string | undefined;
+}): PublicEnv {
+  const result = publicEnvSchema.safeParse(input);
+  if (!result.success) {
+    throw new Error(`Invalid public environment variables: ${formatZodError(result.error)}`);
+  }
+  return result.data;
+}
+
 export function getPublicEnv(): PublicEnv {
   if (cachedPublicEnv) return cachedPublicEnv;
 
-  const result = publicEnvSchema.safeParse({
+  cachedPublicEnv = parsePublicEnv({
     VITE_APP_NAME: import.meta.env.VITE_APP_NAME,
     VITE_APP_URL: import.meta.env.VITE_APP_URL,
     VITE_ENABLE_ANALYTICS: import.meta.env.VITE_ENABLE_ANALYTICS,
   });
 
-  if (!result.success) {
-    throw new Error(`Invalid public environment variables: ${formatZodError(result.error)}`);
-  }
-
-  cachedPublicEnv = result.data;
   return cachedPublicEnv;
 }
 

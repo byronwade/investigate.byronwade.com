@@ -124,7 +124,9 @@ e2e/              # Playwright tests
 
 ## Deployment extension point
 
-Primary target: **Node.js via Nitro** (`pnpm build` → `pnpm start` → `.output/server/index.mjs`).
+Primary local/server target: **Node.js via Nitro** (`pnpm build` → `pnpm start` → `.output/server/index.mjs`).
+
+This repository is also linked to **Vercel**. Because the project previously used Next.js, `vercel.json` explicitly sets `"framework": "tanstack-start"` so preview/production builds use the TanStack Start + Nitro path instead of a stale Next.js preset. See [docs/operations/vercel.md](./docs/operations/vercel.md).
 
 Apply security headers from `getSecurityHeaders()` at the hosting edge or Nitro hook when deploying. Other adapters (Cloudflare/Netlify/Railway) can replace Nitro later — see ADR-0002.
 
@@ -143,6 +145,7 @@ Apply security headers from `getSecurityHeaders()` at the hosting edge or Nitro 
 | Playwright fails to start server | Ensure `pnpm build` works; check port `4173` |
 | CI queued forever | Bring a self-hosted runner online with required labels |
 | Knip false positives | Narrow entry/ignore in `knip.config.ts` — do not ignore whole trees |
+| Vercel build fails after framework migration | Confirm `vercel.json` sets `"framework": "tanstack-start"` and the Vercel project Framework Preset matches |
 
 ## Contributing
 
