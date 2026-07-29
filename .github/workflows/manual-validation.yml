@@ -1,0 +1,55 @@
+name: Manual Validation
+
+on:
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: Suite to run
+        required: true
+        default: verify
+        type: choice
+        options:
+          - verify
+          - e2e-all
+          - release-check
+
+permissions:
+  contents: read
+
+jobs:
+  manual:
+    runs-on: [self-hosted, linux, x64, tanstack-ci]
+    timeout-minutes: 90
+    steps:
+      - name: Checkout
+        # actions/checkout@v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Setup pnpm
+        # pnpm/action-setup@v4.0.0
+        uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2
+        with:
+          version: 10.33.3
+
+      - name: Setup Node.js
+        # actions/setup-node@v4.2.0
+        uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a
+        with:
+          node-version-file: '.nvmrc'
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright
+        run: pnpm exec playwright install --with-deps
+
+      - name: Run selected suite
+        env:
+          CI: true
+        run: |
+          case "${{ inputs.suite }}" in
+            verify) pnpm verify ;;
+            e2e-all) pnpm test:e2e:all ;;
+            release-check) pnpm release:check ;;
+          esac

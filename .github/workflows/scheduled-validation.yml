@@ -1,0 +1,60 @@
+name: Scheduled Validation
+
+on:
+  schedule:
+    - cron: '0 7 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deep:
+    name: Deep quality checks
+    runs-on: [self-hosted, linux, x64, tanstack-ci]
+    timeout-minutes: 90
+    steps:
+      - name: Checkout
+        # actions/checkout@v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Setup pnpm
+        # pnpm/action-setup@v4.0.0
+        uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2
+        with:
+          version: 10.33.3
+
+      - name: Setup Node.js
+        # actions/setup-node@v4.2.0
+        uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a
+        with:
+          node-version-file: '.nvmrc'
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Install all Playwright engines
+        run: pnpm exec playwright install --with-deps
+
+      - name: Full knip
+        run: pnpm knip:full
+
+      - name: Full audit
+        run: pnpm audit
+
+      - name: Verify
+        run: pnpm verify
+        env:
+          CI: true
+
+      - name: All browser E2E
+        run: pnpm test:e2e:all
+        env:
+          CI: true
+
+      - name: Performance budgets
+        run: pnpm perf
+
+      - name: Outdated dependency report
+        run: pnpm deps:check

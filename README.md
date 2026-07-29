@@ -1,224 +1,160 @@
-# InvestigatAI - AI-Powered Digital Investigation Platform
+# Investigate
 
-🔍 **InvestigatAI** is a cutting-edge digital investigation platform that uses artificial intelligence to analyze massive amounts of evidence data, extract insights, and create comprehensive investigation portfolios.
+Production-grade **TanStack Start** application foundation for a serious SaaS product and a team of human + AI developers.
 
-## 🚀 Features
+This repository is immediately usable locally, secure by default, documented thoroughly, and gated by a complete quality pipeline (`pnpm verify`).
 
-### Core Investigation Capabilities
-- **Mass File Processing**: Handle thousands of GBs of evidence data
-- **Multi-Format Support**: Images, videos, documents, audio files, and more
-- **AI-Powered Analysis**: Automatic content extraction and categorization
-- **Timeline Generation**: Create chronological sequences of events
-- **Entity Recognition**: Identify people, locations, and objects
-- **Content Cross-Referencing**: Link related evidence across different files
+## Technology stack
 
-### Advanced AI Analysis
-- **OCR Text Extraction**: Extract text from images and documents
-- **Facial Recognition**: Identify and track individuals across media
-- **Object Detection**: Recognize vehicles, weapons, and relevant objects
-- **Location Intelligence**: Extract and map geographical information
-- **Metadata Analysis**: Parse EXIF data, timestamps, and file properties
-- **Content Similarity**: Find related or duplicate content
+| Area | Choice |
+| --- | --- |
+| Framework | TanStack Start (React) |
+| Routing | TanStack Router (file-based) |
+| Server state | TanStack Query (where client cache helps) |
+| Build | Vite 8 |
+| Deploy adapter | Nitro (Node.js server output) |
+| Language | TypeScript (strict) |
+| Styling | Tailwind CSS v4 + CSS design tokens |
+| Lint/format | Biome |
+| Unit/component | Vitest + Testing Library |
+| E2E / a11y | Playwright + axe |
+| Dead code | Knip |
+| Hooks | Lefthook + commitlint |
+| Package manager | pnpm 10 |
+| CI | GitHub Actions on self-hosted runners |
 
-### Investigation Tools
-- **Evidence Timeline**: Visual chronological representation
-- **Relationship Mapping**: Network analysis of connections
-- **Search & Filter**: Advanced querying across all evidence
-- **Export Reports**: Generate comprehensive investigation reports
-- **Collaboration**: Multi-user investigation support
+## Architecture overview
 
-## 🛠 Tech Stack
+- Full-document SSR with route-level code splitting
+- Server functions for privileged/server-only work
+- Clear `client` / `server` / `shared` library boundaries
+- Feature-oriented `src/features` modules
+- Design tokens in `src/styles/tokens.css` (see DESIGN.md)
 
-- **Frontend**: Next.js 15 with App Router
-- **Styling**: Tailwind CSS + Shadcn/ui components
-- **AI Processing**: Vercel AI SDK with multiple providers
-- **Database**: Supabase (PostgreSQL + Real-time + Storage)
-- **File Storage**: Supabase Storage with CDN
-- **Authentication**: Supabase Auth
-- **Package Manager**: Bun
+Details: [docs/architecture/overview.md](./docs/architecture/overview.md)
 
-## 🏗 Architecture
+## Prerequisites
 
-```
-┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│   File Upload   │───▶│  AI Processing   │───▶│  Investigation  │
-│                 │    │                  │    │   Dashboard     │
-│ • Drag & Drop   │    │ • Content OCR    │    │ • Timeline View │
-│ • Bulk Upload   │    │ • Face Detection │    │ • Entity Graph  │
-│ • Progress      │    │ • Object Recog   │    │ • Search Tools  │
-│ • Validation    │    │ • Metadata Ext   │    │ • Reports       │
-└─────────────────┘    └──────────────────┘    └─────────────────┘
-         │                       │                       │
-         ▼                       ▼                       ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                    Supabase Backend                            │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────────┐ │
-│  │   Storage   │  │ PostgreSQL  │  │     Real-time Subs     │ │
-│  │             │  │             │  │                         │ │
-│  │ • Files     │  │ • Evidence  │  │ • Processing Status     │ │
-│  │ • Thumbnails│  │ • Analysis  │  │ • Collaboration Updates │ │
-│  │ • Processed │  │ • Timeline  │  │ • Live Search Results   │ │
-│  └─────────────┘  └─────────────┘  └─────────────────────────┘ │
-└─────────────────────────────────────────────────────────────────┘
-```
+- Node.js 22 LTS
+- pnpm 10.33.3+
+- Git
 
-## 📂 Project Structure
-
-```
-investigatai/
-├── app/                          # Next.js App Router
-│   ├── (auth)/                   # Authentication routes
-│   ├── dashboard/                # Main investigation dashboard
-│   ├── investigation/            # Investigation-specific pages
-│   ├── api/                      # API routes
-│   └── globals.css               # Global styles
-├── components/                   # Reusable components
-│   ├── ui/                       # Shadcn UI components
-│   ├── investigation/            # Investigation-specific components
-│   ├── file-upload/              # File handling components
-│   └── ai-analysis/              # AI processing components
-├── lib/                          # Utility libraries
-│   ├── ai/                       # AI processing utilities
-│   ├── supabase/                 # Supabase client & schemas
-│   ├── file-processing/          # File handling utilities
-│   └── utils.ts                  # General utilities
-├── types/                        # TypeScript type definitions
-├── hooks/                        # Custom React hooks
-└── docs/                         # Documentation
-```
-
-## 🚦 Getting Started
-
-### Prerequisites
-- Node.js 18+ or Bun
-- Supabase account and project
-- AI API keys (OpenAI, Anthropic, etc.)
-
-### Installation
+## Quick start
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/investigatai.git
-cd investigatai
-
-# Install dependencies
-bun install
-
-# Set up environment variables
-cp .env.example .env.local
-# Edit .env.local with your credentials
-
-# Run database migrations
-bun run db:migrate
-
-# Start development server
-bun run dev
+pnpm install
+cp .env.example .env
+pnpm dev
 ```
 
-### Environment Variables
+Open [http://localhost:3000](http://localhost:3000).
 
-```env
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+**First command for a new owner:** `pnpm install && cp .env.example .env && pnpm verify`
 
-# AI Providers
-OPENAI_API_KEY=your_openai_key
-ANTHROPIC_API_KEY=your_anthropic_key
+## Development commands
 
-# Application
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-```
+Canonical commands are listed in [AGENTS.md](./AGENTS.md). Full local CI parity:
 
-## 🔧 AI Processing Pipeline
-
-### 1. File Ingestion
-- Secure upload to Supabase Storage
-- File type validation and virus scanning
-- Metadata extraction and indexing
-
-### 2. Content Analysis
-- **Text Extraction**: OCR for images/PDFs
-- **Visual Analysis**: Object and face detection
-- **Audio Processing**: Speech-to-text conversion
-- **Video Analysis**: Frame extraction and analysis
-
-### 3. Entity Extraction
-- **People**: Facial recognition and tracking
-- **Locations**: GPS data and visual landmarks
-- **Objects**: Vehicles, weapons, documents
-- **Timestamps**: Creation and modification dates
-
-### 4. Relationship Mapping
-- Cross-reference entities across files
-- Build connection networks
-- Identify patterns and anomalies
-
-## 📊 Database Schema
-
-### Core Tables
-- `investigations` - Investigation metadata
-- `evidence_files` - Uploaded file records
-- `ai_analysis` - AI processing results
-- `entities` - Extracted people, places, objects
-- `timeline_events` - Chronological events
-- `relationships` - Entity connections
-
-## 🔐 Security & Privacy
-
-- **End-to-end encryption** for sensitive data
-- **Role-based access control** for investigations
-- **Audit logging** for all operations
-- **Secure file storage** with access controls
-- **Data retention policies** and secure deletion
-
-## 🚀 Deployment
-
-### Vercel Deployment
 ```bash
-# Deploy to Vercel
-vercel --prod
-
-# Set environment variables in Vercel dashboard
+pnpm verify
 ```
 
-### Supabase Setup
-1. Create new Supabase project
-2. Run SQL migrations in Supabase dashboard
-3. Configure storage buckets and policies
-4. Set up authentication providers
+## Environment variables
 
-## 📈 Performance
+See `.env.example`. Access only through `src/lib/shared/env.ts`.
 
-- **Parallel Processing**: Multiple AI workers for concurrent analysis
-- **Streaming Results**: Real-time updates during processing
-- **Caching**: Intelligent caching of AI results
-- **CDN**: Fast global file delivery via Supabase CDN
+| Variable | Surface | Purpose |
+| --- | --- | --- |
+| `VITE_APP_NAME` | Public | App display name |
+| `VITE_APP_URL` | Public | Public origin for metadata |
+| `VITE_ENABLE_ANALYTICS` | Public | Feature flag placeholder (no vendor) |
+| `NODE_ENV` | Server | Runtime mode |
+| `SERVER_SESSION_SECRET` | Server | Optional future session signing |
 
-## 🤝 Contributing
+## Testing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+- Unit/integration: `pnpm test`, coverage via `pnpm test:coverage`
+- E2E smoke: `pnpm test:e2e:smoke`
+- Accessibility: `pnpm test:a11y`
+- Strategy: [docs/testing/strategy.md](./docs/testing/strategy.md)
 
-## 📄 License
+## Local CI
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+`pnpm verify` / `pnpm ci:local` runs format check, Biome, typecheck, coverage, knip, circular deps, build, bundle report, perf budgets, Playwright smoke, and a11y.
 
-## ⚠️ Legal Notice
+## Self-hosted GitHub runner setup
 
-This tool is designed for legitimate investigative purposes only. Users must comply with all applicable laws and regulations regarding data privacy, surveillance, and digital evidence handling.
+All workflows require labels: `self-hosted`, `linux`, `x64`, `tanstack-ci`.
 
-## 📞 Support
+See [docs/operations/self-hosted-runners.md](./docs/operations/self-hosted-runners.md).
 
-For support, questions, or feature requests:
-- Open an issue on GitHub
-- Join our Discord community
-- Email: support@investigatai.com
+## Design system
 
----
+Read [DESIGN.md](./DESIGN.md) before any UI work.
 
-**InvestigatAI** - Empowering investigators with AI-driven insights 🔍✨
+## Agent instructions
+
+Coding agents must follow [AGENTS.md](./AGENTS.md).
+
+## Repository structure
+
+```text
+src/
+  components/     # shared UI (ui/ primitives)
+  features/       # feature modules
+  hooks/
+  integrations/   # framework integrations (Query provider, etc.)
+  lib/
+    client/       # browser-safe modules
+    server/       # server-only modules
+    shared/       # isomorphic modules
+  routes/         # TanStack file routes
+  styles/         # tokens + global styles entry
+  test/           # test setup + integration tests
+  types/
+docs/
+  architecture/
+  decisions/      # ADRs
+  testing/
+  operations/
+.github/workflows # self-hosted CI
+scripts/ci        # verify, budgets, release checks
+e2e/              # Playwright tests
+```
+
+## Deployment extension point
+
+Primary local/server target: **Node.js via Nitro** (`pnpm build` → `pnpm start` → `.output/server/index.mjs`).
+
+This repository is also linked to **Vercel**. Because the project previously used Next.js, `vercel.json` explicitly sets `"framework": "tanstack-start"` so preview/production builds use the TanStack Start + Nitro path instead of a stale Next.js preset. See [docs/operations/vercel.md](./docs/operations/vercel.md).
+
+Apply security headers from `getSecurityHeaders()` at the hosting edge or Nitro hook when deploying. Other adapters (Cloudflare/Netlify/Railway) can replace Nitro later — see ADR-0002.
+
+## Generated files
+
+| File | Committed? | Notes |
+| --- | --- | --- |
+| `src/routeTree.gen.ts` | Yes | Generated by `pnpm generate-routes` / dev/build. Do not edit. |
+
+## Troubleshooting
+
+| Problem | Fix |
+| --- | --- |
+| Route types missing | `pnpm generate-routes` |
+| Env validation errors | Copy `.env.example` and set valid `VITE_APP_URL` |
+| Playwright fails to start server | Ensure `pnpm build` works; check port `4173` |
+| CI queued forever | Bring a self-hosted runner online with required labels |
+| Knip false positives | Narrow entry/ignore in `knip.config.ts` — do not ignore whole trees |
+| Vercel build fails after framework migration | Confirm `vercel.json` sets `"framework": "tanstack-start"` and the Vercel project Framework Preset matches |
+
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+## Security
+
+See [SECURITY.md](./SECURITY.md).
+
+## License
+
+MIT — see [LICENSE](./LICENSE).
