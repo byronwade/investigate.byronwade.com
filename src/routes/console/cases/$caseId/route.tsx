@@ -16,7 +16,7 @@ function CaseLayout() {
     return <CaseNotFound caseId={caseId} />;
   }
 
-  // Rail stays page-local in Phase A (right column inside main when needed).
+  // Pages set the shell rail via ConsoleRailContext (e.g. Overview).
   return (
     <CaseShell caseRecord={caseRecord}>
       <Outlet />

@@ -121,7 +121,7 @@ function FocusOnNavigate() {
       return;
     }
 
-    const main = document.getElementById('main-content');
+    const main = document.getElementById('console-main') ?? document.getElementById('main-content');
     if (main instanceof HTMLElement) {
       main.dataset.route = pathname;
       main.focus({ preventScroll: true });

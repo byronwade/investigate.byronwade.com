@@ -29,11 +29,17 @@ export function Sidebar({ caseId }: { caseId: string }): React.JSX.Element {
                 <ConsoleLink
                   key={`${group.id}-${item.label}`}
                   to={href}
+                  activeOptions={{ exact: true }}
                   className={cn(
                     'flex h-7 items-center gap-2.5 rounded-md px-2 text-[13px] text-[var(--console-body)]',
                     'hover:bg-[var(--console-row-active)] hover:text-[var(--console-ink)]',
                     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]',
                   )}
+                  activeProps={{
+                    className:
+                      'bg-[var(--console-row-active)] font-medium text-[var(--console-ink)]',
+                    'aria-current': 'page',
+                  }}
                 >
                   <Icon aria-hidden="true" weight="duotone" className="size-3 shrink-0" />
                   <span className="min-w-0 flex-1 truncate">{item.label}</span>
@@ -53,6 +59,10 @@ export function Sidebar({ caseId }: { caseId: string }): React.JSX.Element {
             'hover:bg-[var(--console-row-active)] hover:text-[var(--console-ink)]',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]',
           )}
+          activeProps={{
+            className: 'bg-[var(--console-row-active)] font-medium text-[var(--console-ink)]',
+            'aria-current': 'page',
+          }}
         >
           <ReferenceIcon aria-hidden="true" weight="duotone" className="size-3 shrink-0" />
           <span className="min-w-0 flex-1 truncate">{paperReferenceNav.label}</span>

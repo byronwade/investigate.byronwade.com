@@ -35,10 +35,15 @@ export function CaseTabs({
             <ConsoleLink
               key={tab.label}
               to={href}
+              activeOptions={{ exact: true }}
               className={cn(
-                'inline-flex items-center gap-1.5 py-1 text-[12px] text-[var(--console-muted)]',
+                'inline-flex items-center gap-1.5 border-b-2 border-transparent py-1 text-[12px] text-[var(--console-muted)]',
                 'hover:text-[var(--console-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]',
               )}
+              activeProps={{
+                className: 'border-[var(--console-ink)] font-medium text-[var(--console-ink)]',
+                'aria-current': 'page',
+              }}
             >
               <Icon aria-hidden="true" weight="duotone" className="size-3.5" />
               {tab.label}

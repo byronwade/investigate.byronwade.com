@@ -5,6 +5,7 @@ import type { CaseRecord } from '#/features/console/data';
 import { CaseTabs } from './case-tabs';
 import { ClassificationStrip } from './classification-strip';
 import { shortCaseTitle } from './nav';
+import { ConsoleRailProvider, useConsoleRail } from './rail-context';
 import { Sidebar } from './sidebar';
 import { TopBar } from './top-bar';
 
@@ -17,6 +18,26 @@ export function CaseShell({
   children: React.ReactNode;
   rail?: React.ReactNode;
 }): React.JSX.Element {
+  return (
+    <ConsoleRailProvider>
+      <CaseShellLayout caseRecord={caseRecord} rail={rail}>
+        {children}
+      </CaseShellLayout>
+    </ConsoleRailProvider>
+  );
+}
+
+function CaseShellLayout({
+  caseRecord,
+  children,
+  rail,
+}: {
+  caseRecord: CaseRecord;
+  children: React.ReactNode;
+  rail?: React.ReactNode;
+}): React.JSX.Element {
+  const contextRail = useConsoleRail();
+  const resolvedRail = rail ?? contextRail;
   const caseLabel = shortCaseTitle(caseRecord.title);
 
   return (
@@ -41,9 +62,9 @@ export function CaseShell({
         >
           {children}
         </main>
-        {rail ? (
+        {resolvedRail ? (
           <aside className="hidden w-[var(--console-rail-width)] shrink-0 border-l border-[var(--console-hairline)] xl:block">
-            {rail}
+            {resolvedRail}
           </aside>
         ) : null}
       </div>
