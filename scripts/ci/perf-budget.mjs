@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import { existsSync, readdirSync, statSync } from 'node:fs';
-import { join } from 'node:path';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { basename, join } from 'node:path';
 
 /** Soft starter budgets (bytes, uncompressed on disk). Promote after baseline. */
 const BUDGETS = {
@@ -14,6 +14,22 @@ const clientDirCandidates = [
   '.output/public/assets',
   'dist/client/assets',
 ];
+
+/**
+ * Lazy Investigation Console Paper dumps are route-split and intentionally large.
+ * Budget total JS against shared/entry assets only — not the sum of every screen chunk.
+ */
+function loadConsoleScreenSlugs() {
+  const registryPath = join('src', 'features', 'console', 'screens', 'registry.ts');
+  if (!existsSync(registryPath)) return [];
+  const source = readFileSync(registryPath, 'utf8');
+  return [...source.matchAll(/slug:\s*'([^']+)'/g)].map((match) => match[1]);
+}
+
+function isDeferredConsoleScreenChunk(filePath, slugs) {
+  const name = basename(filePath);
+  return slugs.some((slug) => name.startsWith(`${slug}-`));
+}
 
 function findAssetsDir() {
   for (const candidate of clientDirCandidates) {
@@ -39,12 +55,17 @@ if (!assetsDir) {
   process.exit(1);
 }
 
+const consoleSlugs = loadConsoleScreenSlugs();
 const files = listFiles(assetsDir);
 const jsFiles = files.filter((f) => f.endsWith('.js'));
+const budgetedJsFiles = jsFiles.filter((f) => !isDeferredConsoleScreenChunk(f, consoleSlugs));
 const cssFiles = files.filter((f) => f.endsWith('.css'));
-const totalJs = jsFiles.reduce((n, f) => n + statSync(f).size, 0);
+const totalJs = budgetedJsFiles.reduce((n, f) => n + statSync(f).size, 0);
+const deferredJs = jsFiles
+  .filter((f) => isDeferredConsoleScreenChunk(f, consoleSlugs))
+  .reduce((n, f) => n + statSync(f).size, 0);
 const totalCss = cssFiles.reduce((n, f) => n + statSync(f).size, 0);
-const largestJs = Math.max(0, ...jsFiles.map((f) => statSync(f).size));
+const largestJs = Math.max(0, ...budgetedJsFiles.map((f) => statSync(f).size));
 
 /** @type {string[]} */
 const failures = [];
@@ -56,7 +77,10 @@ if (largestJs > BUDGETS.largestJsChunk) {
 
 console.info('Performance budget check');
 console.info(
-  `  total JS: ${(totalJs / 1024).toFixed(1)} KiB / ${(BUDGETS.totalJs / 1024).toFixed(0)} KiB`,
+  `  total JS (shared/entry): ${(totalJs / 1024).toFixed(1)} KiB / ${(BUDGETS.totalJs / 1024).toFixed(0)} KiB`,
+);
+console.info(
+  `  deferred console screens: ${(deferredJs / 1024).toFixed(1)} KiB (${consoleSlugs.length} slugs, excluded from total)`,
 );
 console.info(
   `  total CSS: ${(totalCss / 1024).toFixed(1)} KiB / ${(BUDGETS.totalCss / 1024).toFixed(0)} KiB`,

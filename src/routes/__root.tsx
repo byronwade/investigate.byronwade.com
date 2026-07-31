@@ -76,24 +76,36 @@ function RootDocument({ children }: { children: ReactNode }) {
 }
 
 function RootComponent() {
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const isConsole = pathname === '/console' || pathname.startsWith('/console/');
+
   return (
     <AppQueryProvider>
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-[var(--radius-md)] focus:bg-[var(--color-bg-elevated)] focus:px-3 focus:py-2"
-      >
-        Skip to content
-      </a>
-      <SiteHeader />
-      <FocusOnNavigate />
-      <main
-        id="main-content"
-        tabIndex={-1}
-        className="min-h-[calc(100vh-var(--header-height))] outline-none"
-      >
-        <Outlet />
-      </main>
-      <SiteFooter />
+      {isConsole ? (
+        <>
+          <FocusOnNavigate />
+          <Outlet />
+        </>
+      ) : (
+        <>
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-[var(--radius-md)] focus:bg-[var(--color-bg-elevated)] focus:px-3 focus:py-2"
+          >
+            Skip to content
+          </a>
+          <SiteHeader />
+          <FocusOnNavigate />
+          <main
+            id="main-content"
+            tabIndex={-1}
+            className="min-h-[calc(100vh-var(--header-height))] outline-none"
+          >
+            <Outlet />
+          </main>
+          <SiteFooter />
+        </>
+      )}
     </AppQueryProvider>
   );
 }
