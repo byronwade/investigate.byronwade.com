@@ -14,8 +14,8 @@
   },
   "scripts": {
     "dev": "vite dev --port 3000",
-    "build": "vite build",
-    "start": "node .output/server/index.mjs",
+    "build": "NODE_ENV=production vite build",
+    "start": "NODE_ENV=production node .output/server/index.mjs",
     "preview": "vite preview",
     "generate-routes": "tsr generate",
     "format": "biome format --write .",
