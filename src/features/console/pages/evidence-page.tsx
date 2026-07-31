@@ -11,6 +11,7 @@ import {
   TableRow,
 } from '#/components/ui/table';
 import { type EvidenceRecord, listEvidence } from '#/features/console/data';
+import { EmptyState } from '#/features/console/ui/empty-state';
 import { PageHeader } from '#/features/console/ui/page-header';
 
 const CUSTODY_LABEL: Record<EvidenceRecord['custody'], string> = {
@@ -50,44 +51,75 @@ export function EvidencePage({ caseId }: { caseId: string }): React.JSX.Element 
         }
       />
 
-      <Table className="text-[13px]">
-        <TableHeader>
-          <TableRow className="border-[var(--console-hairline)] hover:bg-transparent">
-            <TableHead className="h-8 px-0 text-[12px] font-medium text-[var(--console-muted)]">
-              Item
-            </TableHead>
-            <TableHead className="h-8 px-0 text-[12px] font-medium text-[var(--console-muted)]">
-              Kind
-            </TableHead>
-            <TableHead className="h-8 px-0 text-right text-[12px] font-medium text-[var(--console-muted)]">
-              Custody
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {items.map((item) => (
-            <TableRow
-              key={item.id}
-              className="border-[var(--console-strip)] hover:bg-[var(--console-strip)]"
-            >
-              <TableCell className="max-w-xl px-0 py-2.5 whitespace-normal font-medium text-[var(--console-ink)]">
-                {item.label}
-              </TableCell>
-              <TableCell className="px-0 py-2.5 text-[12px] text-[var(--console-muted)]">
-                {item.kind}
-              </TableCell>
-              <TableCell className="px-0 py-2.5 text-right">
-                <Badge
-                  variant={custodyVariant(item.custody)}
-                  className="rounded-md border-[var(--console-hairline)] font-[family-name:var(--console-font-mono)] text-[11px] font-normal tracking-normal"
-                >
-                  {CUSTODY_LABEL[item.custody]}
-                </Badge>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      {items.length === 0 ? (
+        <EmptyState
+          title="No evidence logged"
+          description="Intake packets and field captures will appear here once sealed into the case."
+        />
+      ) : (
+        <>
+          <ul className="space-y-2 md:hidden">
+            {items.map((item) => (
+              <li
+                key={item.id}
+                className="rounded-lg border border-[var(--console-hairline)] px-3 py-3"
+              >
+                <p className="text-[13px] font-medium text-[var(--console-ink)]">{item.label}</p>
+                <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
+                  <span className="text-[12px] text-[var(--console-muted)]">{item.kind}</span>
+                  <Badge
+                    variant={custodyVariant(item.custody)}
+                    className="rounded-md border-[var(--console-hairline)] font-[family-name:var(--console-font-mono)] text-[11px] font-normal tracking-normal"
+                  >
+                    {CUSTODY_LABEL[item.custody]}
+                  </Badge>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          <div className="hidden md:block">
+            <Table className="text-[13px]">
+              <TableHeader>
+                <TableRow className="border-[var(--console-hairline)] hover:bg-transparent">
+                  <TableHead className="h-8 px-0 text-[12px] font-medium text-[var(--console-muted)]">
+                    Item
+                  </TableHead>
+                  <TableHead className="h-8 px-0 text-[12px] font-medium text-[var(--console-muted)]">
+                    Kind
+                  </TableHead>
+                  <TableHead className="h-8 px-0 text-right text-[12px] font-medium text-[var(--console-muted)]">
+                    Custody
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {items.map((item) => (
+                  <TableRow
+                    key={item.id}
+                    className="border-[var(--console-strip)] hover:bg-[var(--console-strip)]"
+                  >
+                    <TableCell className="max-w-xl px-0 py-2.5 whitespace-normal font-medium text-[var(--console-ink)]">
+                      {item.label}
+                    </TableCell>
+                    <TableCell className="px-0 py-2.5 text-[12px] text-[var(--console-muted)]">
+                      {item.kind}
+                    </TableCell>
+                    <TableCell className="px-0 py-2.5 text-right">
+                      <Badge
+                        variant={custodyVariant(item.custody)}
+                        className="rounded-md border-[var(--console-hairline)] font-[family-name:var(--console-font-mono)] text-[11px] font-normal tracking-normal"
+                      >
+                        {CUSTODY_LABEL[item.custody]}
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </>
+      )}
     </div>
   );
 }

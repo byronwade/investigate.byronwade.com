@@ -11,6 +11,7 @@ import {
 } from '#/components/ui/table';
 import { listPeople, type PersonRecord } from '#/features/console/data';
 import { ConsoleLink } from '#/features/console/shell/console-link';
+import { EmptyState } from '#/features/console/ui/empty-state';
 import { PageHeader } from '#/features/console/ui/page-header';
 import { StatusDot, type StatusDotTone } from '#/features/console/ui/status-dot';
 
@@ -49,53 +50,97 @@ export function PeoplePage({ caseId }: { caseId: string }): React.JSX.Element {
         }
       />
 
-      <Table className="text-[13px]">
-        <TableHeader>
-          <TableRow className="border-[var(--console-hairline)] hover:bg-transparent">
-            <TableHead className="h-8 px-0 text-[12px] font-medium text-[var(--console-muted)]">
-              Name
-            </TableHead>
-            <TableHead className="h-8 px-0 text-[12px] font-medium text-[var(--console-muted)]">
-              Role
-            </TableHead>
-            <TableHead className="h-8 px-0 text-[12px] font-medium text-[var(--console-muted)]">
-              Notes
-            </TableHead>
-            <TableHead className="h-8 px-0 text-right text-[12px] font-medium text-[var(--console-muted)]">
-              Contradictions
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {people.map((person) => (
-            <TableRow
-              key={person.id}
-              className="border-[var(--console-strip)] hover:bg-[var(--console-strip)]"
-            >
-              <TableCell className="px-0 py-2.5 font-medium text-[var(--console-ink)]">
+      {people.length === 0 ? (
+        <EmptyState
+          title="No people linked"
+          description="Subjects, witnesses, and persons of interest will appear as they are attached to the case."
+        />
+      ) : (
+        <>
+          <ul className="space-y-2 md:hidden">
+            {people.map((person) => (
+              <li key={person.id}>
                 <ConsoleLink
                   to={`/console/cases/${caseId}/people/${person.id}`}
-                  className="underline-offset-4 hover:underline"
+                  className="block rounded-lg border border-[var(--console-hairline)] px-3 py-3 hover:bg-[var(--console-strip)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]"
                 >
-                  {person.name}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0 space-y-1">
+                      <p className="truncate text-[13px] font-medium text-[var(--console-ink)]">
+                        {person.name}
+                      </p>
+                      <p className="line-clamp-2 text-[12px] text-[var(--console-body)]">
+                        {person.notes}
+                      </p>
+                    </div>
+                    <span className="inline-flex shrink-0 items-center gap-2 text-[12px] text-[var(--console-muted)]">
+                      <StatusDot tone={roleTone(person.role)} />
+                      {ROLE_LABEL[person.role]}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-[12px] text-[var(--console-sensor)]">
+                    {person.contradictionCount > 0
+                      ? `${person.contradictionCount} contradictory`
+                      : 'No contradictions'}
+                  </p>
                 </ConsoleLink>
-              </TableCell>
-              <TableCell className="px-0 py-2.5">
-                <span className="inline-flex items-center gap-2 text-[12px] text-[var(--console-muted)]">
-                  <StatusDot tone={roleTone(person.role)} />
-                  {ROLE_LABEL[person.role]}
-                </span>
-              </TableCell>
-              <TableCell className="max-w-md truncate px-0 py-2.5 whitespace-normal text-[var(--console-ink)]">
-                {person.notes}
-              </TableCell>
-              <TableCell className="px-0 py-2.5 text-right text-[12px] text-[var(--console-sensor)]">
-                {person.contradictionCount > 0 ? `${person.contradictionCount} contradictory` : '—'}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+              </li>
+            ))}
+          </ul>
+
+          <div className="hidden md:block">
+            <Table className="text-[13px]">
+              <TableHeader>
+                <TableRow className="border-[var(--console-hairline)] hover:bg-transparent">
+                  <TableHead className="h-8 px-0 text-[12px] font-medium text-[var(--console-muted)]">
+                    Name
+                  </TableHead>
+                  <TableHead className="h-8 px-0 text-[12px] font-medium text-[var(--console-muted)]">
+                    Role
+                  </TableHead>
+                  <TableHead className="h-8 px-0 text-[12px] font-medium text-[var(--console-muted)]">
+                    Notes
+                  </TableHead>
+                  <TableHead className="h-8 px-0 text-right text-[12px] font-medium text-[var(--console-muted)]">
+                    Contradictions
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {people.map((person) => (
+                  <TableRow
+                    key={person.id}
+                    className="border-[var(--console-strip)] hover:bg-[var(--console-strip)]"
+                  >
+                    <TableCell className="px-0 py-2.5 font-medium text-[var(--console-ink)]">
+                      <ConsoleLink
+                        to={`/console/cases/${caseId}/people/${person.id}`}
+                        className="underline-offset-4 hover:underline"
+                      >
+                        {person.name}
+                      </ConsoleLink>
+                    </TableCell>
+                    <TableCell className="px-0 py-2.5">
+                      <span className="inline-flex items-center gap-2 text-[12px] text-[var(--console-muted)]">
+                        <StatusDot tone={roleTone(person.role)} />
+                        {ROLE_LABEL[person.role]}
+                      </span>
+                    </TableCell>
+                    <TableCell className="max-w-md truncate px-0 py-2.5 whitespace-normal text-[var(--console-ink)]">
+                      {person.notes}
+                    </TableCell>
+                    <TableCell className="px-0 py-2.5 text-right text-[12px] text-[var(--console-sensor)]">
+                      {person.contradictionCount > 0
+                        ? `${person.contradictionCount} contradictory`
+                        : '—'}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </>
+      )}
     </div>
   );
 }

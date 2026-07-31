@@ -1,22 +1,10 @@
-import { createFileRoute, notFound } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 
-import { getWorkspacePage } from '#/features/console/data';
-import { WorkspacePage } from '#/features/console/pages/workspace-page';
+import { EmptyStatesPage } from '#/features/console/pages/empty-states-page';
 
 export const Route = createFileRoute('/console/_workspace/empty-states')({
-  component: Page,
-  head: () => {
-    const model = getWorkspacePage('empty-states');
-    return {
-      meta: [{ title: `${model?.title ?? 'empty-states'} · Investigation Console` }],
-    };
-  },
+  component: EmptyStatesPage,
+  head: () => ({
+    meta: [{ title: 'Empty states · Investigation Console' }],
+  }),
 });
-
-function Page() {
-  const model = getWorkspacePage('empty-states');
-  if (!model) {
-    throw notFound();
-  }
-  return <WorkspacePage model={model} />;
-}

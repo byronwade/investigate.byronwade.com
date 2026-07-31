@@ -34,8 +34,8 @@ describe('case workspace pages', () => {
   it('Evidence shows heading and a fixture item with custody', () => {
     render(<EvidencePage caseId="northridge" />);
     expect(screen.getByRole('heading', { name: 'Evidence' })).toBeInTheDocument();
-    expect(screen.getByText(/Dell latitude laptop/i)).toBeInTheDocument();
-    expect(screen.getByText('sealed')).toBeInTheDocument();
+    expect(screen.getAllByText(/Dell latitude laptop/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText('sealed').length).toBeGreaterThan(0);
   });
 
   it('Leads shows heading and a fixture card', () => {
@@ -47,6 +47,6 @@ describe('case workspace pages', () => {
   it('People shows heading and a fixture person', () => {
     render(<PeoplePage caseId="northridge" />);
     expect(screen.getByRole('heading', { name: 'People' })).toBeInTheDocument();
-    expect(screen.getByText(/Vance, Curtis A\./i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Vance, Curtis A\./i).length).toBeGreaterThan(0);
   });
 });

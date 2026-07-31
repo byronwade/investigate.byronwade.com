@@ -5,6 +5,7 @@ type ConsoleLinkProps = {
   to: string;
   className?: string;
   children: React.ReactNode;
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
   activeProps?: {
     className?: string;
     'aria-current'?: 'page';
@@ -18,13 +19,13 @@ type ConsoleLinkProps = {
 };
 
 /**
- * Link wrapper for console chrome. Case routes land in Task 4; until the
- * route tree types them, we pass absolute path strings through Link.
+ * Link wrapper for console chrome. Paths are absolute strings under `/console`.
  */
 export function ConsoleLink({
   to,
   className,
   children,
+  onClick,
   activeProps,
   activeOptions,
   ...rest
@@ -33,6 +34,7 @@ export function ConsoleLink({
     <Link
       to={to as never}
       className={className}
+      {...(onClick ? { onClick } : {})}
       {...(activeProps ? { activeProps } : {})}
       {...(activeOptions ? { activeOptions } : {})}
       {...rest}

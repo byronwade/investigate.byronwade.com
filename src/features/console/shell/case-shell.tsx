@@ -43,10 +43,10 @@ function CaseShellLayout({
   return (
     <div
       data-surface="console"
-      className="flex min-h-screen flex-col bg-[var(--console-ground)] text-[var(--console-ink)]"
+      className="flex min-h-dvh flex-col bg-[var(--console-ground)] text-[var(--console-ink)]"
     >
       <ClassificationStrip />
-      <TopBar caseRecord={caseRecord} />
+      <TopBar caseRecord={caseRecord} navVariant="case" />
       <CaseTabs
         caseId={caseRecord.id}
         caseNumber={caseRecord.number}
@@ -58,7 +58,7 @@ function CaseShellLayout({
         <main
           id="console-main"
           tabIndex={-1}
-          className="min-w-0 flex-1 overflow-auto p-6 outline-none"
+          className="min-w-0 flex-1 overflow-auto p-4 outline-none sm:p-6"
         >
           {children}
         </main>

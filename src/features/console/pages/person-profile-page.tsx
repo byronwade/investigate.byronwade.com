@@ -1,9 +1,13 @@
 import type * as React from 'react';
 
 import { Badge } from '#/components/ui/badge';
+import { Button } from '#/components/ui/button';
+import { Separator } from '#/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '#/components/ui/tabs';
 import type { PersonRecord } from '#/features/console/data';
 import { getPerson } from '#/features/console/data/agency-getters';
 import { ConsoleLink } from '#/features/console/shell/console-link';
+import { EmptyState } from '#/features/console/ui/empty-state';
 import { PageHeader } from '#/features/console/ui/page-header';
 import { StatusDot, type StatusDotTone } from '#/features/console/ui/status-dot';
 
@@ -45,37 +49,134 @@ export function PersonProfilePage({
         title={person.name}
         description={person.notes}
         meta={
-          <span className="inline-flex items-center gap-2">
+          <span className="inline-flex flex-wrap items-center gap-2">
             <StatusDot tone={roleTone(person.role)} />
-            {ROLE_LABEL[person.role]}
-          </span>
-        }
-        actions={
-          <ConsoleLink
-            to={`/console/cases/${caseId}/people`}
-            className="text-[13px] text-[var(--console-muted)] underline-offset-4 hover:underline"
-          >
-            Back to people
-          </ConsoleLink>
-        }
-      />
-
-      <dl className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-1">
-          <dt className="text-[12px] text-[var(--console-muted)]">Contradictions</dt>
-          <dd className="text-[13px] font-medium text-[var(--console-ink)]">
-            {person.contradictionCount}
-          </dd>
-        </div>
-        <div className="space-y-1">
-          <dt className="text-[12px] text-[var(--console-muted)]">Case link</dt>
-          <dd>
+            <span>{ROLE_LABEL[person.role]}</span>
             <Badge variant="secondary" className="rounded-md">
               {caseId}
             </Badge>
+          </span>
+        }
+        actions={
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="h-11 rounded-[7px] sm:h-[30px]"
+            asChild
+          >
+            <ConsoleLink to={`/console/cases/${caseId}/people`}>Back to people</ConsoleLink>
+          </Button>
+        }
+      />
+
+      <dl className="grid gap-4 rounded-lg border border-[var(--console-hairline)] p-4 sm:grid-cols-3">
+        <div className="space-y-1">
+          <dt className="text-[12px] text-[var(--console-muted)]">Role</dt>
+          <dd className="text-[13px] font-medium text-[var(--console-ink)]">
+            {ROLE_LABEL[person.role]}
+          </dd>
+        </div>
+        <div className="space-y-1">
+          <dt className="text-[12px] text-[var(--console-muted)]">Contradictions</dt>
+          <dd className="text-[13px] font-medium text-[var(--console-ink)]">
+            {person.contradictionCount > 0 ? (
+              <span className="text-[var(--console-sensor)]">
+                {person.contradictionCount} flagged
+              </span>
+            ) : (
+              'None recorded'
+            )}
+          </dd>
+        </div>
+        <div className="space-y-1">
+          <dt className="text-[12px] text-[var(--console-muted)]">Linked case</dt>
+          <dd>
+            <ConsoleLink
+              to={`/console/cases/${caseId}/overview`}
+              className="text-[13px] font-medium text-[var(--console-offence)] underline-offset-4 hover:underline"
+            >
+              Open overview
+            </ConsoleLink>
           </dd>
         </div>
       </dl>
+
+      <Tabs defaultValue="summary" className="gap-4">
+        <TabsList className="h-auto w-full flex-wrap justify-start rounded-md bg-[var(--console-strip)] p-1">
+          <TabsTrigger value="summary" className="min-h-10 flex-none px-3 text-[13px]">
+            Summary
+          </TabsTrigger>
+          <TabsTrigger value="links" className="min-h-10 flex-none px-3 text-[13px]">
+            Case links
+          </TabsTrigger>
+          <TabsTrigger value="notes" className="min-h-10 flex-none px-3 text-[13px]">
+            Notes
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="summary" className="space-y-3">
+          <h2 className="text-[13px] font-semibold text-[var(--console-ink)]">Working summary</h2>
+          <p className="max-w-3xl text-[13px] leading-6 text-[var(--console-body)]">
+            {person.notes}
+          </p>
+          <Separator />
+          <p className="text-[12px] text-[var(--console-muted)]">
+            Profile fields are fixture-backed until live person records are wired.
+          </p>
+        </TabsContent>
+        <TabsContent value="links" className="space-y-3">
+          <ul className="divide-y divide-[var(--console-strip)] border-t border-[var(--console-hairline)]">
+            <li>
+              <ConsoleLink
+                to={`/console/cases/${caseId}/timeline`}
+                className="flex min-h-11 items-center justify-between py-2 text-[13px] hover:bg-[var(--console-strip)]"
+              >
+                <span>Timeline mentions</span>
+                <span className="text-[var(--console-muted)]">Open</span>
+              </ConsoleLink>
+            </li>
+            <li>
+              <ConsoleLink
+                to={`/console/cases/${caseId}/interview`}
+                className="flex min-h-11 items-center justify-between py-2 text-[13px] hover:bg-[var(--console-strip)]"
+              >
+                <span>Interview workspace</span>
+                <span className="text-[var(--console-muted)]">Open</span>
+              </ConsoleLink>
+            </li>
+            <li>
+              <ConsoleLink
+                to={`/console/cases/${caseId}/leads`}
+                className="flex min-h-11 items-center justify-between py-2 text-[13px] hover:bg-[var(--console-strip)]"
+              >
+                <span>Related leads</span>
+                <span className="text-[var(--console-muted)]">Open</span>
+              </ConsoleLink>
+            </li>
+          </ul>
+        </TabsContent>
+        <TabsContent value="notes">
+          {person.contradictionCount > 0 ? (
+            <EmptyState
+              title="Contradiction review required"
+              description={`${person.contradictionCount} statement conflicts are queued for analyst review before court packaging.`}
+              action={
+                <ConsoleLink
+                  to={`/console/cases/${caseId}/analysis`}
+                  className="text-[13px] text-[var(--console-offence)] underline-offset-4 hover:underline"
+                >
+                  Open analysis
+                </ConsoleLink>
+              }
+            />
+          ) : (
+            <EmptyState
+              title="No analyst notes yet"
+              description="Add interview or analysis notes from those workspaces; they will surface here."
+            />
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

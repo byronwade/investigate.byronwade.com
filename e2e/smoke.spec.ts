@@ -16,3 +16,16 @@ test('console case overview remains reachable', async ({ page }) => {
   await page.goto('/console/cases/northridge/overview');
   await expect(page.getByRole('heading', { name: /Northridge/i })).toBeVisible();
 });
+
+test('console mobile navigation opens agency destinations', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/console/command-center');
+  await page.getByRole('button', { name: /open navigation/i }).click();
+  await expect(page.getByRole('dialog')).toBeVisible();
+  await page
+    .getByRole('dialog')
+    .getByRole('link', { name: /^Cases$/i })
+    .click();
+  await expect(page).toHaveURL(/\/console\/cases$/);
+  await expect(page.getByRole('heading', { name: /Cases portfolio/i })).toBeVisible();
+});

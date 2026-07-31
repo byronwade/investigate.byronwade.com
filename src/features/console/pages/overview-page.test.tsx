@@ -64,4 +64,13 @@ describe('OverviewPage', () => {
     expect(slot).toHaveTextContent('Techniques at this level');
     expect(slot).toHaveTextContent('Your access');
   });
+
+  it('exposes a compact techniques section for narrow viewports', () => {
+    renderOverview();
+    expect(screen.getByRole('heading', { name: /Techniques & access/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /New lead/i })).toHaveAttribute(
+      'href',
+      '/console/cases/northridge/leads',
+    );
+  });
 });
