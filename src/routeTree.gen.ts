@@ -15,6 +15,8 @@ import { Route as FoundationRouteImport } from './routes/foundation'
 import { Route as ConsoleIndexRouteImport } from './routes/console/index'
 import { Route as ConsoleScreenRouteImport } from './routes/console/$screen'
 import { Route as ConsoleCasesCaseIdRouteRouteImport } from './routes/console/cases/$caseId/route'
+import { Route as ConsoleReferenceIndexRouteImport } from './routes/console/reference/index'
+import { Route as ConsoleReferenceSlugRouteImport } from './routes/console/reference/$slug'
 import { Route as ConsoleCasesCaseIdEvidenceRouteImport } from './routes/console/cases/$caseId/evidence'
 import { Route as ConsoleCasesCaseIdLeadsRouteImport } from './routes/console/cases/$caseId/leads'
 import { Route as ConsoleCasesCaseIdOverviewRouteImport } from './routes/console/cases/$caseId/overview'
@@ -49,6 +51,16 @@ const ConsoleScreenRoute = ConsoleScreenRouteImport.update({
 const ConsoleCasesCaseIdRouteRoute = ConsoleCasesCaseIdRouteRouteImport.update({
   id: '/cases/$caseId',
   path: '/cases/$caseId',
+  getParentRoute: () => ConsoleRouteRoute,
+} as any)
+const ConsoleReferenceIndexRoute = ConsoleReferenceIndexRouteImport.update({
+  id: '/reference/',
+  path: '/reference/',
+  getParentRoute: () => ConsoleRouteRoute,
+} as any)
+const ConsoleReferenceSlugRoute = ConsoleReferenceSlugRouteImport.update({
+  id: '/reference/$slug',
+  path: '/reference/$slug',
   getParentRoute: () => ConsoleRouteRoute,
 } as any)
 const ConsoleCasesCaseIdEvidenceRoute =
@@ -88,6 +100,8 @@ export interface FileRoutesByFullPath {
   '/console/$screen': typeof ConsoleScreenRoute
   '/console/': typeof ConsoleIndexRoute
   '/console/cases/$caseId': typeof ConsoleCasesCaseIdRouteRouteWithChildren
+  '/console/reference/$slug': typeof ConsoleReferenceSlugRoute
+  '/console/reference/': typeof ConsoleReferenceIndexRoute
   '/console/cases/$caseId/evidence': typeof ConsoleCasesCaseIdEvidenceRoute
   '/console/cases/$caseId/leads': typeof ConsoleCasesCaseIdLeadsRoute
   '/console/cases/$caseId/overview': typeof ConsoleCasesCaseIdOverviewRoute
@@ -100,6 +114,8 @@ export interface FileRoutesByTo {
   '/console/$screen': typeof ConsoleScreenRoute
   '/console': typeof ConsoleIndexRoute
   '/console/cases/$caseId': typeof ConsoleCasesCaseIdRouteRouteWithChildren
+  '/console/reference/$slug': typeof ConsoleReferenceSlugRoute
+  '/console/reference': typeof ConsoleReferenceIndexRoute
   '/console/cases/$caseId/evidence': typeof ConsoleCasesCaseIdEvidenceRoute
   '/console/cases/$caseId/leads': typeof ConsoleCasesCaseIdLeadsRoute
   '/console/cases/$caseId/overview': typeof ConsoleCasesCaseIdOverviewRoute
@@ -114,6 +130,8 @@ export interface FileRoutesById {
   '/console/$screen': typeof ConsoleScreenRoute
   '/console/': typeof ConsoleIndexRoute
   '/console/cases/$caseId': typeof ConsoleCasesCaseIdRouteRouteWithChildren
+  '/console/reference/$slug': typeof ConsoleReferenceSlugRoute
+  '/console/reference/': typeof ConsoleReferenceIndexRoute
   '/console/cases/$caseId/evidence': typeof ConsoleCasesCaseIdEvidenceRoute
   '/console/cases/$caseId/leads': typeof ConsoleCasesCaseIdLeadsRoute
   '/console/cases/$caseId/overview': typeof ConsoleCasesCaseIdOverviewRoute
@@ -129,6 +147,8 @@ export interface FileRouteTypes {
     | '/console/$screen'
     | '/console/'
     | '/console/cases/$caseId'
+    | '/console/reference/$slug'
+    | '/console/reference/'
     | '/console/cases/$caseId/evidence'
     | '/console/cases/$caseId/leads'
     | '/console/cases/$caseId/overview'
@@ -141,6 +161,8 @@ export interface FileRouteTypes {
     | '/console/$screen'
     | '/console'
     | '/console/cases/$caseId'
+    | '/console/reference/$slug'
+    | '/console/reference'
     | '/console/cases/$caseId/evidence'
     | '/console/cases/$caseId/leads'
     | '/console/cases/$caseId/overview'
@@ -154,6 +176,8 @@ export interface FileRouteTypes {
     | '/console/$screen'
     | '/console/'
     | '/console/cases/$caseId'
+    | '/console/reference/$slug'
+    | '/console/reference/'
     | '/console/cases/$caseId/evidence'
     | '/console/cases/$caseId/leads'
     | '/console/cases/$caseId/overview'
@@ -209,6 +233,20 @@ declare module '@tanstack/react-router' {
       path: '/cases/$caseId'
       fullPath: '/console/cases/$caseId'
       preLoaderRoute: typeof ConsoleCasesCaseIdRouteRouteImport
+      parentRoute: typeof ConsoleRouteRoute
+    }
+    '/console/reference/': {
+      id: '/console/reference/'
+      path: '/reference'
+      fullPath: '/console/reference/'
+      preLoaderRoute: typeof ConsoleReferenceIndexRouteImport
+      parentRoute: typeof ConsoleRouteRoute
+    }
+    '/console/reference/$slug': {
+      id: '/console/reference/$slug'
+      path: '/reference/$slug'
+      fullPath: '/console/reference/$slug'
+      preLoaderRoute: typeof ConsoleReferenceSlugRouteImport
       parentRoute: typeof ConsoleRouteRoute
     }
     '/console/cases/$caseId/evidence': {
@@ -275,12 +313,16 @@ interface ConsoleRouteRouteChildren {
   ConsoleScreenRoute: typeof ConsoleScreenRoute
   ConsoleIndexRoute: typeof ConsoleIndexRoute
   ConsoleCasesCaseIdRouteRoute: typeof ConsoleCasesCaseIdRouteRouteWithChildren
+  ConsoleReferenceSlugRoute: typeof ConsoleReferenceSlugRoute
+  ConsoleReferenceIndexRoute: typeof ConsoleReferenceIndexRoute
 }
 
 const ConsoleRouteRouteChildren: ConsoleRouteRouteChildren = {
   ConsoleScreenRoute: ConsoleScreenRoute,
   ConsoleIndexRoute: ConsoleIndexRoute,
   ConsoleCasesCaseIdRouteRoute: ConsoleCasesCaseIdRouteRouteWithChildren,
+  ConsoleReferenceSlugRoute: ConsoleReferenceSlugRoute,
+  ConsoleReferenceIndexRoute: ConsoleReferenceIndexRoute,
 }
 
 const ConsoleRouteRouteWithChildren = ConsoleRouteRoute._addFileChildren(
@@ -295,12 +337,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}

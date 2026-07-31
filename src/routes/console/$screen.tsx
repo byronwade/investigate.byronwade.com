@@ -1,13 +1,11 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
 
-/**
- * Legacy Paper dump path. Task 7 registers `/console/reference/$slug`;
- * redirect lightly so bookmarks land on the gallery when that ships.
- */
+/** Legacy Paper dump path → reference gallery. */
 export const Route = createFileRoute('/console/$screen')({
   beforeLoad: ({ params }) => {
     throw redirect({
-      href: `/console/reference/${encodeURIComponent(params.screen)}`,
+      to: '/console/reference/$slug',
+      params: { slug: params.screen },
     });
   },
 });
