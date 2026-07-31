@@ -4,9 +4,11 @@ Starter budgets enforced by `pnpm perf` (uncompressed on-disk assets after build
 
 | Metric | Budget |
 | --- | --- |
-| Total JS | 900 KiB |
+| Total JS (shared/entry) | 900 KiB |
 | Total CSS | 120 KiB |
-| Largest JS chunk | 450 KiB |
+| Largest JS chunk (shared/entry) | 450 KiB |
+
+Lazy Investigation Console Paper dumps (`src/features/console/screens/paper/*`, one chunk per `/console/<slug>` route) are excluded from the total/largest JS budgets so exact visual exports do not inflate the marketing-shell baseline. Their aggregate size is still printed by `pnpm perf` for visibility.
 
 ## Core Web Vitals / Lighthouse expectations
 

@@ -28,6 +28,15 @@ export default defineConfig({
         'src/routes/**',
         'src/router.tsx',
         'src/components/site-*.tsx',
+        // shadcn primitives installed for console — covered by usage, not unit thresholds yet
+        'src/components/ui/avatar.tsx',
+        'src/components/ui/command.tsx',
+        'src/components/ui/dialog.tsx',
+        'src/components/ui/dropdown-menu.tsx',
+        'src/components/ui/scroll-area.tsx',
+        'src/components/ui/sheet.tsx',
+        'src/components/ui/tabs.tsx',
+        'src/components/ui/tooltip.tsx',
         'src/features/demo/**',
         'src/integrations/**',
         '**/*.d.ts',
@@ -46,7 +55,11 @@ export default defineConfig({
         test: {
           name: 'unit',
           environment: 'node',
-          include: ['src/**/*.unit.test.{ts,tsx}', 'src/lib/**/*.test.ts'],
+          include: [
+            'src/**/*.unit.test.{ts,tsx}',
+            'src/lib/**/*.test.ts',
+            'src/features/**/*.test.ts',
+          ],
           exclude: ['src/**/*.component.test.ts', 'src/**/*.component.test.tsx'],
         },
       },
@@ -58,6 +71,7 @@ export default defineConfig({
           include: [
             'src/**/*.integration.test.{ts,tsx}',
             'src/**/*.component.test.{ts,tsx}',
+            'src/features/console/**/*.test.tsx',
             'src/test/**/*.test.{ts,tsx}',
           ],
           setupFiles: ['./src/test/setup.ts'],

@@ -16,8 +16,8 @@ export function getSecurityHeaders(isProduction: boolean): SecurityHeaderMap {
     'Content-Security-Policy': [
       "default-src 'self'",
       scriptSrc,
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-      "font-src 'self' https://fonts.gstatic.com data:",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net",
+      "font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net data:",
       "img-src 'self' data: blob:",
       connectSrc,
       "object-src 'none'",

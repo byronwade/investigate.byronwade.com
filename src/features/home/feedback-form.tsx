@@ -1,5 +1,5 @@
 import { type FormEvent, useState } from 'react';
-import { Button } from '#/components/ui/button';
+import { Button } from '#/components/ui/marketing-button';
 import { type FeedbackFieldErrors, validateFeedback } from '#/lib/shared/feedback';
 
 type SubmitState =

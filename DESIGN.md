@@ -201,9 +201,23 @@ Aim for WCAG 2.2 AA for text and interactive contrast. Prefer semantic tokens al
 Do not hardcode colors, radii, or shadows when a token exists.
 If a new value is needed, add a token and document it here.
 
+## Investigation Console
+
+Product UI for the AI-led case platform (Paper design language). Spec: `docs/superpowers/specs/2026-07-30-investigation-console-app-design.md`.
+
+- Scoped surface: `[data-surface='console']` + `src/features/console/styles/console.css`
+- Fonts: Geist / Geist Mono (console only); marketing keeps Fraunces / Source Sans 3
+- Ink palette: `#111111`, `#3D3D3D`, `#6B6B6B` (floor), `#ECECEC` (hairline)
+- Categorical: offence `#0070F3`, sensor `#B45309`, tip `#8E4EC6`, activity `#15682F`
+- App shells: `CaseShell` (case tabs) and `AgencyShell` (no case tabs) — classification strip, top bar, 212px sidebar, main, optional 344px rail
+- UI kit: shadcn primitives in `src/components/ui` + Phosphor Duotone icons; themed via console CSS variables
+- Product routes: `/console` → `/console/command-center`; agency/media/system under `/console/*`; case workspace `/console/cases/$caseId/...`
+- Paper dumps (exact JSX): `/console/reference` and `/console/reference/$slug` (`src/features/console/screens/paper/*`, Biome-ignored)
+- Phase C plan: `docs/superpowers/plans/2026-07-31-investigation-console-phase-c.md`
+
 ## Extending the design system
 
-1. Add/adjust tokens in `src/styles/tokens.css`
+1. Add/adjust tokens in `src/styles/tokens.css` (marketing) or `src/features/console/styles/console.css` (console)
 2. Document the change in this file
 3. Prefer semantic tokens over new brand steps when possible
 4. Add a visual example in the starter UI if the pattern is shared

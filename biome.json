@@ -17,7 +17,9 @@
       "!**/playwright-report",
       "!**/test-results",
       "!**/pnpm-lock.yaml",
-      "!**/*.css"
+      "!**/*.css",
+      "!**/src/features/console/screens/paper",
+      "!**/scripts/paper-jsx-to-screen.mjs"
     ]
   },
   "formatter": {
