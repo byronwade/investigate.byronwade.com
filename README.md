@@ -49,7 +49,7 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-**Investigation Console:** [http://localhost:3000/console](http://localhost:3000/console) redirects to the Northridge case overview. Case pages live under `/console/cases/$caseId/…`. Exact Paper dumps: `/console/reference`.
+**Investigation Console:** [http://localhost:3000/console](http://localhost:3000/console) redirects to the command center. Agency/media/system routes live under `/console/…`; case pages under `/console/cases/$caseId/…`. Exact Paper dumps: `/console/reference`.
 
 **First command for a new owner:** `pnpm install && cp .env.example .env && pnpm verify`
 

@@ -14,14 +14,50 @@ import { Route as ConsoleRouteRouteImport } from './routes/console/route'
 import { Route as FoundationRouteImport } from './routes/foundation'
 import { Route as ConsoleIndexRouteImport } from './routes/console/index'
 import { Route as ConsoleScreenRouteImport } from './routes/console/$screen'
+import { Route as ConsoleWorkspaceRouteRouteImport } from './routes/console/_workspace/route'
+import { Route as ConsoleWorkspaceAdministrationRouteImport } from './routes/console/_workspace/administration'
+import { Route as ConsoleWorkspaceCasesRouteImport } from './routes/console/_workspace/cases'
+import { Route as ConsoleWorkspaceCommandCenterRouteImport } from './routes/console/_workspace/command-center'
+import { Route as ConsoleWorkspaceCourtProductionRouteImport } from './routes/console/_workspace/court-production'
+import { Route as ConsoleWorkspaceEmptyStatesRouteImport } from './routes/console/_workspace/empty-states'
+import { Route as ConsoleWorkspaceFoundationsRouteImport } from './routes/console/_workspace/foundations'
+import { Route as ConsoleWorkspaceHandoffRouteImport } from './routes/console/_workspace/handoff'
+import { Route as ConsoleWorkspaceIncidentsRouteImport } from './routes/console/_workspace/incidents'
+import { Route as ConsoleWorkspaceIntakeRouteImport } from './routes/console/_workspace/intake'
+import { Route as ConsoleWorkspaceIntelligenceRouteImport } from './routes/console/_workspace/intelligence'
+import { Route as ConsoleWorkspaceInterviewsRouteImport } from './routes/console/_workspace/interviews'
+import { Route as ConsoleWorkspaceLocalModeRouteImport } from './routes/console/_workspace/local-mode'
+import { Route as ConsoleWorkspaceMotionRouteImport } from './routes/console/_workspace/motion'
+import { Route as ConsoleWorkspaceOversightRouteImport } from './routes/console/_workspace/oversight'
+import { Route as ConsoleWorkspacePeopleOrgsRouteImport } from './routes/console/_workspace/people-orgs'
+import { Route as ConsoleWorkspaceProsecutionRouteImport } from './routes/console/_workspace/prosecution'
+import { Route as ConsoleWorkspaceRecordsRouteImport } from './routes/console/_workspace/records'
+import { Route as ConsoleWorkspaceReportsRouteImport } from './routes/console/_workspace/reports'
+import { Route as ConsoleWorkspaceScenesRouteImport } from './routes/console/_workspace/scenes'
+import { Route as ConsoleWorkspaceSearchRouteImport } from './routes/console/_workspace/search'
 import { Route as ConsoleCasesCaseIdRouteRouteImport } from './routes/console/cases/$caseId/route'
 import { Route as ConsoleReferenceIndexRouteImport } from './routes/console/reference/index'
 import { Route as ConsoleReferenceSlugRouteImport } from './routes/console/reference/$slug'
+import { Route as ConsoleWorkspaceMediaAudioExaminationRouteImport } from './routes/console/_workspace/media/audio-examination'
+import { Route as ConsoleWorkspaceMediaFieldCaptureRouteImport } from './routes/console/_workspace/media/field-capture'
+import { Route as ConsoleWorkspaceMediaPhotoCanvasRouteImport } from './routes/console/_workspace/media/photo-canvas'
+import { Route as ConsoleWorkspaceMediaVideoReviewRouteImport } from './routes/console/_workspace/media/video-review'
+import { Route as ConsoleCasesCaseIdAnalysisRouteImport } from './routes/console/cases/$caseId/analysis'
+import { Route as ConsoleCasesCaseIdApprovalsRouteImport } from './routes/console/cases/$caseId/approvals'
+import { Route as ConsoleCasesCaseIdClosureRouteImport } from './routes/console/cases/$caseId/closure'
+import { Route as ConsoleCasesCaseIdDigitalRouteImport } from './routes/console/cases/$caseId/digital'
+import { Route as ConsoleCasesCaseIdDiscoveryRouteImport } from './routes/console/cases/$caseId/discovery'
 import { Route as ConsoleCasesCaseIdEvidenceRouteImport } from './routes/console/cases/$caseId/evidence'
+import { Route as ConsoleCasesCaseIdForensicsRouteImport } from './routes/console/cases/$caseId/forensics'
+import { Route as ConsoleCasesCaseIdInterviewRouteImport } from './routes/console/cases/$caseId/interview'
 import { Route as ConsoleCasesCaseIdLeadsRouteImport } from './routes/console/cases/$caseId/leads'
+import { Route as ConsoleCasesCaseIdLegalRouteImport } from './routes/console/cases/$caseId/legal'
 import { Route as ConsoleCasesCaseIdOverviewRouteImport } from './routes/console/cases/$caseId/overview'
 import { Route as ConsoleCasesCaseIdPeopleRouteImport } from './routes/console/cases/$caseId/people'
+import { Route as ConsoleCasesCaseIdPlanRouteImport } from './routes/console/cases/$caseId/plan'
+import { Route as ConsoleCasesCaseIdSceneRouteImport } from './routes/console/cases/$caseId/scene'
 import { Route as ConsoleCasesCaseIdTimelineRouteImport } from './routes/console/cases/$caseId/timeline'
+import { Route as ConsoleCasesCaseIdPeoplePersonIdRouteImport } from './routes/console/cases/$caseId/people.$personId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -48,6 +84,122 @@ const ConsoleScreenRoute = ConsoleScreenRouteImport.update({
   path: '/$screen',
   getParentRoute: () => ConsoleRouteRoute,
 } as any)
+const ConsoleWorkspaceRouteRoute = ConsoleWorkspaceRouteRouteImport.update({
+  id: '/_workspace',
+  getParentRoute: () => ConsoleRouteRoute,
+} as any)
+const ConsoleWorkspaceAdministrationRoute =
+  ConsoleWorkspaceAdministrationRouteImport.update({
+    id: '/administration',
+    path: '/administration',
+    getParentRoute: () => ConsoleWorkspaceRouteRoute,
+  } as any)
+const ConsoleWorkspaceCasesRoute = ConsoleWorkspaceCasesRouteImport.update({
+  id: '/cases',
+  path: '/cases',
+  getParentRoute: () => ConsoleWorkspaceRouteRoute,
+} as any)
+const ConsoleWorkspaceCommandCenterRoute =
+  ConsoleWorkspaceCommandCenterRouteImport.update({
+    id: '/command-center',
+    path: '/command-center',
+    getParentRoute: () => ConsoleWorkspaceRouteRoute,
+  } as any)
+const ConsoleWorkspaceCourtProductionRoute =
+  ConsoleWorkspaceCourtProductionRouteImport.update({
+    id: '/court-production',
+    path: '/court-production',
+    getParentRoute: () => ConsoleWorkspaceRouteRoute,
+  } as any)
+const ConsoleWorkspaceEmptyStatesRoute =
+  ConsoleWorkspaceEmptyStatesRouteImport.update({
+    id: '/empty-states',
+    path: '/empty-states',
+    getParentRoute: () => ConsoleWorkspaceRouteRoute,
+  } as any)
+const ConsoleWorkspaceFoundationsRoute =
+  ConsoleWorkspaceFoundationsRouteImport.update({
+    id: '/foundations',
+    path: '/foundations',
+    getParentRoute: () => ConsoleWorkspaceRouteRoute,
+  } as any)
+const ConsoleWorkspaceHandoffRoute = ConsoleWorkspaceHandoffRouteImport.update({
+  id: '/handoff',
+  path: '/handoff',
+  getParentRoute: () => ConsoleWorkspaceRouteRoute,
+} as any)
+const ConsoleWorkspaceIncidentsRoute =
+  ConsoleWorkspaceIncidentsRouteImport.update({
+    id: '/incidents',
+    path: '/incidents',
+    getParentRoute: () => ConsoleWorkspaceRouteRoute,
+  } as any)
+const ConsoleWorkspaceIntakeRoute = ConsoleWorkspaceIntakeRouteImport.update({
+  id: '/intake',
+  path: '/intake',
+  getParentRoute: () => ConsoleWorkspaceRouteRoute,
+} as any)
+const ConsoleWorkspaceIntelligenceRoute =
+  ConsoleWorkspaceIntelligenceRouteImport.update({
+    id: '/intelligence',
+    path: '/intelligence',
+    getParentRoute: () => ConsoleWorkspaceRouteRoute,
+  } as any)
+const ConsoleWorkspaceInterviewsRoute =
+  ConsoleWorkspaceInterviewsRouteImport.update({
+    id: '/interviews',
+    path: '/interviews',
+    getParentRoute: () => ConsoleWorkspaceRouteRoute,
+  } as any)
+const ConsoleWorkspaceLocalModeRoute =
+  ConsoleWorkspaceLocalModeRouteImport.update({
+    id: '/local-mode',
+    path: '/local-mode',
+    getParentRoute: () => ConsoleWorkspaceRouteRoute,
+  } as any)
+const ConsoleWorkspaceMotionRoute = ConsoleWorkspaceMotionRouteImport.update({
+  id: '/motion',
+  path: '/motion',
+  getParentRoute: () => ConsoleWorkspaceRouteRoute,
+} as any)
+const ConsoleWorkspaceOversightRoute =
+  ConsoleWorkspaceOversightRouteImport.update({
+    id: '/oversight',
+    path: '/oversight',
+    getParentRoute: () => ConsoleWorkspaceRouteRoute,
+  } as any)
+const ConsoleWorkspacePeopleOrgsRoute =
+  ConsoleWorkspacePeopleOrgsRouteImport.update({
+    id: '/people-orgs',
+    path: '/people-orgs',
+    getParentRoute: () => ConsoleWorkspaceRouteRoute,
+  } as any)
+const ConsoleWorkspaceProsecutionRoute =
+  ConsoleWorkspaceProsecutionRouteImport.update({
+    id: '/prosecution',
+    path: '/prosecution',
+    getParentRoute: () => ConsoleWorkspaceRouteRoute,
+  } as any)
+const ConsoleWorkspaceRecordsRoute = ConsoleWorkspaceRecordsRouteImport.update({
+  id: '/records',
+  path: '/records',
+  getParentRoute: () => ConsoleWorkspaceRouteRoute,
+} as any)
+const ConsoleWorkspaceReportsRoute = ConsoleWorkspaceReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => ConsoleWorkspaceRouteRoute,
+} as any)
+const ConsoleWorkspaceScenesRoute = ConsoleWorkspaceScenesRouteImport.update({
+  id: '/scenes',
+  path: '/scenes',
+  getParentRoute: () => ConsoleWorkspaceRouteRoute,
+} as any)
+const ConsoleWorkspaceSearchRoute = ConsoleWorkspaceSearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => ConsoleWorkspaceRouteRoute,
+} as any)
 const ConsoleCasesCaseIdRouteRoute = ConsoleCasesCaseIdRouteRouteImport.update({
   id: '/cases/$caseId',
   path: '/cases/$caseId',
@@ -63,15 +215,86 @@ const ConsoleReferenceSlugRoute = ConsoleReferenceSlugRouteImport.update({
   path: '/reference/$slug',
   getParentRoute: () => ConsoleRouteRoute,
 } as any)
+const ConsoleWorkspaceMediaAudioExaminationRoute =
+  ConsoleWorkspaceMediaAudioExaminationRouteImport.update({
+    id: '/media/audio-examination',
+    path: '/media/audio-examination',
+    getParentRoute: () => ConsoleWorkspaceRouteRoute,
+  } as any)
+const ConsoleWorkspaceMediaFieldCaptureRoute =
+  ConsoleWorkspaceMediaFieldCaptureRouteImport.update({
+    id: '/media/field-capture',
+    path: '/media/field-capture',
+    getParentRoute: () => ConsoleWorkspaceRouteRoute,
+  } as any)
+const ConsoleWorkspaceMediaPhotoCanvasRoute =
+  ConsoleWorkspaceMediaPhotoCanvasRouteImport.update({
+    id: '/media/photo-canvas',
+    path: '/media/photo-canvas',
+    getParentRoute: () => ConsoleWorkspaceRouteRoute,
+  } as any)
+const ConsoleWorkspaceMediaVideoReviewRoute =
+  ConsoleWorkspaceMediaVideoReviewRouteImport.update({
+    id: '/media/video-review',
+    path: '/media/video-review',
+    getParentRoute: () => ConsoleWorkspaceRouteRoute,
+  } as any)
+const ConsoleCasesCaseIdAnalysisRoute =
+  ConsoleCasesCaseIdAnalysisRouteImport.update({
+    id: '/analysis',
+    path: '/analysis',
+    getParentRoute: () => ConsoleCasesCaseIdRouteRoute,
+  } as any)
+const ConsoleCasesCaseIdApprovalsRoute =
+  ConsoleCasesCaseIdApprovalsRouteImport.update({
+    id: '/approvals',
+    path: '/approvals',
+    getParentRoute: () => ConsoleCasesCaseIdRouteRoute,
+  } as any)
+const ConsoleCasesCaseIdClosureRoute =
+  ConsoleCasesCaseIdClosureRouteImport.update({
+    id: '/closure',
+    path: '/closure',
+    getParentRoute: () => ConsoleCasesCaseIdRouteRoute,
+  } as any)
+const ConsoleCasesCaseIdDigitalRoute =
+  ConsoleCasesCaseIdDigitalRouteImport.update({
+    id: '/digital',
+    path: '/digital',
+    getParentRoute: () => ConsoleCasesCaseIdRouteRoute,
+  } as any)
+const ConsoleCasesCaseIdDiscoveryRoute =
+  ConsoleCasesCaseIdDiscoveryRouteImport.update({
+    id: '/discovery',
+    path: '/discovery',
+    getParentRoute: () => ConsoleCasesCaseIdRouteRoute,
+  } as any)
 const ConsoleCasesCaseIdEvidenceRoute =
   ConsoleCasesCaseIdEvidenceRouteImport.update({
     id: '/evidence',
     path: '/evidence',
     getParentRoute: () => ConsoleCasesCaseIdRouteRoute,
   } as any)
+const ConsoleCasesCaseIdForensicsRoute =
+  ConsoleCasesCaseIdForensicsRouteImport.update({
+    id: '/forensics',
+    path: '/forensics',
+    getParentRoute: () => ConsoleCasesCaseIdRouteRoute,
+  } as any)
+const ConsoleCasesCaseIdInterviewRoute =
+  ConsoleCasesCaseIdInterviewRouteImport.update({
+    id: '/interview',
+    path: '/interview',
+    getParentRoute: () => ConsoleCasesCaseIdRouteRoute,
+  } as any)
 const ConsoleCasesCaseIdLeadsRoute = ConsoleCasesCaseIdLeadsRouteImport.update({
   id: '/leads',
   path: '/leads',
+  getParentRoute: () => ConsoleCasesCaseIdRouteRoute,
+} as any)
+const ConsoleCasesCaseIdLegalRoute = ConsoleCasesCaseIdLegalRouteImport.update({
+  id: '/legal',
+  path: '/legal',
   getParentRoute: () => ConsoleCasesCaseIdRouteRoute,
 } as any)
 const ConsoleCasesCaseIdOverviewRoute =
@@ -86,11 +309,27 @@ const ConsoleCasesCaseIdPeopleRoute =
     path: '/people',
     getParentRoute: () => ConsoleCasesCaseIdRouteRoute,
   } as any)
+const ConsoleCasesCaseIdPlanRoute = ConsoleCasesCaseIdPlanRouteImport.update({
+  id: '/plan',
+  path: '/plan',
+  getParentRoute: () => ConsoleCasesCaseIdRouteRoute,
+} as any)
+const ConsoleCasesCaseIdSceneRoute = ConsoleCasesCaseIdSceneRouteImport.update({
+  id: '/scene',
+  path: '/scene',
+  getParentRoute: () => ConsoleCasesCaseIdRouteRoute,
+} as any)
 const ConsoleCasesCaseIdTimelineRoute =
   ConsoleCasesCaseIdTimelineRouteImport.update({
     id: '/timeline',
     path: '/timeline',
     getParentRoute: () => ConsoleCasesCaseIdRouteRoute,
+  } as any)
+const ConsoleCasesCaseIdPeoplePersonIdRoute =
+  ConsoleCasesCaseIdPeoplePersonIdRouteImport.update({
+    id: '/$personId',
+    path: '/$personId',
+    getParentRoute: () => ConsoleCasesCaseIdPeopleRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -100,43 +339,149 @@ export interface FileRoutesByFullPath {
   '/console/$screen': typeof ConsoleScreenRoute
   '/console/': typeof ConsoleIndexRoute
   '/console/cases/$caseId': typeof ConsoleCasesCaseIdRouteRouteWithChildren
+  '/console/administration': typeof ConsoleWorkspaceAdministrationRoute
+  '/console/cases': typeof ConsoleWorkspaceCasesRoute
+  '/console/command-center': typeof ConsoleWorkspaceCommandCenterRoute
+  '/console/court-production': typeof ConsoleWorkspaceCourtProductionRoute
+  '/console/empty-states': typeof ConsoleWorkspaceEmptyStatesRoute
+  '/console/foundations': typeof ConsoleWorkspaceFoundationsRoute
+  '/console/handoff': typeof ConsoleWorkspaceHandoffRoute
+  '/console/incidents': typeof ConsoleWorkspaceIncidentsRoute
+  '/console/intake': typeof ConsoleWorkspaceIntakeRoute
+  '/console/intelligence': typeof ConsoleWorkspaceIntelligenceRoute
+  '/console/interviews': typeof ConsoleWorkspaceInterviewsRoute
+  '/console/local-mode': typeof ConsoleWorkspaceLocalModeRoute
+  '/console/motion': typeof ConsoleWorkspaceMotionRoute
+  '/console/oversight': typeof ConsoleWorkspaceOversightRoute
+  '/console/people-orgs': typeof ConsoleWorkspacePeopleOrgsRoute
+  '/console/prosecution': typeof ConsoleWorkspaceProsecutionRoute
+  '/console/records': typeof ConsoleWorkspaceRecordsRoute
+  '/console/reports': typeof ConsoleWorkspaceReportsRoute
+  '/console/scenes': typeof ConsoleWorkspaceScenesRoute
+  '/console/search': typeof ConsoleWorkspaceSearchRoute
   '/console/reference/$slug': typeof ConsoleReferenceSlugRoute
   '/console/reference/': typeof ConsoleReferenceIndexRoute
+  '/console/media/audio-examination': typeof ConsoleWorkspaceMediaAudioExaminationRoute
+  '/console/media/field-capture': typeof ConsoleWorkspaceMediaFieldCaptureRoute
+  '/console/media/photo-canvas': typeof ConsoleWorkspaceMediaPhotoCanvasRoute
+  '/console/media/video-review': typeof ConsoleWorkspaceMediaVideoReviewRoute
+  '/console/cases/$caseId/analysis': typeof ConsoleCasesCaseIdAnalysisRoute
+  '/console/cases/$caseId/approvals': typeof ConsoleCasesCaseIdApprovalsRoute
+  '/console/cases/$caseId/closure': typeof ConsoleCasesCaseIdClosureRoute
+  '/console/cases/$caseId/digital': typeof ConsoleCasesCaseIdDigitalRoute
+  '/console/cases/$caseId/discovery': typeof ConsoleCasesCaseIdDiscoveryRoute
   '/console/cases/$caseId/evidence': typeof ConsoleCasesCaseIdEvidenceRoute
+  '/console/cases/$caseId/forensics': typeof ConsoleCasesCaseIdForensicsRoute
+  '/console/cases/$caseId/interview': typeof ConsoleCasesCaseIdInterviewRoute
   '/console/cases/$caseId/leads': typeof ConsoleCasesCaseIdLeadsRoute
+  '/console/cases/$caseId/legal': typeof ConsoleCasesCaseIdLegalRoute
   '/console/cases/$caseId/overview': typeof ConsoleCasesCaseIdOverviewRoute
-  '/console/cases/$caseId/people': typeof ConsoleCasesCaseIdPeopleRoute
+  '/console/cases/$caseId/people': typeof ConsoleCasesCaseIdPeopleRouteWithChildren
+  '/console/cases/$caseId/plan': typeof ConsoleCasesCaseIdPlanRoute
+  '/console/cases/$caseId/scene': typeof ConsoleCasesCaseIdSceneRoute
   '/console/cases/$caseId/timeline': typeof ConsoleCasesCaseIdTimelineRoute
+  '/console/cases/$caseId/people/$personId': typeof ConsoleCasesCaseIdPeoplePersonIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/foundation': typeof FoundationRoute
-  '/console/$screen': typeof ConsoleScreenRoute
   '/console': typeof ConsoleIndexRoute
+  '/console/$screen': typeof ConsoleScreenRoute
   '/console/cases/$caseId': typeof ConsoleCasesCaseIdRouteRouteWithChildren
+  '/console/administration': typeof ConsoleWorkspaceAdministrationRoute
+  '/console/cases': typeof ConsoleWorkspaceCasesRoute
+  '/console/command-center': typeof ConsoleWorkspaceCommandCenterRoute
+  '/console/court-production': typeof ConsoleWorkspaceCourtProductionRoute
+  '/console/empty-states': typeof ConsoleWorkspaceEmptyStatesRoute
+  '/console/foundations': typeof ConsoleWorkspaceFoundationsRoute
+  '/console/handoff': typeof ConsoleWorkspaceHandoffRoute
+  '/console/incidents': typeof ConsoleWorkspaceIncidentsRoute
+  '/console/intake': typeof ConsoleWorkspaceIntakeRoute
+  '/console/intelligence': typeof ConsoleWorkspaceIntelligenceRoute
+  '/console/interviews': typeof ConsoleWorkspaceInterviewsRoute
+  '/console/local-mode': typeof ConsoleWorkspaceLocalModeRoute
+  '/console/motion': typeof ConsoleWorkspaceMotionRoute
+  '/console/oversight': typeof ConsoleWorkspaceOversightRoute
+  '/console/people-orgs': typeof ConsoleWorkspacePeopleOrgsRoute
+  '/console/prosecution': typeof ConsoleWorkspaceProsecutionRoute
+  '/console/records': typeof ConsoleWorkspaceRecordsRoute
+  '/console/reports': typeof ConsoleWorkspaceReportsRoute
+  '/console/scenes': typeof ConsoleWorkspaceScenesRoute
+  '/console/search': typeof ConsoleWorkspaceSearchRoute
   '/console/reference/$slug': typeof ConsoleReferenceSlugRoute
   '/console/reference': typeof ConsoleReferenceIndexRoute
+  '/console/media/audio-examination': typeof ConsoleWorkspaceMediaAudioExaminationRoute
+  '/console/media/field-capture': typeof ConsoleWorkspaceMediaFieldCaptureRoute
+  '/console/media/photo-canvas': typeof ConsoleWorkspaceMediaPhotoCanvasRoute
+  '/console/media/video-review': typeof ConsoleWorkspaceMediaVideoReviewRoute
+  '/console/cases/$caseId/analysis': typeof ConsoleCasesCaseIdAnalysisRoute
+  '/console/cases/$caseId/approvals': typeof ConsoleCasesCaseIdApprovalsRoute
+  '/console/cases/$caseId/closure': typeof ConsoleCasesCaseIdClosureRoute
+  '/console/cases/$caseId/digital': typeof ConsoleCasesCaseIdDigitalRoute
+  '/console/cases/$caseId/discovery': typeof ConsoleCasesCaseIdDiscoveryRoute
   '/console/cases/$caseId/evidence': typeof ConsoleCasesCaseIdEvidenceRoute
+  '/console/cases/$caseId/forensics': typeof ConsoleCasesCaseIdForensicsRoute
+  '/console/cases/$caseId/interview': typeof ConsoleCasesCaseIdInterviewRoute
   '/console/cases/$caseId/leads': typeof ConsoleCasesCaseIdLeadsRoute
+  '/console/cases/$caseId/legal': typeof ConsoleCasesCaseIdLegalRoute
   '/console/cases/$caseId/overview': typeof ConsoleCasesCaseIdOverviewRoute
-  '/console/cases/$caseId/people': typeof ConsoleCasesCaseIdPeopleRoute
+  '/console/cases/$caseId/people': typeof ConsoleCasesCaseIdPeopleRouteWithChildren
+  '/console/cases/$caseId/plan': typeof ConsoleCasesCaseIdPlanRoute
+  '/console/cases/$caseId/scene': typeof ConsoleCasesCaseIdSceneRoute
   '/console/cases/$caseId/timeline': typeof ConsoleCasesCaseIdTimelineRoute
+  '/console/cases/$caseId/people/$personId': typeof ConsoleCasesCaseIdPeoplePersonIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/console': typeof ConsoleRouteRouteWithChildren
   '/foundation': typeof FoundationRoute
+  '/console/_workspace': typeof ConsoleWorkspaceRouteRouteWithChildren
   '/console/$screen': typeof ConsoleScreenRoute
   '/console/': typeof ConsoleIndexRoute
   '/console/cases/$caseId': typeof ConsoleCasesCaseIdRouteRouteWithChildren
+  '/console/_workspace/administration': typeof ConsoleWorkspaceAdministrationRoute
+  '/console/_workspace/cases': typeof ConsoleWorkspaceCasesRoute
+  '/console/_workspace/command-center': typeof ConsoleWorkspaceCommandCenterRoute
+  '/console/_workspace/court-production': typeof ConsoleWorkspaceCourtProductionRoute
+  '/console/_workspace/empty-states': typeof ConsoleWorkspaceEmptyStatesRoute
+  '/console/_workspace/foundations': typeof ConsoleWorkspaceFoundationsRoute
+  '/console/_workspace/handoff': typeof ConsoleWorkspaceHandoffRoute
+  '/console/_workspace/incidents': typeof ConsoleWorkspaceIncidentsRoute
+  '/console/_workspace/intake': typeof ConsoleWorkspaceIntakeRoute
+  '/console/_workspace/intelligence': typeof ConsoleWorkspaceIntelligenceRoute
+  '/console/_workspace/interviews': typeof ConsoleWorkspaceInterviewsRoute
+  '/console/_workspace/local-mode': typeof ConsoleWorkspaceLocalModeRoute
+  '/console/_workspace/motion': typeof ConsoleWorkspaceMotionRoute
+  '/console/_workspace/oversight': typeof ConsoleWorkspaceOversightRoute
+  '/console/_workspace/people-orgs': typeof ConsoleWorkspacePeopleOrgsRoute
+  '/console/_workspace/prosecution': typeof ConsoleWorkspaceProsecutionRoute
+  '/console/_workspace/records': typeof ConsoleWorkspaceRecordsRoute
+  '/console/_workspace/reports': typeof ConsoleWorkspaceReportsRoute
+  '/console/_workspace/scenes': typeof ConsoleWorkspaceScenesRoute
+  '/console/_workspace/search': typeof ConsoleWorkspaceSearchRoute
   '/console/reference/$slug': typeof ConsoleReferenceSlugRoute
   '/console/reference/': typeof ConsoleReferenceIndexRoute
+  '/console/_workspace/media/audio-examination': typeof ConsoleWorkspaceMediaAudioExaminationRoute
+  '/console/_workspace/media/field-capture': typeof ConsoleWorkspaceMediaFieldCaptureRoute
+  '/console/_workspace/media/photo-canvas': typeof ConsoleWorkspaceMediaPhotoCanvasRoute
+  '/console/_workspace/media/video-review': typeof ConsoleWorkspaceMediaVideoReviewRoute
+  '/console/cases/$caseId/analysis': typeof ConsoleCasesCaseIdAnalysisRoute
+  '/console/cases/$caseId/approvals': typeof ConsoleCasesCaseIdApprovalsRoute
+  '/console/cases/$caseId/closure': typeof ConsoleCasesCaseIdClosureRoute
+  '/console/cases/$caseId/digital': typeof ConsoleCasesCaseIdDigitalRoute
+  '/console/cases/$caseId/discovery': typeof ConsoleCasesCaseIdDiscoveryRoute
   '/console/cases/$caseId/evidence': typeof ConsoleCasesCaseIdEvidenceRoute
+  '/console/cases/$caseId/forensics': typeof ConsoleCasesCaseIdForensicsRoute
+  '/console/cases/$caseId/interview': typeof ConsoleCasesCaseIdInterviewRoute
   '/console/cases/$caseId/leads': typeof ConsoleCasesCaseIdLeadsRoute
+  '/console/cases/$caseId/legal': typeof ConsoleCasesCaseIdLegalRoute
   '/console/cases/$caseId/overview': typeof ConsoleCasesCaseIdOverviewRoute
-  '/console/cases/$caseId/people': typeof ConsoleCasesCaseIdPeopleRoute
+  '/console/cases/$caseId/people': typeof ConsoleCasesCaseIdPeopleRouteWithChildren
+  '/console/cases/$caseId/plan': typeof ConsoleCasesCaseIdPlanRoute
+  '/console/cases/$caseId/scene': typeof ConsoleCasesCaseIdSceneRoute
   '/console/cases/$caseId/timeline': typeof ConsoleCasesCaseIdTimelineRoute
+  '/console/cases/$caseId/people/$personId': typeof ConsoleCasesCaseIdPeoplePersonIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -147,42 +492,148 @@ export interface FileRouteTypes {
     | '/console/$screen'
     | '/console/'
     | '/console/cases/$caseId'
+    | '/console/administration'
+    | '/console/cases'
+    | '/console/command-center'
+    | '/console/court-production'
+    | '/console/empty-states'
+    | '/console/foundations'
+    | '/console/handoff'
+    | '/console/incidents'
+    | '/console/intake'
+    | '/console/intelligence'
+    | '/console/interviews'
+    | '/console/local-mode'
+    | '/console/motion'
+    | '/console/oversight'
+    | '/console/people-orgs'
+    | '/console/prosecution'
+    | '/console/records'
+    | '/console/reports'
+    | '/console/scenes'
+    | '/console/search'
     | '/console/reference/$slug'
     | '/console/reference/'
+    | '/console/media/audio-examination'
+    | '/console/media/field-capture'
+    | '/console/media/photo-canvas'
+    | '/console/media/video-review'
+    | '/console/cases/$caseId/analysis'
+    | '/console/cases/$caseId/approvals'
+    | '/console/cases/$caseId/closure'
+    | '/console/cases/$caseId/digital'
+    | '/console/cases/$caseId/discovery'
     | '/console/cases/$caseId/evidence'
+    | '/console/cases/$caseId/forensics'
+    | '/console/cases/$caseId/interview'
     | '/console/cases/$caseId/leads'
+    | '/console/cases/$caseId/legal'
     | '/console/cases/$caseId/overview'
     | '/console/cases/$caseId/people'
+    | '/console/cases/$caseId/plan'
+    | '/console/cases/$caseId/scene'
     | '/console/cases/$caseId/timeline'
+    | '/console/cases/$caseId/people/$personId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/foundation'
-    | '/console/$screen'
     | '/console'
+    | '/console/$screen'
     | '/console/cases/$caseId'
+    | '/console/administration'
+    | '/console/cases'
+    | '/console/command-center'
+    | '/console/court-production'
+    | '/console/empty-states'
+    | '/console/foundations'
+    | '/console/handoff'
+    | '/console/incidents'
+    | '/console/intake'
+    | '/console/intelligence'
+    | '/console/interviews'
+    | '/console/local-mode'
+    | '/console/motion'
+    | '/console/oversight'
+    | '/console/people-orgs'
+    | '/console/prosecution'
+    | '/console/records'
+    | '/console/reports'
+    | '/console/scenes'
+    | '/console/search'
     | '/console/reference/$slug'
     | '/console/reference'
+    | '/console/media/audio-examination'
+    | '/console/media/field-capture'
+    | '/console/media/photo-canvas'
+    | '/console/media/video-review'
+    | '/console/cases/$caseId/analysis'
+    | '/console/cases/$caseId/approvals'
+    | '/console/cases/$caseId/closure'
+    | '/console/cases/$caseId/digital'
+    | '/console/cases/$caseId/discovery'
     | '/console/cases/$caseId/evidence'
+    | '/console/cases/$caseId/forensics'
+    | '/console/cases/$caseId/interview'
     | '/console/cases/$caseId/leads'
+    | '/console/cases/$caseId/legal'
     | '/console/cases/$caseId/overview'
     | '/console/cases/$caseId/people'
+    | '/console/cases/$caseId/plan'
+    | '/console/cases/$caseId/scene'
     | '/console/cases/$caseId/timeline'
+    | '/console/cases/$caseId/people/$personId'
   id:
     | '__root__'
     | '/'
     | '/console'
     | '/foundation'
+    | '/console/_workspace'
     | '/console/$screen'
     | '/console/'
     | '/console/cases/$caseId'
+    | '/console/_workspace/administration'
+    | '/console/_workspace/cases'
+    | '/console/_workspace/command-center'
+    | '/console/_workspace/court-production'
+    | '/console/_workspace/empty-states'
+    | '/console/_workspace/foundations'
+    | '/console/_workspace/handoff'
+    | '/console/_workspace/incidents'
+    | '/console/_workspace/intake'
+    | '/console/_workspace/intelligence'
+    | '/console/_workspace/interviews'
+    | '/console/_workspace/local-mode'
+    | '/console/_workspace/motion'
+    | '/console/_workspace/oversight'
+    | '/console/_workspace/people-orgs'
+    | '/console/_workspace/prosecution'
+    | '/console/_workspace/records'
+    | '/console/_workspace/reports'
+    | '/console/_workspace/scenes'
+    | '/console/_workspace/search'
     | '/console/reference/$slug'
     | '/console/reference/'
+    | '/console/_workspace/media/audio-examination'
+    | '/console/_workspace/media/field-capture'
+    | '/console/_workspace/media/photo-canvas'
+    | '/console/_workspace/media/video-review'
+    | '/console/cases/$caseId/analysis'
+    | '/console/cases/$caseId/approvals'
+    | '/console/cases/$caseId/closure'
+    | '/console/cases/$caseId/digital'
+    | '/console/cases/$caseId/discovery'
     | '/console/cases/$caseId/evidence'
+    | '/console/cases/$caseId/forensics'
+    | '/console/cases/$caseId/interview'
     | '/console/cases/$caseId/leads'
+    | '/console/cases/$caseId/legal'
     | '/console/cases/$caseId/overview'
     | '/console/cases/$caseId/people'
+    | '/console/cases/$caseId/plan'
+    | '/console/cases/$caseId/scene'
     | '/console/cases/$caseId/timeline'
+    | '/console/cases/$caseId/people/$personId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -228,6 +679,153 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConsoleScreenRouteImport
       parentRoute: typeof ConsoleRouteRoute
     }
+    '/console/_workspace': {
+      id: '/console/_workspace'
+      path: ''
+      fullPath: '/console'
+      preLoaderRoute: typeof ConsoleWorkspaceRouteRouteImport
+      parentRoute: typeof ConsoleRouteRoute
+    }
+    '/console/_workspace/administration': {
+      id: '/console/_workspace/administration'
+      path: '/administration'
+      fullPath: '/console/administration'
+      preLoaderRoute: typeof ConsoleWorkspaceAdministrationRouteImport
+      parentRoute: typeof ConsoleWorkspaceRouteRoute
+    }
+    '/console/_workspace/cases': {
+      id: '/console/_workspace/cases'
+      path: '/cases'
+      fullPath: '/console/cases'
+      preLoaderRoute: typeof ConsoleWorkspaceCasesRouteImport
+      parentRoute: typeof ConsoleWorkspaceRouteRoute
+    }
+    '/console/_workspace/command-center': {
+      id: '/console/_workspace/command-center'
+      path: '/command-center'
+      fullPath: '/console/command-center'
+      preLoaderRoute: typeof ConsoleWorkspaceCommandCenterRouteImport
+      parentRoute: typeof ConsoleWorkspaceRouteRoute
+    }
+    '/console/_workspace/court-production': {
+      id: '/console/_workspace/court-production'
+      path: '/court-production'
+      fullPath: '/console/court-production'
+      preLoaderRoute: typeof ConsoleWorkspaceCourtProductionRouteImport
+      parentRoute: typeof ConsoleWorkspaceRouteRoute
+    }
+    '/console/_workspace/empty-states': {
+      id: '/console/_workspace/empty-states'
+      path: '/empty-states'
+      fullPath: '/console/empty-states'
+      preLoaderRoute: typeof ConsoleWorkspaceEmptyStatesRouteImport
+      parentRoute: typeof ConsoleWorkspaceRouteRoute
+    }
+    '/console/_workspace/foundations': {
+      id: '/console/_workspace/foundations'
+      path: '/foundations'
+      fullPath: '/console/foundations'
+      preLoaderRoute: typeof ConsoleWorkspaceFoundationsRouteImport
+      parentRoute: typeof ConsoleWorkspaceRouteRoute
+    }
+    '/console/_workspace/handoff': {
+      id: '/console/_workspace/handoff'
+      path: '/handoff'
+      fullPath: '/console/handoff'
+      preLoaderRoute: typeof ConsoleWorkspaceHandoffRouteImport
+      parentRoute: typeof ConsoleWorkspaceRouteRoute
+    }
+    '/console/_workspace/incidents': {
+      id: '/console/_workspace/incidents'
+      path: '/incidents'
+      fullPath: '/console/incidents'
+      preLoaderRoute: typeof ConsoleWorkspaceIncidentsRouteImport
+      parentRoute: typeof ConsoleWorkspaceRouteRoute
+    }
+    '/console/_workspace/intake': {
+      id: '/console/_workspace/intake'
+      path: '/intake'
+      fullPath: '/console/intake'
+      preLoaderRoute: typeof ConsoleWorkspaceIntakeRouteImport
+      parentRoute: typeof ConsoleWorkspaceRouteRoute
+    }
+    '/console/_workspace/intelligence': {
+      id: '/console/_workspace/intelligence'
+      path: '/intelligence'
+      fullPath: '/console/intelligence'
+      preLoaderRoute: typeof ConsoleWorkspaceIntelligenceRouteImport
+      parentRoute: typeof ConsoleWorkspaceRouteRoute
+    }
+    '/console/_workspace/interviews': {
+      id: '/console/_workspace/interviews'
+      path: '/interviews'
+      fullPath: '/console/interviews'
+      preLoaderRoute: typeof ConsoleWorkspaceInterviewsRouteImport
+      parentRoute: typeof ConsoleWorkspaceRouteRoute
+    }
+    '/console/_workspace/local-mode': {
+      id: '/console/_workspace/local-mode'
+      path: '/local-mode'
+      fullPath: '/console/local-mode'
+      preLoaderRoute: typeof ConsoleWorkspaceLocalModeRouteImport
+      parentRoute: typeof ConsoleWorkspaceRouteRoute
+    }
+    '/console/_workspace/motion': {
+      id: '/console/_workspace/motion'
+      path: '/motion'
+      fullPath: '/console/motion'
+      preLoaderRoute: typeof ConsoleWorkspaceMotionRouteImport
+      parentRoute: typeof ConsoleWorkspaceRouteRoute
+    }
+    '/console/_workspace/oversight': {
+      id: '/console/_workspace/oversight'
+      path: '/oversight'
+      fullPath: '/console/oversight'
+      preLoaderRoute: typeof ConsoleWorkspaceOversightRouteImport
+      parentRoute: typeof ConsoleWorkspaceRouteRoute
+    }
+    '/console/_workspace/people-orgs': {
+      id: '/console/_workspace/people-orgs'
+      path: '/people-orgs'
+      fullPath: '/console/people-orgs'
+      preLoaderRoute: typeof ConsoleWorkspacePeopleOrgsRouteImport
+      parentRoute: typeof ConsoleWorkspaceRouteRoute
+    }
+    '/console/_workspace/prosecution': {
+      id: '/console/_workspace/prosecution'
+      path: '/prosecution'
+      fullPath: '/console/prosecution'
+      preLoaderRoute: typeof ConsoleWorkspaceProsecutionRouteImport
+      parentRoute: typeof ConsoleWorkspaceRouteRoute
+    }
+    '/console/_workspace/records': {
+      id: '/console/_workspace/records'
+      path: '/records'
+      fullPath: '/console/records'
+      preLoaderRoute: typeof ConsoleWorkspaceRecordsRouteImport
+      parentRoute: typeof ConsoleWorkspaceRouteRoute
+    }
+    '/console/_workspace/reports': {
+      id: '/console/_workspace/reports'
+      path: '/reports'
+      fullPath: '/console/reports'
+      preLoaderRoute: typeof ConsoleWorkspaceReportsRouteImport
+      parentRoute: typeof ConsoleWorkspaceRouteRoute
+    }
+    '/console/_workspace/scenes': {
+      id: '/console/_workspace/scenes'
+      path: '/scenes'
+      fullPath: '/console/scenes'
+      preLoaderRoute: typeof ConsoleWorkspaceScenesRouteImport
+      parentRoute: typeof ConsoleWorkspaceRouteRoute
+    }
+    '/console/_workspace/search': {
+      id: '/console/_workspace/search'
+      path: '/search'
+      fullPath: '/console/search'
+      preLoaderRoute: typeof ConsoleWorkspaceSearchRouteImport
+      parentRoute: typeof ConsoleWorkspaceRouteRoute
+    }
     '/console/cases/$caseId': {
       id: '/console/cases/$caseId'
       path: '/cases/$caseId'
@@ -249,6 +847,69 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConsoleReferenceSlugRouteImport
       parentRoute: typeof ConsoleRouteRoute
     }
+    '/console/_workspace/media/audio-examination': {
+      id: '/console/_workspace/media/audio-examination'
+      path: '/media/audio-examination'
+      fullPath: '/console/media/audio-examination'
+      preLoaderRoute: typeof ConsoleWorkspaceMediaAudioExaminationRouteImport
+      parentRoute: typeof ConsoleWorkspaceRouteRoute
+    }
+    '/console/_workspace/media/field-capture': {
+      id: '/console/_workspace/media/field-capture'
+      path: '/media/field-capture'
+      fullPath: '/console/media/field-capture'
+      preLoaderRoute: typeof ConsoleWorkspaceMediaFieldCaptureRouteImport
+      parentRoute: typeof ConsoleWorkspaceRouteRoute
+    }
+    '/console/_workspace/media/photo-canvas': {
+      id: '/console/_workspace/media/photo-canvas'
+      path: '/media/photo-canvas'
+      fullPath: '/console/media/photo-canvas'
+      preLoaderRoute: typeof ConsoleWorkspaceMediaPhotoCanvasRouteImport
+      parentRoute: typeof ConsoleWorkspaceRouteRoute
+    }
+    '/console/_workspace/media/video-review': {
+      id: '/console/_workspace/media/video-review'
+      path: '/media/video-review'
+      fullPath: '/console/media/video-review'
+      preLoaderRoute: typeof ConsoleWorkspaceMediaVideoReviewRouteImport
+      parentRoute: typeof ConsoleWorkspaceRouteRoute
+    }
+    '/console/cases/$caseId/analysis': {
+      id: '/console/cases/$caseId/analysis'
+      path: '/analysis'
+      fullPath: '/console/cases/$caseId/analysis'
+      preLoaderRoute: typeof ConsoleCasesCaseIdAnalysisRouteImport
+      parentRoute: typeof ConsoleCasesCaseIdRouteRoute
+    }
+    '/console/cases/$caseId/approvals': {
+      id: '/console/cases/$caseId/approvals'
+      path: '/approvals'
+      fullPath: '/console/cases/$caseId/approvals'
+      preLoaderRoute: typeof ConsoleCasesCaseIdApprovalsRouteImport
+      parentRoute: typeof ConsoleCasesCaseIdRouteRoute
+    }
+    '/console/cases/$caseId/closure': {
+      id: '/console/cases/$caseId/closure'
+      path: '/closure'
+      fullPath: '/console/cases/$caseId/closure'
+      preLoaderRoute: typeof ConsoleCasesCaseIdClosureRouteImport
+      parentRoute: typeof ConsoleCasesCaseIdRouteRoute
+    }
+    '/console/cases/$caseId/digital': {
+      id: '/console/cases/$caseId/digital'
+      path: '/digital'
+      fullPath: '/console/cases/$caseId/digital'
+      preLoaderRoute: typeof ConsoleCasesCaseIdDigitalRouteImport
+      parentRoute: typeof ConsoleCasesCaseIdRouteRoute
+    }
+    '/console/cases/$caseId/discovery': {
+      id: '/console/cases/$caseId/discovery'
+      path: '/discovery'
+      fullPath: '/console/cases/$caseId/discovery'
+      preLoaderRoute: typeof ConsoleCasesCaseIdDiscoveryRouteImport
+      parentRoute: typeof ConsoleCasesCaseIdRouteRoute
+    }
     '/console/cases/$caseId/evidence': {
       id: '/console/cases/$caseId/evidence'
       path: '/evidence'
@@ -256,11 +917,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConsoleCasesCaseIdEvidenceRouteImport
       parentRoute: typeof ConsoleCasesCaseIdRouteRoute
     }
+    '/console/cases/$caseId/forensics': {
+      id: '/console/cases/$caseId/forensics'
+      path: '/forensics'
+      fullPath: '/console/cases/$caseId/forensics'
+      preLoaderRoute: typeof ConsoleCasesCaseIdForensicsRouteImport
+      parentRoute: typeof ConsoleCasesCaseIdRouteRoute
+    }
+    '/console/cases/$caseId/interview': {
+      id: '/console/cases/$caseId/interview'
+      path: '/interview'
+      fullPath: '/console/cases/$caseId/interview'
+      preLoaderRoute: typeof ConsoleCasesCaseIdInterviewRouteImport
+      parentRoute: typeof ConsoleCasesCaseIdRouteRoute
+    }
     '/console/cases/$caseId/leads': {
       id: '/console/cases/$caseId/leads'
       path: '/leads'
       fullPath: '/console/cases/$caseId/leads'
       preLoaderRoute: typeof ConsoleCasesCaseIdLeadsRouteImport
+      parentRoute: typeof ConsoleCasesCaseIdRouteRoute
+    }
+    '/console/cases/$caseId/legal': {
+      id: '/console/cases/$caseId/legal'
+      path: '/legal'
+      fullPath: '/console/cases/$caseId/legal'
+      preLoaderRoute: typeof ConsoleCasesCaseIdLegalRouteImport
       parentRoute: typeof ConsoleCasesCaseIdRouteRoute
     }
     '/console/cases/$caseId/overview': {
@@ -277,6 +959,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConsoleCasesCaseIdPeopleRouteImport
       parentRoute: typeof ConsoleCasesCaseIdRouteRoute
     }
+    '/console/cases/$caseId/plan': {
+      id: '/console/cases/$caseId/plan'
+      path: '/plan'
+      fullPath: '/console/cases/$caseId/plan'
+      preLoaderRoute: typeof ConsoleCasesCaseIdPlanRouteImport
+      parentRoute: typeof ConsoleCasesCaseIdRouteRoute
+    }
+    '/console/cases/$caseId/scene': {
+      id: '/console/cases/$caseId/scene'
+      path: '/scene'
+      fullPath: '/console/cases/$caseId/scene'
+      preLoaderRoute: typeof ConsoleCasesCaseIdSceneRouteImport
+      parentRoute: typeof ConsoleCasesCaseIdRouteRoute
+    }
     '/console/cases/$caseId/timeline': {
       id: '/console/cases/$caseId/timeline'
       path: '/timeline'
@@ -284,23 +980,126 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConsoleCasesCaseIdTimelineRouteImport
       parentRoute: typeof ConsoleCasesCaseIdRouteRoute
     }
+    '/console/cases/$caseId/people/$personId': {
+      id: '/console/cases/$caseId/people/$personId'
+      path: '/$personId'
+      fullPath: '/console/cases/$caseId/people/$personId'
+      preLoaderRoute: typeof ConsoleCasesCaseIdPeoplePersonIdRouteImport
+      parentRoute: typeof ConsoleCasesCaseIdPeopleRoute
+    }
   }
 }
 
+interface ConsoleWorkspaceRouteRouteChildren {
+  ConsoleWorkspaceAdministrationRoute: typeof ConsoleWorkspaceAdministrationRoute
+  ConsoleWorkspaceCasesRoute: typeof ConsoleWorkspaceCasesRoute
+  ConsoleWorkspaceCommandCenterRoute: typeof ConsoleWorkspaceCommandCenterRoute
+  ConsoleWorkspaceCourtProductionRoute: typeof ConsoleWorkspaceCourtProductionRoute
+  ConsoleWorkspaceEmptyStatesRoute: typeof ConsoleWorkspaceEmptyStatesRoute
+  ConsoleWorkspaceFoundationsRoute: typeof ConsoleWorkspaceFoundationsRoute
+  ConsoleWorkspaceHandoffRoute: typeof ConsoleWorkspaceHandoffRoute
+  ConsoleWorkspaceIncidentsRoute: typeof ConsoleWorkspaceIncidentsRoute
+  ConsoleWorkspaceIntakeRoute: typeof ConsoleWorkspaceIntakeRoute
+  ConsoleWorkspaceIntelligenceRoute: typeof ConsoleWorkspaceIntelligenceRoute
+  ConsoleWorkspaceInterviewsRoute: typeof ConsoleWorkspaceInterviewsRoute
+  ConsoleWorkspaceLocalModeRoute: typeof ConsoleWorkspaceLocalModeRoute
+  ConsoleWorkspaceMotionRoute: typeof ConsoleWorkspaceMotionRoute
+  ConsoleWorkspaceOversightRoute: typeof ConsoleWorkspaceOversightRoute
+  ConsoleWorkspacePeopleOrgsRoute: typeof ConsoleWorkspacePeopleOrgsRoute
+  ConsoleWorkspaceProsecutionRoute: typeof ConsoleWorkspaceProsecutionRoute
+  ConsoleWorkspaceRecordsRoute: typeof ConsoleWorkspaceRecordsRoute
+  ConsoleWorkspaceReportsRoute: typeof ConsoleWorkspaceReportsRoute
+  ConsoleWorkspaceScenesRoute: typeof ConsoleWorkspaceScenesRoute
+  ConsoleWorkspaceSearchRoute: typeof ConsoleWorkspaceSearchRoute
+  ConsoleWorkspaceMediaAudioExaminationRoute: typeof ConsoleWorkspaceMediaAudioExaminationRoute
+  ConsoleWorkspaceMediaFieldCaptureRoute: typeof ConsoleWorkspaceMediaFieldCaptureRoute
+  ConsoleWorkspaceMediaPhotoCanvasRoute: typeof ConsoleWorkspaceMediaPhotoCanvasRoute
+  ConsoleWorkspaceMediaVideoReviewRoute: typeof ConsoleWorkspaceMediaVideoReviewRoute
+}
+
+const ConsoleWorkspaceRouteRouteChildren: ConsoleWorkspaceRouteRouteChildren = {
+  ConsoleWorkspaceAdministrationRoute: ConsoleWorkspaceAdministrationRoute,
+  ConsoleWorkspaceCasesRoute: ConsoleWorkspaceCasesRoute,
+  ConsoleWorkspaceCommandCenterRoute: ConsoleWorkspaceCommandCenterRoute,
+  ConsoleWorkspaceCourtProductionRoute: ConsoleWorkspaceCourtProductionRoute,
+  ConsoleWorkspaceEmptyStatesRoute: ConsoleWorkspaceEmptyStatesRoute,
+  ConsoleWorkspaceFoundationsRoute: ConsoleWorkspaceFoundationsRoute,
+  ConsoleWorkspaceHandoffRoute: ConsoleWorkspaceHandoffRoute,
+  ConsoleWorkspaceIncidentsRoute: ConsoleWorkspaceIncidentsRoute,
+  ConsoleWorkspaceIntakeRoute: ConsoleWorkspaceIntakeRoute,
+  ConsoleWorkspaceIntelligenceRoute: ConsoleWorkspaceIntelligenceRoute,
+  ConsoleWorkspaceInterviewsRoute: ConsoleWorkspaceInterviewsRoute,
+  ConsoleWorkspaceLocalModeRoute: ConsoleWorkspaceLocalModeRoute,
+  ConsoleWorkspaceMotionRoute: ConsoleWorkspaceMotionRoute,
+  ConsoleWorkspaceOversightRoute: ConsoleWorkspaceOversightRoute,
+  ConsoleWorkspacePeopleOrgsRoute: ConsoleWorkspacePeopleOrgsRoute,
+  ConsoleWorkspaceProsecutionRoute: ConsoleWorkspaceProsecutionRoute,
+  ConsoleWorkspaceRecordsRoute: ConsoleWorkspaceRecordsRoute,
+  ConsoleWorkspaceReportsRoute: ConsoleWorkspaceReportsRoute,
+  ConsoleWorkspaceScenesRoute: ConsoleWorkspaceScenesRoute,
+  ConsoleWorkspaceSearchRoute: ConsoleWorkspaceSearchRoute,
+  ConsoleWorkspaceMediaAudioExaminationRoute:
+    ConsoleWorkspaceMediaAudioExaminationRoute,
+  ConsoleWorkspaceMediaFieldCaptureRoute:
+    ConsoleWorkspaceMediaFieldCaptureRoute,
+  ConsoleWorkspaceMediaPhotoCanvasRoute: ConsoleWorkspaceMediaPhotoCanvasRoute,
+  ConsoleWorkspaceMediaVideoReviewRoute: ConsoleWorkspaceMediaVideoReviewRoute,
+}
+
+const ConsoleWorkspaceRouteRouteWithChildren =
+  ConsoleWorkspaceRouteRoute._addFileChildren(
+    ConsoleWorkspaceRouteRouteChildren,
+  )
+
+interface ConsoleCasesCaseIdPeopleRouteChildren {
+  ConsoleCasesCaseIdPeoplePersonIdRoute: typeof ConsoleCasesCaseIdPeoplePersonIdRoute
+}
+
+const ConsoleCasesCaseIdPeopleRouteChildren: ConsoleCasesCaseIdPeopleRouteChildren =
+  {
+    ConsoleCasesCaseIdPeoplePersonIdRoute:
+      ConsoleCasesCaseIdPeoplePersonIdRoute,
+  }
+
+const ConsoleCasesCaseIdPeopleRouteWithChildren =
+  ConsoleCasesCaseIdPeopleRoute._addFileChildren(
+    ConsoleCasesCaseIdPeopleRouteChildren,
+  )
+
 interface ConsoleCasesCaseIdRouteRouteChildren {
+  ConsoleCasesCaseIdAnalysisRoute: typeof ConsoleCasesCaseIdAnalysisRoute
+  ConsoleCasesCaseIdApprovalsRoute: typeof ConsoleCasesCaseIdApprovalsRoute
+  ConsoleCasesCaseIdClosureRoute: typeof ConsoleCasesCaseIdClosureRoute
+  ConsoleCasesCaseIdDigitalRoute: typeof ConsoleCasesCaseIdDigitalRoute
+  ConsoleCasesCaseIdDiscoveryRoute: typeof ConsoleCasesCaseIdDiscoveryRoute
   ConsoleCasesCaseIdEvidenceRoute: typeof ConsoleCasesCaseIdEvidenceRoute
+  ConsoleCasesCaseIdForensicsRoute: typeof ConsoleCasesCaseIdForensicsRoute
+  ConsoleCasesCaseIdInterviewRoute: typeof ConsoleCasesCaseIdInterviewRoute
   ConsoleCasesCaseIdLeadsRoute: typeof ConsoleCasesCaseIdLeadsRoute
+  ConsoleCasesCaseIdLegalRoute: typeof ConsoleCasesCaseIdLegalRoute
   ConsoleCasesCaseIdOverviewRoute: typeof ConsoleCasesCaseIdOverviewRoute
-  ConsoleCasesCaseIdPeopleRoute: typeof ConsoleCasesCaseIdPeopleRoute
+  ConsoleCasesCaseIdPeopleRoute: typeof ConsoleCasesCaseIdPeopleRouteWithChildren
+  ConsoleCasesCaseIdPlanRoute: typeof ConsoleCasesCaseIdPlanRoute
+  ConsoleCasesCaseIdSceneRoute: typeof ConsoleCasesCaseIdSceneRoute
   ConsoleCasesCaseIdTimelineRoute: typeof ConsoleCasesCaseIdTimelineRoute
 }
 
 const ConsoleCasesCaseIdRouteRouteChildren: ConsoleCasesCaseIdRouteRouteChildren =
   {
+    ConsoleCasesCaseIdAnalysisRoute: ConsoleCasesCaseIdAnalysisRoute,
+    ConsoleCasesCaseIdApprovalsRoute: ConsoleCasesCaseIdApprovalsRoute,
+    ConsoleCasesCaseIdClosureRoute: ConsoleCasesCaseIdClosureRoute,
+    ConsoleCasesCaseIdDigitalRoute: ConsoleCasesCaseIdDigitalRoute,
+    ConsoleCasesCaseIdDiscoveryRoute: ConsoleCasesCaseIdDiscoveryRoute,
     ConsoleCasesCaseIdEvidenceRoute: ConsoleCasesCaseIdEvidenceRoute,
+    ConsoleCasesCaseIdForensicsRoute: ConsoleCasesCaseIdForensicsRoute,
+    ConsoleCasesCaseIdInterviewRoute: ConsoleCasesCaseIdInterviewRoute,
     ConsoleCasesCaseIdLeadsRoute: ConsoleCasesCaseIdLeadsRoute,
+    ConsoleCasesCaseIdLegalRoute: ConsoleCasesCaseIdLegalRoute,
     ConsoleCasesCaseIdOverviewRoute: ConsoleCasesCaseIdOverviewRoute,
-    ConsoleCasesCaseIdPeopleRoute: ConsoleCasesCaseIdPeopleRoute,
+    ConsoleCasesCaseIdPeopleRoute: ConsoleCasesCaseIdPeopleRouteWithChildren,
+    ConsoleCasesCaseIdPlanRoute: ConsoleCasesCaseIdPlanRoute,
+    ConsoleCasesCaseIdSceneRoute: ConsoleCasesCaseIdSceneRoute,
     ConsoleCasesCaseIdTimelineRoute: ConsoleCasesCaseIdTimelineRoute,
   }
 
@@ -310,6 +1109,7 @@ const ConsoleCasesCaseIdRouteRouteWithChildren =
   )
 
 interface ConsoleRouteRouteChildren {
+  ConsoleWorkspaceRouteRoute: typeof ConsoleWorkspaceRouteRouteWithChildren
   ConsoleScreenRoute: typeof ConsoleScreenRoute
   ConsoleIndexRoute: typeof ConsoleIndexRoute
   ConsoleCasesCaseIdRouteRoute: typeof ConsoleCasesCaseIdRouteRouteWithChildren
@@ -318,6 +1118,7 @@ interface ConsoleRouteRouteChildren {
 }
 
 const ConsoleRouteRouteChildren: ConsoleRouteRouteChildren = {
+  ConsoleWorkspaceRouteRoute: ConsoleWorkspaceRouteRouteWithChildren,
   ConsoleScreenRoute: ConsoleScreenRoute,
   ConsoleIndexRoute: ConsoleIndexRoute,
   ConsoleCasesCaseIdRouteRoute: ConsoleCasesCaseIdRouteRouteWithChildren,
@@ -337,12 +1138,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}

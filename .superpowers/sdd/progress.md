@@ -1,17 +1,17 @@
-# SDD Progress — Investigation Console Phase A
+# SDD Progress — Investigation Console
 
-Plan: docs/superpowers/plans/2026-07-31-investigation-console-app.md
+Plan A: docs/superpowers/plans/2026-07-31-investigation-console-app.md
+Plan C: docs/superpowers/plans/2026-07-31-investigation-console-phase-c.md
 Branch: design/investigation-console
 
+## Phase A
 
-Task 1: complete (commits 937622e..c273673, review clean)
+Task 1–8: complete (through 4d76402)
+Final review fixes: ade041d (active nav, focus, rail)
 
-Task 2: complete (commits c273673..83f25b7, review clean)
+## Phase C
 
-Task 3: complete (commits 83f25b7..364fdaf, review clean)
-
-Task 4: complete (commits 364fdaf..af918b5, review clean)
-
-Task 5: complete (commits af918b5..6a3fbd6, review clean)
-Task 6: complete (commits 6a3fbd6..d54812b, review clean)
-
+- Foundation: AgencyShell, agency nav, fixtures/getters, workspace page pattern
+- Agency workspace + media + system/modes + case extras + foundations routes
+- `/console` → command-center; Paper reference retained
+- Tests: agency getters + AgencyShell; smoke updated

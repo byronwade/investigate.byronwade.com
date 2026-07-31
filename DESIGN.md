@@ -209,10 +209,11 @@ Product UI for the AI-led case platform (Paper design language). Spec: `docs/sup
 - Fonts: Geist / Geist Mono (console only); marketing keeps Fraunces / Source Sans 3
 - Ink palette: `#111111`, `#3D3D3D`, `#6B6B6B` (floor), `#ECECEC` (hairline)
 - Categorical: offence `#0070F3`, sensor `#B45309`, tip `#8E4EC6`, activity `#15682F`
-- App shell: `CaseShell` — classification strip, top bar, case tabs, 212px sidebar, main, optional 344px rail
+- App shells: `CaseShell` (case tabs) and `AgencyShell` (no case tabs) — classification strip, top bar, 212px sidebar, main, optional 344px rail
 - UI kit: shadcn primitives in `src/components/ui` + Phosphor Duotone icons; themed via console CSS variables
-- Product routes: `/console` → `/console/cases/$caseId/{overview,timeline,evidence,leads,people}`
+- Product routes: `/console` → `/console/command-center`; agency/media/system under `/console/*`; case workspace `/console/cases/$caseId/...`
 - Paper dumps (exact JSX): `/console/reference` and `/console/reference/$slug` (`src/features/console/screens/paper/*`, Biome-ignored)
+- Phase C plan: `docs/superpowers/plans/2026-07-31-investigation-console-phase-c.md`
 
 ## Extending the design system
 
