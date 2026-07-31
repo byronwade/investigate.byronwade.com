@@ -1,21 +1,31 @@
+'use client';
+
 import { CaretDown } from '@phosphor-icons/react/dist/csr/CaretDown';
 import { MagnifyingGlass } from '@phosphor-icons/react/dist/csr/MagnifyingGlass';
 import { Plus } from '@phosphor-icons/react/dist/csr/Plus';
 import { Triangle } from '@phosphor-icons/react/dist/csr/Triangle';
 import type * as React from 'react';
+import { useState } from 'react';
 
 import { Avatar, AvatarFallback } from '#/components/ui/avatar';
 import { Badge } from '#/components/ui/badge';
 import { Button } from '#/components/ui/button';
-import { Input } from '#/components/ui/input';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '#/components/ui/dropdown-menu';
 import { Separator } from '#/components/ui/separator';
 import type { CaseRecord } from '#/features/console/data';
 
+import { CommandPalette } from './command-palette';
 import { ConsoleLink } from './console-link';
 import { paperReferenceNav, shortCaseTitle } from './nav';
 
 export function TopBar({ caseRecord }: { caseRecord: CaseRecord }): React.JSX.Element {
   const caseLabel = shortCaseTitle(caseRecord.title);
+  const [commandOpen, setCommandOpen] = useState(false);
 
   return (
     <header className="flex h-[var(--console-topbar-height)] shrink-0 items-center justify-between gap-6 border-b border-[var(--console-hairline)] bg-[var(--console-ground)] px-5">
@@ -41,28 +51,41 @@ export function TopBar({ caseRecord }: { caseRecord: CaseRecord }): React.JSX.El
       </div>
 
       <div className="flex min-w-0 max-w-[560px] flex-1 items-center gap-2">
-        <div className="relative min-w-0 flex-1">
+        <button
+          type="button"
+          onClick={() => setCommandOpen(true)}
+          className="relative flex h-[30px] min-w-0 flex-1 items-center rounded-[7px] border border-[var(--console-hairline)] bg-transparent pr-12 pl-9 text-left text-[13px] text-[var(--console-muted)] hover:bg-[var(--console-strip)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]"
+          aria-label="Open command palette"
+        >
           <MagnifyingGlass
             aria-hidden="true"
             weight="duotone"
             className="pointer-events-none absolute top-1/2 left-3 size-[13px] -translate-y-1/2 text-[var(--console-offence)]"
           />
-          <Input
-            type="search"
-            placeholder="Ask the case, or run an agent task…"
-            aria-label="Ask the case"
-            className="h-[30px] rounded-[7px] border-[var(--console-hairline)] bg-transparent pr-12 pl-9 text-[13px] shadow-none"
-          />
+          <span className="truncate">Ask the case, or run an agent task…</span>
           <kbd className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 font-[family-name:var(--console-font-mono)] text-[11px] text-[var(--console-muted)]">
             ⌘K
           </kbd>
-        </div>
-        <Button type="button" size="sm" className="h-[30px] gap-1.5 rounded-[7px] px-3 text-[13px]">
-          <Plus aria-hidden="true" weight="bold" className="size-[11px]" />
-          New
-          <Separator orientation="vertical" className="mx-0.5 h-3.5 bg-white/25" />
-          <CaretDown aria-hidden="true" weight="bold" className="size-[9px]" />
-        </Button>
+        </button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              type="button"
+              size="sm"
+              className="h-[30px] gap-1.5 rounded-[7px] px-3 text-[13px]"
+            >
+              <Plus aria-hidden="true" weight="bold" className="size-[11px]" />
+              New
+              <Separator orientation="vertical" className="mx-0.5 h-3.5 bg-white/25" />
+              <CaretDown aria-hidden="true" weight="bold" className="size-[9px]" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-44">
+            <DropdownMenuItem disabled>New lead</DropdownMenuItem>
+            <DropdownMenuItem disabled>New evidence</DropdownMenuItem>
+            <DropdownMenuItem disabled>New interview</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <div className="flex shrink-0 items-center gap-3.5">
@@ -85,6 +108,8 @@ export function TopBar({ caseRecord }: { caseRecord: CaseRecord }): React.JSX.El
           </AvatarFallback>
         </Avatar>
       </div>
+
+      <CommandPalette caseId={caseRecord.id} open={commandOpen} onOpenChange={setCommandOpen} />
     </header>
   );
 }

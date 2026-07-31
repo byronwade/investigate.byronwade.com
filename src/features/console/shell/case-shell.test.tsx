@@ -21,6 +21,8 @@ vi.mock('@tanstack/react-router', () => ({
       {children}
     </a>
   ),
+  useNavigate: () => vi.fn(),
+  useRouterState: () => ({ location: { pathname: '/console/cases/northridge/overview' } }),
 }));
 
 describe('CaseShell', () => {

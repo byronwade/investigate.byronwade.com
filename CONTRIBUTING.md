@@ -34,6 +34,7 @@ pnpm dev
 - `fix/<short-description>` for fixes
 - `chore/<short-description>` for maintenance
 - `docs/<short-description>` for documentation
+- `design/<short-description>` for Paper / UI migration branches
 
 Default branch: `main`.
 

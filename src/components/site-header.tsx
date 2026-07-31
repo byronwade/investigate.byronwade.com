@@ -6,6 +6,7 @@ import { getPublicEnv } from '#/lib/shared/env';
 const navItems = [
   { to: '/', label: 'Home' },
   { to: '/foundation', label: 'Foundation' },
+  { to: '/console', label: 'Console' },
 ] as const;
 
 export function SiteHeader() {
