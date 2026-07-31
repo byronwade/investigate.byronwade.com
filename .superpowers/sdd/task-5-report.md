@@ -64,4 +64,4 @@ Addressed review findings on People role double-announcement and identical Revie
 | `pnpm exec vitest run src/features/console/pages/overview-page.test.tsx` | PASS (2 tests) |
 
 ### Commit
-- (pending) `fix(console): unique Overview action labels for a11y`
+- `6a3fbd6` — `fix(console): unique Overview action labels for a11y`

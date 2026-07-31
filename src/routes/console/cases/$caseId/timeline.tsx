@@ -1,10 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router';
 
 import { getCase } from '#/features/console/data';
-import { PageHeader } from '#/features/console/ui/page-header';
+import { TimelinePage } from '#/features/console/pages/timeline-page';
 
 export const Route = createFileRoute('/console/cases/$caseId/timeline')({
-  component: CaseTimelineStub,
+  component: TimelineRoute,
   head: ({ params }) => {
     const caseRecord = getCase(params.caseId);
     return {
@@ -19,18 +19,7 @@ export const Route = createFileRoute('/console/cases/$caseId/timeline')({
   },
 });
 
-function CaseTimelineStub() {
+function TimelineRoute() {
   const { caseId } = Route.useParams();
-  const caseRecord = getCase(caseId);
-  if (!caseRecord) {
-    return null;
-  }
-
-  return (
-    <PageHeader
-      title="Timeline"
-      description={caseRecord.title}
-      meta={`${caseRecord.number} · ${caseRecord.status}`}
-    />
-  );
+  return <TimelinePage caseId={caseId} />;
 }

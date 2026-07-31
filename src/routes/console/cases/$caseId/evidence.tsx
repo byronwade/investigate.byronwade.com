@@ -1,10 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router';
 
 import { getCase } from '#/features/console/data';
-import { PageHeader } from '#/features/console/ui/page-header';
+import { EvidencePage } from '#/features/console/pages/evidence-page';
 
 export const Route = createFileRoute('/console/cases/$caseId/evidence')({
-  component: CaseEvidenceStub,
+  component: EvidenceRoute,
   head: ({ params }) => {
     const caseRecord = getCase(params.caseId);
     return {
@@ -19,18 +19,7 @@ export const Route = createFileRoute('/console/cases/$caseId/evidence')({
   },
 });
 
-function CaseEvidenceStub() {
+function EvidenceRoute() {
   const { caseId } = Route.useParams();
-  const caseRecord = getCase(caseId);
-  if (!caseRecord) {
-    return null;
-  }
-
-  return (
-    <PageHeader
-      title="Evidence"
-      description={caseRecord.title}
-      meta={`${caseRecord.number} · ${caseRecord.status}`}
-    />
-  );
+  return <EvidencePage caseId={caseId} />;
 }
