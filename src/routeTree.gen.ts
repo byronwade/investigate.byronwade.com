@@ -10,11 +10,25 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ConsoleRouteRouteImport } from './routes/console/route'
 import { Route as FoundationRouteImport } from './routes/foundation'
+import { Route as ConsoleIndexRouteImport } from './routes/console/index'
+import { Route as ConsoleScreenRouteImport } from './routes/console/$screen'
+import { Route as ConsoleCasesCaseIdRouteRouteImport } from './routes/console/cases/$caseId/route'
+import { Route as ConsoleCasesCaseIdEvidenceRouteImport } from './routes/console/cases/$caseId/evidence'
+import { Route as ConsoleCasesCaseIdLeadsRouteImport } from './routes/console/cases/$caseId/leads'
+import { Route as ConsoleCasesCaseIdOverviewRouteImport } from './routes/console/cases/$caseId/overview'
+import { Route as ConsoleCasesCaseIdPeopleRouteImport } from './routes/console/cases/$caseId/people'
+import { Route as ConsoleCasesCaseIdTimelineRouteImport } from './routes/console/cases/$caseId/timeline'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConsoleRouteRoute = ConsoleRouteRouteImport.update({
+  id: '/console',
+  path: '/console',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FoundationRoute = FoundationRouteImport.update({
@@ -22,30 +36,134 @@ const FoundationRoute = FoundationRouteImport.update({
   path: '/foundation',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ConsoleIndexRoute = ConsoleIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ConsoleRouteRoute,
+} as any)
+const ConsoleScreenRoute = ConsoleScreenRouteImport.update({
+  id: '/$screen',
+  path: '/$screen',
+  getParentRoute: () => ConsoleRouteRoute,
+} as any)
+const ConsoleCasesCaseIdRouteRoute = ConsoleCasesCaseIdRouteRouteImport.update({
+  id: '/cases/$caseId',
+  path: '/cases/$caseId',
+  getParentRoute: () => ConsoleRouteRoute,
+} as any)
+const ConsoleCasesCaseIdEvidenceRoute =
+  ConsoleCasesCaseIdEvidenceRouteImport.update({
+    id: '/evidence',
+    path: '/evidence',
+    getParentRoute: () => ConsoleCasesCaseIdRouteRoute,
+  } as any)
+const ConsoleCasesCaseIdLeadsRoute = ConsoleCasesCaseIdLeadsRouteImport.update({
+  id: '/leads',
+  path: '/leads',
+  getParentRoute: () => ConsoleCasesCaseIdRouteRoute,
+} as any)
+const ConsoleCasesCaseIdOverviewRoute =
+  ConsoleCasesCaseIdOverviewRouteImport.update({
+    id: '/overview',
+    path: '/overview',
+    getParentRoute: () => ConsoleCasesCaseIdRouteRoute,
+  } as any)
+const ConsoleCasesCaseIdPeopleRoute =
+  ConsoleCasesCaseIdPeopleRouteImport.update({
+    id: '/people',
+    path: '/people',
+    getParentRoute: () => ConsoleCasesCaseIdRouteRoute,
+  } as any)
+const ConsoleCasesCaseIdTimelineRoute =
+  ConsoleCasesCaseIdTimelineRouteImport.update({
+    id: '/timeline',
+    path: '/timeline',
+    getParentRoute: () => ConsoleCasesCaseIdRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/console': typeof ConsoleRouteRouteWithChildren
   '/foundation': typeof FoundationRoute
+  '/console/$screen': typeof ConsoleScreenRoute
+  '/console/': typeof ConsoleIndexRoute
+  '/console/cases/$caseId': typeof ConsoleCasesCaseIdRouteRouteWithChildren
+  '/console/cases/$caseId/evidence': typeof ConsoleCasesCaseIdEvidenceRoute
+  '/console/cases/$caseId/leads': typeof ConsoleCasesCaseIdLeadsRoute
+  '/console/cases/$caseId/overview': typeof ConsoleCasesCaseIdOverviewRoute
+  '/console/cases/$caseId/people': typeof ConsoleCasesCaseIdPeopleRoute
+  '/console/cases/$caseId/timeline': typeof ConsoleCasesCaseIdTimelineRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/foundation': typeof FoundationRoute
+  '/console/$screen': typeof ConsoleScreenRoute
+  '/console': typeof ConsoleIndexRoute
+  '/console/cases/$caseId': typeof ConsoleCasesCaseIdRouteRouteWithChildren
+  '/console/cases/$caseId/evidence': typeof ConsoleCasesCaseIdEvidenceRoute
+  '/console/cases/$caseId/leads': typeof ConsoleCasesCaseIdLeadsRoute
+  '/console/cases/$caseId/overview': typeof ConsoleCasesCaseIdOverviewRoute
+  '/console/cases/$caseId/people': typeof ConsoleCasesCaseIdPeopleRoute
+  '/console/cases/$caseId/timeline': typeof ConsoleCasesCaseIdTimelineRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/console': typeof ConsoleRouteRouteWithChildren
   '/foundation': typeof FoundationRoute
+  '/console/$screen': typeof ConsoleScreenRoute
+  '/console/': typeof ConsoleIndexRoute
+  '/console/cases/$caseId': typeof ConsoleCasesCaseIdRouteRouteWithChildren
+  '/console/cases/$caseId/evidence': typeof ConsoleCasesCaseIdEvidenceRoute
+  '/console/cases/$caseId/leads': typeof ConsoleCasesCaseIdLeadsRoute
+  '/console/cases/$caseId/overview': typeof ConsoleCasesCaseIdOverviewRoute
+  '/console/cases/$caseId/people': typeof ConsoleCasesCaseIdPeopleRoute
+  '/console/cases/$caseId/timeline': typeof ConsoleCasesCaseIdTimelineRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/foundation'
+  fullPaths:
+    | '/'
+    | '/console'
+    | '/foundation'
+    | '/console/$screen'
+    | '/console/'
+    | '/console/cases/$caseId'
+    | '/console/cases/$caseId/evidence'
+    | '/console/cases/$caseId/leads'
+    | '/console/cases/$caseId/overview'
+    | '/console/cases/$caseId/people'
+    | '/console/cases/$caseId/timeline'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/foundation'
-  id: '__root__' | '/' | '/foundation'
+  to:
+    | '/'
+    | '/foundation'
+    | '/console/$screen'
+    | '/console'
+    | '/console/cases/$caseId'
+    | '/console/cases/$caseId/evidence'
+    | '/console/cases/$caseId/leads'
+    | '/console/cases/$caseId/overview'
+    | '/console/cases/$caseId/people'
+    | '/console/cases/$caseId/timeline'
+  id:
+    | '__root__'
+    | '/'
+    | '/console'
+    | '/foundation'
+    | '/console/$screen'
+    | '/console/'
+    | '/console/cases/$caseId'
+    | '/console/cases/$caseId/evidence'
+    | '/console/cases/$caseId/leads'
+    | '/console/cases/$caseId/overview'
+    | '/console/cases/$caseId/people'
+    | '/console/cases/$caseId/timeline'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ConsoleRouteRoute: typeof ConsoleRouteRouteWithChildren
   FoundationRoute: typeof FoundationRoute
 }
 
@@ -58,6 +176,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/console': {
+      id: '/console'
+      path: '/console'
+      fullPath: '/console'
+      preLoaderRoute: typeof ConsoleRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/foundation': {
       id: '/foundation'
       path: '/foundation'
@@ -65,11 +190,106 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FoundationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/console/': {
+      id: '/console/'
+      path: '/'
+      fullPath: '/console/'
+      preLoaderRoute: typeof ConsoleIndexRouteImport
+      parentRoute: typeof ConsoleRouteRoute
+    }
+    '/console/$screen': {
+      id: '/console/$screen'
+      path: '/$screen'
+      fullPath: '/console/$screen'
+      preLoaderRoute: typeof ConsoleScreenRouteImport
+      parentRoute: typeof ConsoleRouteRoute
+    }
+    '/console/cases/$caseId': {
+      id: '/console/cases/$caseId'
+      path: '/cases/$caseId'
+      fullPath: '/console/cases/$caseId'
+      preLoaderRoute: typeof ConsoleCasesCaseIdRouteRouteImport
+      parentRoute: typeof ConsoleRouteRoute
+    }
+    '/console/cases/$caseId/evidence': {
+      id: '/console/cases/$caseId/evidence'
+      path: '/evidence'
+      fullPath: '/console/cases/$caseId/evidence'
+      preLoaderRoute: typeof ConsoleCasesCaseIdEvidenceRouteImport
+      parentRoute: typeof ConsoleCasesCaseIdRouteRoute
+    }
+    '/console/cases/$caseId/leads': {
+      id: '/console/cases/$caseId/leads'
+      path: '/leads'
+      fullPath: '/console/cases/$caseId/leads'
+      preLoaderRoute: typeof ConsoleCasesCaseIdLeadsRouteImport
+      parentRoute: typeof ConsoleCasesCaseIdRouteRoute
+    }
+    '/console/cases/$caseId/overview': {
+      id: '/console/cases/$caseId/overview'
+      path: '/overview'
+      fullPath: '/console/cases/$caseId/overview'
+      preLoaderRoute: typeof ConsoleCasesCaseIdOverviewRouteImport
+      parentRoute: typeof ConsoleCasesCaseIdRouteRoute
+    }
+    '/console/cases/$caseId/people': {
+      id: '/console/cases/$caseId/people'
+      path: '/people'
+      fullPath: '/console/cases/$caseId/people'
+      preLoaderRoute: typeof ConsoleCasesCaseIdPeopleRouteImport
+      parentRoute: typeof ConsoleCasesCaseIdRouteRoute
+    }
+    '/console/cases/$caseId/timeline': {
+      id: '/console/cases/$caseId/timeline'
+      path: '/timeline'
+      fullPath: '/console/cases/$caseId/timeline'
+      preLoaderRoute: typeof ConsoleCasesCaseIdTimelineRouteImport
+      parentRoute: typeof ConsoleCasesCaseIdRouteRoute
+    }
   }
 }
 
+interface ConsoleCasesCaseIdRouteRouteChildren {
+  ConsoleCasesCaseIdEvidenceRoute: typeof ConsoleCasesCaseIdEvidenceRoute
+  ConsoleCasesCaseIdLeadsRoute: typeof ConsoleCasesCaseIdLeadsRoute
+  ConsoleCasesCaseIdOverviewRoute: typeof ConsoleCasesCaseIdOverviewRoute
+  ConsoleCasesCaseIdPeopleRoute: typeof ConsoleCasesCaseIdPeopleRoute
+  ConsoleCasesCaseIdTimelineRoute: typeof ConsoleCasesCaseIdTimelineRoute
+}
+
+const ConsoleCasesCaseIdRouteRouteChildren: ConsoleCasesCaseIdRouteRouteChildren =
+  {
+    ConsoleCasesCaseIdEvidenceRoute: ConsoleCasesCaseIdEvidenceRoute,
+    ConsoleCasesCaseIdLeadsRoute: ConsoleCasesCaseIdLeadsRoute,
+    ConsoleCasesCaseIdOverviewRoute: ConsoleCasesCaseIdOverviewRoute,
+    ConsoleCasesCaseIdPeopleRoute: ConsoleCasesCaseIdPeopleRoute,
+    ConsoleCasesCaseIdTimelineRoute: ConsoleCasesCaseIdTimelineRoute,
+  }
+
+const ConsoleCasesCaseIdRouteRouteWithChildren =
+  ConsoleCasesCaseIdRouteRoute._addFileChildren(
+    ConsoleCasesCaseIdRouteRouteChildren,
+  )
+
+interface ConsoleRouteRouteChildren {
+  ConsoleScreenRoute: typeof ConsoleScreenRoute
+  ConsoleIndexRoute: typeof ConsoleIndexRoute
+  ConsoleCasesCaseIdRouteRoute: typeof ConsoleCasesCaseIdRouteRouteWithChildren
+}
+
+const ConsoleRouteRouteChildren: ConsoleRouteRouteChildren = {
+  ConsoleScreenRoute: ConsoleScreenRoute,
+  ConsoleIndexRoute: ConsoleIndexRoute,
+  ConsoleCasesCaseIdRouteRoute: ConsoleCasesCaseIdRouteRouteWithChildren,
+}
+
+const ConsoleRouteRouteWithChildren = ConsoleRouteRoute._addFileChildren(
+  ConsoleRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ConsoleRouteRoute: ConsoleRouteRouteWithChildren,
   FoundationRoute: FoundationRoute,
 }
 export const routeTree = rootRouteImport
