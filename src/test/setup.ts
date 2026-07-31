@@ -18,6 +18,18 @@ beforeAll(() => {
       },
     }),
   });
+
+  class ResizeObserverStub {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  }
+
+  Object.defineProperty(window, 'ResizeObserver', {
+    writable: true,
+    configurable: true,
+    value: ResizeObserverStub,
+  });
 });
 
 afterEach(() => {
