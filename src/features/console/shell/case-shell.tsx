@@ -34,7 +34,11 @@ export function CaseShell({
       />
       <div className="flex min-h-0 flex-1">
         <Sidebar caseId={caseRecord.id} />
-        <main id="console-main" className="min-w-0 flex-1 overflow-auto p-6">
+        <main
+          id="console-main"
+          tabIndex={-1}
+          className="min-w-0 flex-1 overflow-auto p-6 outline-none"
+        >
           {children}
         </main>
         {rail ? (
