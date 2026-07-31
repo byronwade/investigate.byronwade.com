@@ -1,0 +1,82 @@
+/*
+  Investigation Console visual language — sourced from Paper
+  "32 · Foundations (design system)". Scoped under [data-surface='console'].
+*/
+
+[data-surface='console'] {
+  --console-ink: #111111;
+  --console-body: #3d3d3d;
+  --console-muted: #6b6b6b;
+  --console-hairline: #ececec;
+  --console-ground: #ffffff;
+  --console-strip: #fafafa;
+  --console-sidebar: #fcfcfc;
+  --console-row-active: #f2f2f2;
+  --console-offence: #0070f3;
+  --console-sensor: #b45309;
+  --console-tip: #8e4ec6;
+  --console-activity: #15682f;
+  --console-danger: #e5484d;
+  --console-ok: #45a557;
+  --console-font-sans: 'Geist', 'Inter', system-ui, sans-serif;
+  --console-font-mono: 'Geist Mono', 'IBM Plex Mono', ui-monospace, monospace;
+  --console-sidebar-width: 212px;
+  --console-rail-width: 344px;
+  --console-class-height: 26px;
+  --console-topbar-height: 48px;
+  --console-tabs-height: 42px;
+
+  /* shadcn semantic tokens → console palette */
+  --background: var(--console-ground);
+  --foreground: var(--console-ink);
+  --card: var(--console-ground);
+  --card-foreground: var(--console-ink);
+  --popover: var(--console-ground);
+  --popover-foreground: var(--console-ink);
+  --primary: var(--console-ink);
+  --primary-foreground: #ffffff;
+  --secondary: var(--console-strip);
+  --secondary-foreground: var(--console-ink);
+  --muted: var(--console-strip);
+  --muted-foreground: var(--console-muted);
+  --accent: var(--console-row-active);
+  --accent-foreground: var(--console-ink);
+  --destructive: var(--console-danger);
+  --border: var(--console-hairline);
+  --input: var(--console-hairline);
+  --ring: var(--console-ink);
+  --radius: 0.375rem;
+
+  color: var(--console-ink);
+  background: var(--console-ground);
+  font-family: var(--console-font-sans);
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[data-surface='console'] body,
+body:has([data-surface='console']) {
+  background: var(--console-ground);
+}
+
+.console-app {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  background: var(--console-ground);
+  color: var(--console-ink);
+  font-family: var(--console-font-sans);
+}
+
+.console-screen {
+  width: 100%;
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+.console-screen * {
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
