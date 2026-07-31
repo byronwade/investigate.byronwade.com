@@ -1,4 +1,5 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import type * as React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -13,11 +14,13 @@ vi.mock('@tanstack/react-router', () => ({
     className,
     activeProps,
     activeOptions,
+    onClick,
     ...rest
   }: {
     children: React.ReactNode;
     to: string;
     className?: string;
+    onClick?: React.MouseEventHandler<HTMLAnchorElement>;
     activeProps?: { className?: string; 'aria-current'?: 'page' };
     activeOptions?: { exact?: boolean };
   }) => {
@@ -32,6 +35,7 @@ vi.mock('@tanstack/react-router', () => ({
         href={to}
         className={mergedClassName}
         aria-current={isActive ? (activeProps?.['aria-current'] ?? 'page') : undefined}
+        onClick={onClick}
         {...rest}
       >
         {children}
@@ -45,8 +49,14 @@ vi.mock('@tanstack/react-router', () => ({
   },
 }));
 
+async function openMobileNav() {
+  const user = userEvent.setup();
+  await user.click(screen.getByRole('button', { name: /open navigation/i }));
+  return screen.getByRole('dialog');
+}
+
 describe('AgencyShell', () => {
-  it('renders agency chrome without case tabs', () => {
+  it('renders agency chrome without case tabs', async () => {
     render(
       <AgencyShell crumb="Command center">
         <p>Agency main</p>
@@ -56,19 +66,32 @@ describe('AgencyShell', () => {
     expect(screen.queryByRole('navigation', { name: /case/i })).not.toBeInTheDocument();
     expect(screen.getAllByText('Command center').length).toBeGreaterThan(0);
     expect(screen.getByText('Agency main')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /^Intake/i })).toBeInTheDocument();
+
+    const dialog = await openMobileNav();
+    expect(within(dialog).getByRole('link', { name: /^Intake/i })).toBeInTheDocument();
   });
 
-  it('marks command center as the active sidebar link', () => {
+  it('marks command center as the active sidebar link', async () => {
     render(
       <AgencyShell crumb="Command center">
         <p>Agency main</p>
       </AgencyShell>,
     );
 
-    expect(screen.getByRole('link', { name: /^Command center$/i })).toHaveAttribute(
+    const dialog = await openMobileNav();
+    expect(within(dialog).getByRole('link', { name: /^Command center$/i })).toHaveAttribute(
       'aria-current',
       'page',
     );
+  });
+
+  it('exposes a mobile navigation trigger', () => {
+    render(
+      <AgencyShell crumb="Command center">
+        <p>Agency main</p>
+      </AgencyShell>,
+    );
+
+    expect(screen.getByRole('button', { name: /open navigation/i })).toBeInTheDocument();
   });
 });

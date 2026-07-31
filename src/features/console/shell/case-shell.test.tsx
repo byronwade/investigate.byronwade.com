@@ -1,4 +1,5 @@
 import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import type * as React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -16,11 +17,13 @@ vi.mock('@tanstack/react-router', () => ({
     className,
     activeProps,
     activeOptions,
+    onClick,
     ...rest
   }: {
     children: React.ReactNode;
     to: string;
     className?: string;
+    onClick?: React.MouseEventHandler<HTMLAnchorElement>;
     activeProps?: { className?: string; 'aria-current'?: 'page' };
     activeOptions?: { exact?: boolean };
   }) => {
@@ -35,6 +38,7 @@ vi.mock('@tanstack/react-router', () => ({
         href={to}
         className={mergedClassName}
         aria-current={isActive ? (activeProps?.['aria-current'] ?? 'page') : undefined}
+        onClick={onClick}
         {...rest}
       >
         {children}
@@ -48,8 +52,14 @@ vi.mock('@tanstack/react-router', () => ({
   },
 }));
 
+async function openMobileNav() {
+  const user = userEvent.setup();
+  await user.click(screen.getByRole('button', { name: /open navigation/i }));
+  return screen.getByRole('dialog');
+}
+
 describe('CaseShell', () => {
-  it('shows case number and primary nav labels', () => {
+  it('shows case number and primary nav labels', async () => {
     const caseRecord = getCase(DEFAULT_CASE_ID);
     if (!caseRecord) {
       throw new Error(`Expected fixture case ${DEFAULT_CASE_ID}`);
@@ -64,9 +74,12 @@ describe('CaseShell', () => {
     expect(screen.getAllByText(/245D-CG-3881127/).length).toBeGreaterThan(0);
     expect(screen.getByRole('navigation', { name: /case/i })).toBeInTheDocument();
     expect(screen.getByText('Main')).toBeInTheDocument();
+
+    const dialog = await openMobileNav();
+    expect(within(dialog).getByRole('link', { name: /^This case$/i })).toBeInTheDocument();
   });
 
-  it('marks the current case tab and sidebar link as active', () => {
+  it('marks the current case tab and sidebar link as active', async () => {
     const caseRecord = getCase(DEFAULT_CASE_ID);
     if (!caseRecord) {
       throw new Error(`Expected fixture case ${DEFAULT_CASE_ID}`);
@@ -78,18 +91,18 @@ describe('CaseShell', () => {
       </CaseShell>,
     );
 
-    const overviewTab = screen.getByRole('link', { name: /^Overview$/i });
+    const caseNav = screen.getByRole('navigation', { name: /case/i });
+    const overviewTab = within(caseNav).getByRole('link', { name: /^Overview$/i });
     expect(overviewTab).toHaveAttribute('aria-current', 'page');
     expect(overviewTab.className).toContain('border-[var(--console-ink)]');
 
-    const thisCaseNav = screen.getByRole('link', { name: /^This case$/i });
+    const peopleTab = within(caseNav).getByRole('link', { name: /^People$/i });
+    expect(peopleTab).not.toHaveAttribute('aria-current');
+
+    const dialog = await openMobileNav();
+    const thisCaseNav = within(dialog).getByRole('link', { name: /^This case$/i });
     expect(thisCaseNav).toHaveAttribute('aria-current', 'page');
     expect(thisCaseNav.className).toContain('bg-[var(--console-row-active)]');
-
-    const peopleTab = within(screen.getByRole('navigation', { name: /case/i })).getByRole('link', {
-      name: /^People$/i,
-    });
-    expect(peopleTab).not.toHaveAttribute('aria-current');
   });
 
   it('renders overview rail in the shell rail slot via context', () => {
