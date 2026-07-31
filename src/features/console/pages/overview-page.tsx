@@ -240,6 +240,7 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
                       type="button"
                       size="xs"
                       className="h-6 bg-[var(--console-ink)] px-2.5 text-[12px] text-white hover:bg-[var(--console-ink)]/90"
+                      aria-label={`Review: ${decision.label}`}
                     >
                       Review
                     </Button>
@@ -248,6 +249,7 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
                       variant="outline"
                       size="xs"
                       className="h-6 border-[var(--console-hairline)] bg-[var(--console-ground)] px-2.5 text-[12px] text-[var(--console-body)] shadow-none"
+                      aria-label={`Reject: ${decision.label}`}
                     >
                       Reject
                     </Button>
@@ -301,7 +303,7 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
                   </TableCell>
                   <TableCell className="px-0 py-2.5">
                     <span className="inline-flex items-center gap-2 text-[12px] text-[var(--console-muted)]">
-                      <StatusDot tone={roleTone(person.role)} label={ROLE_LABEL[person.role]} />
+                      <StatusDot tone={roleTone(person.role)} />
                       {ROLE_LABEL[person.role]}
                     </span>
                   </TableCell>

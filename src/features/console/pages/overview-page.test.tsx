@@ -27,4 +27,18 @@ describe('OverviewPage', () => {
     expect(screen.getByRole('heading', { name: /Northridge/i })).toBeInTheDocument();
     expect(screen.getByText(/decisions are human-only/i)).toBeInTheDocument();
   });
+
+  it('exposes unique human-only action labels', () => {
+    render(<OverviewPage caseId="northridge" />);
+    expect(
+      screen.getByRole('button', {
+        name: /Review: Accept finding 1 as potentially exculpatory/i,
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', {
+        name: /Reject: Elevate Osei from person of interest/i,
+      }),
+    ).toBeInTheDocument();
+  });
 });
