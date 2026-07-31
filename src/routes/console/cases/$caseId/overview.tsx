@@ -1,10 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router';
 
 import { getCase } from '#/features/console/data';
-import { PageHeader } from '#/features/console/ui/page-header';
+import { OverviewPage } from '#/features/console/pages/overview-page';
 
 export const Route = createFileRoute('/console/cases/$caseId/overview')({
-  component: CaseOverviewStub,
+  component: OverviewRoute,
   head: ({ params }) => {
     const caseRecord = getCase(params.caseId);
     return {
@@ -19,18 +19,7 @@ export const Route = createFileRoute('/console/cases/$caseId/overview')({
   },
 });
 
-function CaseOverviewStub() {
+function OverviewRoute() {
   const { caseId } = Route.useParams();
-  const caseRecord = getCase(caseId);
-  if (!caseRecord) {
-    return null;
-  }
-
-  return (
-    <PageHeader
-      title="Overview"
-      description={caseRecord.title}
-      meta={`${caseRecord.number} · ${caseRecord.status}`}
-    />
-  );
+  return <OverviewPage caseId={caseId} />;
 }
