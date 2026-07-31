@@ -82,9 +82,9 @@ describe('CaseShell', () => {
     expect(overviewTab).toHaveAttribute('aria-current', 'page');
     expect(overviewTab.className).toContain('border-[var(--console-ink)]');
 
-    const casesNav = screen.getByRole('link', { name: /^Cases$/i });
-    expect(casesNav).toHaveAttribute('aria-current', 'page');
-    expect(casesNav.className).toContain('bg-[var(--console-row-active)]');
+    const thisCaseNav = screen.getByRole('link', { name: /^This case$/i });
+    expect(thisCaseNav).toHaveAttribute('aria-current', 'page');
+    expect(thisCaseNav.className).toContain('bg-[var(--console-row-active)]');
 
     const peopleTab = within(screen.getByRole('navigation', { name: /case/i })).getByRole('link', {
       name: /^People$/i,

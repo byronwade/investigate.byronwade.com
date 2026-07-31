@@ -17,15 +17,22 @@ import {
   DropdownMenuTrigger,
 } from '#/components/ui/dropdown-menu';
 import { Separator } from '#/components/ui/separator';
-import type { CaseRecord } from '#/features/console/data';
+import { type CaseRecord, DEFAULT_CASE_ID } from '#/features/console/data';
 
 import { CommandPalette } from './command-palette';
 import { ConsoleLink } from './console-link';
 import { paperReferenceNav, shortCaseTitle } from './nav';
 
-export function TopBar({ caseRecord }: { caseRecord: CaseRecord }): React.JSX.Element {
-  const caseLabel = shortCaseTitle(caseRecord.title);
+export function TopBar({
+  caseRecord,
+  crumb,
+}: {
+  caseRecord?: CaseRecord;
+  crumb?: string;
+}): React.JSX.Element {
+  const caseLabel = caseRecord ? shortCaseTitle(caseRecord.title) : null;
   const [commandOpen, setCommandOpen] = useState(false);
+  const paletteCaseId = caseRecord?.id ?? DEFAULT_CASE_ID;
 
   return (
     <header className="flex h-[var(--console-topbar-height)] shrink-0 items-center justify-between gap-6 border-b border-[var(--console-hairline)] bg-[var(--console-ground)] px-5">
@@ -36,18 +43,39 @@ export function TopBar({ caseRecord }: { caseRecord: CaseRecord }): React.JSX.El
           className="size-[15px] shrink-0 text-[var(--console-ink)]"
         />
         <span className="text-[13px] text-[var(--console-muted)]">FBI Chicago</span>
-        <span className="text-[13px] text-[#c4c4c4]" aria-hidden="true">
-          /
-        </span>
-        <span className="font-[family-name:var(--console-font-mono)] text-[12px] text-[var(--console-muted)]">
-          {caseRecord.number}
-        </span>
-        <span className="text-[13px] text-[#c4c4c4]" aria-hidden="true">
-          /
-        </span>
-        <span className="truncate text-[13px] font-medium text-[var(--console-ink)]">
-          {caseLabel}
-        </span>
+        {caseRecord ? (
+          <>
+            <span className="text-[13px] text-[#c4c4c4]" aria-hidden="true">
+              /
+            </span>
+            <span className="font-[family-name:var(--console-font-mono)] text-[12px] text-[var(--console-muted)]">
+              {caseRecord.number}
+            </span>
+            <span className="text-[13px] text-[#c4c4c4]" aria-hidden="true">
+              /
+            </span>
+            <span className="truncate text-[13px] font-medium text-[var(--console-ink)]">
+              {caseLabel}
+            </span>
+          </>
+        ) : (
+          <>
+            <span className="text-[13px] text-[#c4c4c4]" aria-hidden="true">
+              /
+            </span>
+            <span className="text-[13px] text-[var(--console-muted)]">Chicago field office</span>
+            {crumb ? (
+              <>
+                <span className="text-[13px] text-[#c4c4c4]" aria-hidden="true">
+                  /
+                </span>
+                <span className="truncate text-[13px] font-medium text-[var(--console-ink)]">
+                  {crumb}
+                </span>
+              </>
+            ) : null}
+          </>
+        )}
       </div>
 
       <div className="flex min-w-0 max-w-[560px] flex-1 items-center gap-2">
@@ -109,7 +137,7 @@ export function TopBar({ caseRecord }: { caseRecord: CaseRecord }): React.JSX.El
         </Avatar>
       </div>
 
-      <CommandPalette caseId={caseRecord.id} open={commandOpen} onOpenChange={setCommandOpen} />
+      <CommandPalette caseId={paletteCaseId} open={commandOpen} onOpenChange={setCommandOpen} />
     </header>
   );
 }

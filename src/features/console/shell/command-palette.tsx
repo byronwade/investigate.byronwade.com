@@ -14,7 +14,7 @@ import {
 } from '#/components/ui/command';
 import type { CaseId } from '#/features/console/data';
 
-import { caseTabs, resolveCaseNavTo } from './nav';
+import { agencyCommandDestinations, caseTabs, resolveCaseNavTo } from './nav';
 
 type CommandPaletteProps = {
   caseId: CaseId;
@@ -48,16 +48,30 @@ export function CommandPalette({
       open={open}
       onOpenChange={setOpen}
       title="Command palette"
-      description="Jump to a case page or run a task"
+      description="Jump to a workspace page or case page"
     >
       <CommandInput placeholder="Ask the case, or jump to a page…" />
       <CommandList>
         <CommandEmpty>No matching commands.</CommandEmpty>
+        <CommandGroup heading="Workspace">
+          {agencyCommandDestinations.map((item) => (
+            <CommandItem
+              key={`agency-${item.to}-${item.label}`}
+              value={`workspace ${item.label}`}
+              onSelect={() => {
+                void navigate({ href: resolveCaseNavTo(item.to, caseId) });
+                setOpen(false);
+              }}
+            >
+              {item.label}
+            </CommandItem>
+          ))}
+        </CommandGroup>
         <CommandGroup heading="Case pages">
           {caseTabs.map((item) => (
             <CommandItem
               key={item.to}
-              value={item.label}
+              value={`case ${item.label}`}
               onSelect={() => {
                 void navigate({ href: resolveCaseNavTo(item.to, caseId) });
                 setOpen(false);

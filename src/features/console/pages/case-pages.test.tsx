@@ -1,10 +1,28 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import type * as React from 'react';
+import { describe, expect, it, vi } from 'vitest';
 
 import { EvidencePage } from './evidence-page';
 import { LeadsPage } from './leads-page';
 import { PeoplePage } from './people-page';
 import { TimelinePage } from './timeline-page';
+
+vi.mock('@tanstack/react-router', () => ({
+  Link: ({
+    children,
+    to,
+    className,
+    ...rest
+  }: {
+    children: React.ReactNode;
+    to: string;
+    className?: string;
+  }) => (
+    <a href={to} className={className} {...rest}>
+      {children}
+    </a>
+  ),
+}));
 
 describe('case workspace pages', () => {
   it('Timeline shows heading and a fixture event', () => {

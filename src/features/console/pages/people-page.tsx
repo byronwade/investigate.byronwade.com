@@ -10,6 +10,7 @@ import {
   TableRow,
 } from '#/components/ui/table';
 import { listPeople, type PersonRecord } from '#/features/console/data';
+import { ConsoleLink } from '#/features/console/shell/console-link';
 import { PageHeader } from '#/features/console/ui/page-header';
 import { StatusDot, type StatusDotTone } from '#/features/console/ui/status-dot';
 
@@ -72,7 +73,12 @@ export function PeoplePage({ caseId }: { caseId: string }): React.JSX.Element {
               className="border-[var(--console-strip)] hover:bg-[var(--console-strip)]"
             >
               <TableCell className="px-0 py-2.5 font-medium text-[var(--console-ink)]">
-                {person.name}
+                <ConsoleLink
+                  to={`/console/cases/${caseId}/people/${person.id}`}
+                  className="underline-offset-4 hover:underline"
+                >
+                  {person.name}
+                </ConsoleLink>
               </TableCell>
               <TableCell className="px-0 py-2.5">
                 <span className="inline-flex items-center gap-2 text-[12px] text-[var(--console-muted)]">

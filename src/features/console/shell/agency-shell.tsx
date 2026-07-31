@@ -1,44 +1,39 @@
 import type * as React from 'react';
 
-import type { CaseRecord } from '#/features/console/data';
-
-import { CaseTabs } from './case-tabs';
 import { ClassificationStrip } from './classification-strip';
-import { shortCaseTitle } from './nav';
 import { ConsoleRailProvider, useConsoleRail } from './rail-context';
 import { Sidebar } from './sidebar';
 import { TopBar } from './top-bar';
 
-export function CaseShell({
-  caseRecord,
+export function AgencyShell({
+  crumb,
   children,
   rail,
 }: {
-  caseRecord: CaseRecord;
+  crumb: string;
   children: React.ReactNode;
   rail?: React.ReactNode;
 }): React.JSX.Element {
   return (
     <ConsoleRailProvider>
-      <CaseShellLayout caseRecord={caseRecord} rail={rail}>
+      <AgencyShellLayout crumb={crumb} rail={rail}>
         {children}
-      </CaseShellLayout>
+      </AgencyShellLayout>
     </ConsoleRailProvider>
   );
 }
 
-function CaseShellLayout({
-  caseRecord,
+function AgencyShellLayout({
+  crumb,
   children,
   rail,
 }: {
-  caseRecord: CaseRecord;
+  crumb: string;
   children: React.ReactNode;
   rail?: React.ReactNode;
 }): React.JSX.Element {
   const contextRail = useConsoleRail();
   const resolvedRail = rail ?? contextRail;
-  const caseLabel = shortCaseTitle(caseRecord.title);
 
   return (
     <div
@@ -46,15 +41,9 @@ function CaseShellLayout({
       className="flex min-h-screen flex-col bg-[var(--console-ground)] text-[var(--console-ink)]"
     >
       <ClassificationStrip />
-      <TopBar caseRecord={caseRecord} />
-      <CaseTabs
-        caseId={caseRecord.id}
-        caseNumber={caseRecord.number}
-        caseLabel={caseLabel}
-        reviewDueLabel={caseRecord.reviewDueLabel}
-      />
+      <TopBar crumb={crumb} />
       <div className="flex min-h-0 flex-1">
-        <Sidebar variant="case" caseId={caseRecord.id} />
+        <Sidebar variant="agency" />
         <main
           id="console-main"
           tabIndex={-1}
