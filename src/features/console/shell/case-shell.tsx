@@ -1,0 +1,48 @@
+import type * as React from 'react';
+
+import type { CaseRecord } from '#/features/console/data';
+
+import { CaseTabs } from './case-tabs';
+import { ClassificationStrip } from './classification-strip';
+import { shortCaseTitle } from './nav';
+import { Sidebar } from './sidebar';
+import { TopBar } from './top-bar';
+
+export function CaseShell({
+  caseRecord,
+  children,
+  rail,
+}: {
+  caseRecord: CaseRecord;
+  children: React.ReactNode;
+  rail?: React.ReactNode;
+}): React.JSX.Element {
+  const caseLabel = shortCaseTitle(caseRecord.title);
+
+  return (
+    <div
+      data-surface="console"
+      className="flex min-h-screen flex-col bg-[var(--console-ground)] text-[var(--console-ink)]"
+    >
+      <ClassificationStrip />
+      <TopBar caseRecord={caseRecord} />
+      <CaseTabs
+        caseId={caseRecord.id}
+        caseNumber={caseRecord.number}
+        caseLabel={caseLabel}
+        reviewDueLabel={caseRecord.reviewDueLabel}
+      />
+      <div className="flex min-h-0 flex-1">
+        <Sidebar caseId={caseRecord.id} />
+        <main id="console-main" className="min-w-0 flex-1 overflow-auto p-6">
+          {children}
+        </main>
+        {rail ? (
+          <aside className="hidden w-[var(--console-rail-width)] shrink-0 border-l border-[var(--console-hairline)] xl:block">
+            {rail}
+          </aside>
+        ) : null}
+      </div>
+    </div>
+  );
+}

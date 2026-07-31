@@ -62,6 +62,7 @@ export default defineConfig({
           include: [
             'src/**/*.integration.test.{ts,tsx}',
             'src/**/*.component.test.{ts,tsx}',
+            'src/features/console/**/*.test.tsx',
             'src/test/**/*.test.{ts,tsx}',
           ],
           setupFiles: ['./src/test/setup.ts'],
