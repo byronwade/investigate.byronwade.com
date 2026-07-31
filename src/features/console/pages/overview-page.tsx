@@ -25,6 +25,7 @@ import { ConsoleLink } from '#/features/console/shell/console-link';
 import { useConsoleRailSetter } from '#/features/console/shell/rail-context';
 import { PageHeader } from '#/features/console/ui/page-header';
 import { StatusDot, type StatusDotTone } from '#/features/console/ui/status-dot';
+import { cn } from '#/lib/utils';
 
 const ROLE_LABEL: Record<PersonRecord['role'], string> = {
   subject: 'subject',
@@ -59,9 +60,15 @@ function roleTone(role: PersonRecord['role']): StatusDotTone {
   }
 }
 
-export function OverviewRailPanel({ rail }: { rail: OverviewModel['rail'] }): React.JSX.Element {
+export function OverviewRailPanel({
+  rail,
+  className,
+}: {
+  rail: OverviewModel['rail'];
+  className?: string;
+}): React.JSX.Element {
   return (
-    <div className="space-y-5 p-6">
+    <div className={cn('space-y-5', className ?? 'p-6')}>
       <div className="space-y-2.5">
         <h2 className="text-[12px] font-medium text-[var(--console-muted)]">
           Techniques at this level
@@ -157,17 +164,21 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
               type="button"
               variant="outline"
               size="sm"
-              className="h-[30px] border-[var(--console-hairline)] bg-[var(--console-ground)] text-[13px] font-medium text-[var(--console-body)] shadow-none"
+              className="h-11 border-[var(--console-hairline)] bg-[var(--console-ground)] text-[13px] font-medium text-[var(--console-body)] shadow-none sm:h-[30px]"
+              asChild
             >
-              Request approval
+              <ConsoleLink to={`/console/cases/${caseId}/approvals`}>Request approval</ConsoleLink>
             </Button>
             <Button
               type="button"
               size="sm"
-              className="h-[30px] bg-[var(--console-ink)] text-[13px] font-medium text-white hover:bg-[var(--console-ink)]/90"
+              className="h-11 bg-[var(--console-ink)] text-[13px] font-medium text-white hover:bg-[var(--console-ink)]/90 sm:h-[30px]"
+              asChild
             >
-              <Plus aria-hidden="true" weight="duotone" className="size-3.5" />
-              New lead
+              <ConsoleLink to={`/console/cases/${caseId}/leads`}>
+                <Plus aria-hidden="true" weight="duotone" className="size-3.5" />
+                New lead
+              </ConsoleLink>
             </Button>
           </>
         }
@@ -284,20 +295,22 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
             {assistant.humanOnly.map((decision) => (
               <li
                 key={decision.id}
-                className="flex h-[34px] items-center gap-3 border-b border-[var(--console-strip)] last:border-b-0"
+                className="flex flex-col gap-2 border-b border-[var(--console-strip)] py-2.5 last:border-b-0 sm:min-h-[34px] sm:flex-row sm:items-center sm:gap-3 sm:py-0"
               >
-                <StatusDot tone="warn" label="Needs review" />
-                <span className="min-w-0 flex-1 truncate text-[13px] text-[var(--console-ink)]">
-                  {decision.label}
-                </span>
-                <span className="w-[92px] shrink-0 truncate text-right text-[12px] text-[var(--console-muted)]">
+                <div className="flex min-w-0 items-center gap-3">
+                  <StatusDot tone="warn" label="Needs review" />
+                  <span className="min-w-0 flex-1 text-[13px] text-[var(--console-ink)] sm:truncate">
+                    {decision.label}
+                  </span>
+                </div>
+                <span className="pl-5 text-[12px] text-[var(--console-muted)] sm:w-[92px] sm:shrink-0 sm:truncate sm:pl-0 sm:text-right">
                   {decision.assignee}
                 </span>
-                <div className="flex w-[120px] shrink-0 justify-end gap-1.5">
+                <div className="flex gap-1.5 pl-5 sm:w-[120px] sm:shrink-0 sm:justify-end sm:pl-0">
                   <Button
                     type="button"
                     size="xs"
-                    className="h-6 bg-[var(--console-ink)] px-2.5 text-[12px] text-white hover:bg-[var(--console-ink)]/90"
+                    className="h-9 bg-[var(--console-ink)] px-2.5 text-[12px] text-white hover:bg-[var(--console-ink)]/90 sm:h-6"
                     aria-label={`Review: ${decision.label}`}
                   >
                     Review
@@ -306,7 +319,7 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
                     type="button"
                     variant="outline"
                     size="xs"
-                    className="h-6 border-[var(--console-hairline)] bg-[var(--console-ground)] px-2.5 text-[12px] text-[var(--console-body)] shadow-none"
+                    className="h-9 border-[var(--console-hairline)] bg-[var(--console-ground)] px-2.5 text-[12px] text-[var(--console-body)] shadow-none sm:h-6"
                     aria-label={`Reject: ${decision.label}`}
                   >
                     Reject
@@ -316,6 +329,16 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
             ))}
           </ul>
         </div>
+      </section>
+
+      <section aria-labelledby="access-compact-heading" className="space-y-3 xl:hidden">
+        <h2
+          id="access-compact-heading"
+          className="border-b border-[var(--console-hairline)] pb-2 text-[13px] font-semibold text-[var(--console-ink)]"
+        >
+          Techniques & access
+        </h2>
+        <OverviewRailPanel rail={overview.rail} className="p-0" />
       </section>
 
       <section aria-labelledby="people-preview-heading" className="space-y-2">
@@ -333,50 +356,84 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
             {people.length} linked · open directory
           </ConsoleLink>
         </div>
-        <Table className="text-[13px]">
-          <TableHeader>
-            <TableRow className="border-[var(--console-hairline)] hover:bg-transparent">
-              <TableHead className="h-8 px-0 text-[12px] font-medium text-[var(--console-muted)]">
-                Name
-              </TableHead>
-              <TableHead className="h-8 px-0 text-[12px] font-medium text-[var(--console-muted)]">
-                Role
-              </TableHead>
-              <TableHead className="h-8 px-0 text-[12px] font-medium text-[var(--console-muted)]">
-                Notes
-              </TableHead>
-              <TableHead className="h-8 px-0 text-right text-[12px] font-medium text-[var(--console-muted)]">
-                Contradictions
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {people.map((person) => (
-              <TableRow
-                key={person.id}
-                className="border-[var(--console-strip)] hover:bg-[var(--console-strip)]"
+
+        <ul className="space-y-2 md:hidden">
+          {people.map((person) => (
+            <li key={person.id}>
+              <ConsoleLink
+                to={`/console/cases/${caseId}/people/${person.id}`}
+                className="block rounded-lg border border-[var(--console-hairline)] px-3 py-3 hover:bg-[var(--console-strip)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]"
               >
-                <TableCell className="px-0 py-2.5 font-medium text-[var(--console-ink)]">
-                  {person.name}
-                </TableCell>
-                <TableCell className="px-0 py-2.5">
-                  <span className="inline-flex items-center gap-2 text-[12px] text-[var(--console-muted)]">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0 space-y-1">
+                    <p className="truncate text-[13px] font-medium text-[var(--console-ink)]">
+                      {person.name}
+                    </p>
+                    <p className="line-clamp-2 text-[12px] text-[var(--console-body)]">
+                      {person.notes}
+                    </p>
+                  </div>
+                  <span className="inline-flex shrink-0 items-center gap-2 text-[12px] text-[var(--console-muted)]">
                     <StatusDot tone={roleTone(person.role)} />
                     {ROLE_LABEL[person.role]}
                   </span>
-                </TableCell>
-                <TableCell className="max-w-md truncate px-0 py-2.5 whitespace-normal text-[var(--console-ink)]">
-                  {person.notes}
-                </TableCell>
-                <TableCell className="px-0 py-2.5 text-right text-[12px] text-[var(--console-sensor)]">
-                  {person.contradictionCount > 0
-                    ? `${person.contradictionCount} contradictory`
-                    : '—'}
-                </TableCell>
+                </div>
+              </ConsoleLink>
+            </li>
+          ))}
+        </ul>
+
+        <div className="hidden md:block">
+          <Table className="text-[13px]">
+            <TableHeader>
+              <TableRow className="border-[var(--console-hairline)] hover:bg-transparent">
+                <TableHead className="h-8 px-0 text-[12px] font-medium text-[var(--console-muted)]">
+                  Name
+                </TableHead>
+                <TableHead className="h-8 px-0 text-[12px] font-medium text-[var(--console-muted)]">
+                  Role
+                </TableHead>
+                <TableHead className="h-8 px-0 text-[12px] font-medium text-[var(--console-muted)]">
+                  Notes
+                </TableHead>
+                <TableHead className="h-8 px-0 text-right text-[12px] font-medium text-[var(--console-muted)]">
+                  Contradictions
+                </TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {people.map((person) => (
+                <TableRow
+                  key={person.id}
+                  className="border-[var(--console-strip)] hover:bg-[var(--console-strip)]"
+                >
+                  <TableCell className="px-0 py-2.5 font-medium text-[var(--console-ink)]">
+                    <ConsoleLink
+                      to={`/console/cases/${caseId}/people/${person.id}`}
+                      className="underline-offset-4 hover:underline"
+                    >
+                      {person.name}
+                    </ConsoleLink>
+                  </TableCell>
+                  <TableCell className="px-0 py-2.5">
+                    <span className="inline-flex items-center gap-2 text-[12px] text-[var(--console-muted)]">
+                      <StatusDot tone={roleTone(person.role)} />
+                      {ROLE_LABEL[person.role]}
+                    </span>
+                  </TableCell>
+                  <TableCell className="max-w-md truncate px-0 py-2.5 whitespace-normal text-[var(--console-ink)]">
+                    {person.notes}
+                  </TableCell>
+                  <TableCell className="px-0 py-2.5 text-right text-[12px] text-[var(--console-sensor)]">
+                    {person.contradictionCount > 0
+                      ? `${person.contradictionCount} contradictory`
+                      : '—'}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </section>
     </div>
   );

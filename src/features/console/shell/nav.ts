@@ -116,17 +116,17 @@ export const agencySidebarGroups: CaseNavGroup[] = [
         icon: Users,
       },
       {
-        to: '/console/cases/northridge/evidence',
+        to: '/console/cases/$caseId/evidence',
         label: 'Physical evidence',
         icon: Package,
       },
       {
-        to: '/console/cases/northridge/digital',
+        to: '/console/cases/$caseId/digital',
         label: 'Digital evidence',
         icon: HardDrives,
       },
       {
-        to: '/console/cases/northridge/leads',
+        to: '/console/cases/$caseId/leads',
         label: 'Leads & tasks',
         icon: Kanban,
         badge: '37',
@@ -143,13 +143,13 @@ export const agencySidebarGroups: CaseNavGroup[] = [
     label: 'Process',
     items: [
       {
-        to: '/console/cases/northridge/legal',
+        to: '/console/cases/$caseId/legal',
         label: 'Legal process',
         icon: Scales,
         badge: '4',
       },
       {
-        to: '/console/cases/northridge/forensics',
+        to: '/console/cases/$caseId/forensics',
         label: 'Forensics',
         icon: Flask,
       },

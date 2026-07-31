@@ -1,14 +1,20 @@
 import {
   caseWorkspacePages,
   commandCenter,
+  intakeModel,
+  investigativePlan,
   mediaWorkbenches,
   portfolioCases,
+  searchModel,
   workspacePages,
 } from './agency';
 import type {
   CommandCenterModel,
+  IntakeModel,
+  InvestigativePlanModel,
   MediaWorkbenchModel,
   PortfolioCase,
+  SearchModel,
   WorkspacePageModel,
 } from './agency-types';
 import { getCase, listPeople } from './getters';
@@ -39,4 +45,19 @@ export function getMediaWorkbench(slug: string): MediaWorkbenchModel | null {
 
 export function getPerson(caseId: CaseId, personId: string): PersonRecord | null {
   return listPeople(caseId).find((person) => person.id === personId) ?? null;
+}
+
+export function getIntake(): IntakeModel {
+  return intakeModel;
+}
+
+export function getInvestigativePlan(caseId: CaseId): InvestigativePlanModel | null {
+  if (!getCase(caseId)) {
+    return null;
+  }
+  return investigativePlan;
+}
+
+export function getSearch(): SearchModel {
+  return searchModel;
 }

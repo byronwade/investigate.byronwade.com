@@ -1,7 +1,10 @@
 import type {
   CommandCenterModel,
+  IntakeModel,
+  InvestigativePlanModel,
   MediaWorkbenchModel,
   PortfolioCase,
+  SearchModel,
   WorkspacePageModel,
 } from './agency-types';
 import { NORTHRIDGE_CASE_ID } from './northridge';
@@ -134,7 +137,7 @@ export const portfolioCases: PortfolioCase[] = [
     status: 'open',
     squad: 'Public corruption',
     openedLabel: 'Opened 03 Jan 2026',
-    href: `/console/cases/${DEFAULT_CASE_ID}/overview`,
+    href: '/console/cases/halstead/overview',
   },
   {
     id: 'cortland',
@@ -143,7 +146,7 @@ export const portfolioCases: PortfolioCase[] = [
     status: 'open',
     squad: 'White collar',
     openedLabel: 'Opened 18 Nov 2025',
-    href: `/console/cases/${DEFAULT_CASE_ID}/overview`,
+    href: '/console/cases/cortland/overview',
   },
   {
     id: 'lakeshore',
@@ -152,7 +155,7 @@ export const portfolioCases: PortfolioCase[] = [
     status: 'closed',
     squad: 'Civil rights',
     openedLabel: 'Closed 09 Dec 2025',
-    href: `/console/cases/${DEFAULT_CASE_ID}/overview`,
+    href: '/console/cases/lakeshore/overview',
   },
 ];
 
@@ -1094,4 +1097,210 @@ export const mediaWorkbenches: Record<string, MediaWorkbenchModel> = {
     ],
     notes: [{ id: 'n1', at: 'note', text: 'Do not upscale — original retained' }],
   },
+};
+
+export const intakeModel: IntakeModel = {
+  title: 'Intake & triage',
+  description:
+    'Classify tips, assign need-to-know, and open or decline cases. Assistants propose; humans decide.',
+  meta: '24 awaiting triage',
+  selectedId: 'i1',
+  queue: [
+    {
+      id: 'i1',
+      tipId: 'TIP-2026-1184',
+      summary: 'Anonymous tip — Northridge vendor invoices inflated on 2024 awards',
+      classification: 'public corruption',
+      priority: 'priority',
+      tone: 'danger',
+      owner: 'mine',
+      submittedLabel: 'Submitted 28 Feb · tip line',
+      extractedFields: [
+        { label: 'Alleged actors', value: 'Vance, Curtis A. · Northridge Township' },
+        { label: 'Federal nexus', value: 'Proposed — wire / program fraud (assistant)' },
+        { label: 'Source reliability', value: 'Unknown · anonymous' },
+        { label: 'Suggested action', value: 'Open preliminary · assign Public Corruption' },
+      ],
+    },
+    {
+      id: 'i2',
+      tipId: 'TIP-2026-1179',
+      summary: 'Municipal clerk reports missing badge-access export for Feb board vote',
+      classification: 'records',
+      priority: 'today',
+      tone: 'warn',
+      owner: 'unassigned',
+      submittedLabel: 'Submitted 27 Feb · walk-in',
+      extractedFields: [
+        { label: 'Alleged actors', value: 'Unknown clerk staff' },
+        { label: 'Federal nexus', value: 'Unclear — may support Northridge' },
+        { label: 'Source reliability', value: 'Named municipal employee' },
+        { label: 'Suggested action', value: 'Link to Northridge · request records' },
+      ],
+    },
+    {
+      id: 'i3',
+      tipId: 'TIP-2026-1162',
+      summary: 'Citizen complaint — parking ticket pattern; no federal nexus indicated',
+      classification: 'decline candidate',
+      priority: 'low',
+      tone: 'muted',
+      owner: 'squad',
+      submittedLabel: 'Submitted 25 Feb · web form',
+      extractedFields: [
+        { label: 'Alleged actors', value: 'Local parking enforcement' },
+        { label: 'Federal nexus', value: 'None indicated' },
+        { label: 'Source reliability', value: 'Named complainant' },
+        { label: 'Suggested action', value: 'Decline · refer to municipal' },
+      ],
+    },
+    {
+      id: 'i4',
+      tipId: 'TIP-2026-1155',
+      summary: 'Vendor employee alleges kickbacks on Halstead Transit bus shelter contracts',
+      classification: 'public corruption',
+      priority: 'today',
+      tone: 'warn',
+      owner: 'mine',
+      submittedLabel: 'Submitted 24 Feb · tip line',
+      extractedFields: [
+        { label: 'Alleged actors', value: 'Halstead Transit procurement' },
+        { label: 'Federal nexus', value: 'Proposed — federal transit funds' },
+        { label: 'Source reliability', value: 'Named · employment verified pending' },
+        { label: 'Suggested action', value: 'Open · assign to Halstead squad' },
+      ],
+    },
+  ],
+};
+
+export const investigativePlan: InvestigativePlanModel = {
+  title: 'Investigative plan',
+  description:
+    'Hypotheses, techniques, and sequenced work — assistants propose steps; humans approve.',
+  objective:
+    'Determine whether Northridge Township award decisions were steered through inflated invoices and covered by access-log manipulation around the 11 Feb vote.',
+  hypotheses: [
+    {
+      id: 'h1',
+      code: 'H1',
+      title: 'Inflated awards',
+      statement:
+        'Vendor invoices systematically exceed peer awards by more than 18% on contested packages.',
+      status: 'testing',
+      tone: 'warn',
+      supports: ['Invoice 8812', 'Peer award spreadsheet'],
+      contradicts: [],
+    },
+    {
+      id: 'h2',
+      code: 'H2',
+      title: 'Badge-access cover',
+      statement:
+        'Subject was present for the award vote; stated alibi conflicts with badge-access log.',
+      status: 'corroborating',
+      tone: 'ok',
+      supports: ['Badge-access log', 'Bright statement 08-B'],
+      contradicts: ['Subject verbal alibi'],
+    },
+    {
+      id: 'h3',
+      code: 'H3',
+      title: 'Osei tip channel',
+      statement:
+        'Marcus Osei is a material tip source rather than a participant in the award scheme.',
+      status: 'disprove candidate',
+      tone: 'danger',
+      supports: [],
+      contradicts: ['No corroborating record for Osei'],
+    },
+  ],
+  steps: [
+    {
+      id: 's1',
+      label: 'Complete bank records production review',
+      owner: 'SA Okonjo-Ramirez',
+      due: '04 Mar',
+      tone: 'warn',
+    },
+    {
+      id: 's2',
+      label: 'Schedule follow-up interview — Bright',
+      owner: 'SSA Halloway',
+      due: 'this week',
+      tone: 'ok',
+    },
+    {
+      id: 's3',
+      label: 'Disprove or corroborate Osei tip with independent records',
+      owner: 'Assistant propose · human approve',
+      due: 'queued',
+      tone: 'sensor',
+    },
+  ],
+};
+
+export const searchModel: SearchModel = {
+  title: 'Search results',
+  description: 'Cross-record search with need-to-know filtering applied to every hit.',
+  query: 'Northridge award',
+  visibleCount: 5,
+  hiddenCount: 2,
+  filters: ['All', 'Evidence', 'Timeline', 'People', 'Runs'],
+  hits: [
+    {
+      id: 'sr1',
+      kind: 'Evidence',
+      title: 'Vendor invoice 8812',
+      snippet: 'Line items for “community outreach” exceed peer awards by 22% on package NR-14.',
+      provenance: 'Northridge · custody intake · DE-1183',
+      href: `/console/cases/${DEFAULT_CASE_ID}/evidence`,
+      tone: 'ok',
+    },
+    {
+      id: 'sr2',
+      kind: 'Timeline',
+      title: 'Award vote — council chamber',
+      snippet:
+        '11 Feb 2026 · roll-call vote on contested awards; Vance present for three of four packages.',
+      provenance: 'Northridge · event · council minutes',
+      href: `/console/cases/${DEFAULT_CASE_ID}/timeline`,
+      tone: 'ok',
+    },
+    {
+      id: 'sr3',
+      kind: 'People',
+      title: 'Vance, Curtis A.',
+      snippet: 'Signed 3 of 4 disputed awards · bank records subpoenaed 14 Feb.',
+      provenance: 'Northridge · subject',
+      href: `/console/cases/${DEFAULT_CASE_ID}/people/person-vance`,
+      tone: 'warn',
+    },
+    {
+      id: 'sr4',
+      kind: 'Run',
+      title: 'RUN 8841 — contradiction sweep',
+      snippet: '3 contradictions found · 1 potentially exculpatory · 41 records read · 4 denied.',
+      provenance: 'Overnight assistant · FOUO',
+      href: `/console/cases/${DEFAULT_CASE_ID}/overview`,
+      tone: 'sensor',
+    },
+    {
+      id: 'sr5',
+      kind: 'Media',
+      title: 'Hall lobby cam bookmark 18:52',
+      snippet: 'Subject enters frame from east door carrying folio consistent with award packet.',
+      provenance: 'Video review · fixture asset',
+      href: '/console/media/video-review',
+      tone: 'ok',
+    },
+    {
+      id: 'sr6',
+      kind: 'Restricted',
+      title: 'Foreign-intel lane hit',
+      snippet: 'Hidden by clearance — denial audited.',
+      provenance: 'Need-to-know filter',
+      tone: 'danger',
+      clearanceHidden: true,
+    },
+  ],
 };

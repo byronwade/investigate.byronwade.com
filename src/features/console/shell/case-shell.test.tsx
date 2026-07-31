@@ -119,9 +119,11 @@ describe('CaseShell', () => {
 
     const main = document.getElementById('console-main');
     expect(main).toBeTruthy();
-    expect(main).not.toHaveTextContent('Techniques at this level');
+    expect(main).toHaveTextContent('Techniques & access');
 
-    expect(screen.getByRole('heading', { name: /Techniques at this level/i })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /Your access/i })).toBeInTheDocument();
+    expect(
+      screen.getAllByRole('heading', { name: /Techniques at this level/i }).length,
+    ).toBeGreaterThan(0);
+    expect(screen.getAllByRole('heading', { name: /Your access/i }).length).toBeGreaterThan(0);
   });
 });

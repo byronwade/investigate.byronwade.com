@@ -54,3 +54,71 @@ export type PortfolioCase = {
   openedLabel: string;
   href: string;
 };
+
+export type IntakeQueueItem = {
+  id: string;
+  tipId: string;
+  summary: string;
+  classification: string;
+  priority: string;
+  tone: StatusDotTone;
+  owner: 'mine' | 'unassigned' | 'squad';
+  submittedLabel: string;
+  extractedFields: { label: string; value: string }[];
+};
+
+export type IntakeModel = {
+  title: string;
+  description: string;
+  meta: string;
+  queue: IntakeQueueItem[];
+  selectedId: string;
+};
+
+export type PlanHypothesis = {
+  id: string;
+  code: string;
+  title: string;
+  statement: string;
+  status: string;
+  tone: StatusDotTone;
+  supports: string[];
+  contradicts: string[];
+};
+
+export type PlanStep = {
+  id: string;
+  label: string;
+  owner: string;
+  due?: string;
+  tone?: StatusDotTone;
+};
+
+export type InvestigativePlanModel = {
+  title: string;
+  description: string;
+  objective: string;
+  hypotheses: PlanHypothesis[];
+  steps: PlanStep[];
+};
+
+export type SearchHit = {
+  id: string;
+  kind: string;
+  title: string;
+  snippet: string;
+  provenance: string;
+  href?: string;
+  tone?: StatusDotTone;
+  clearanceHidden?: boolean;
+};
+
+export type SearchModel = {
+  title: string;
+  description: string;
+  query: string;
+  visibleCount: number;
+  hiddenCount: number;
+  filters: string[];
+  hits: SearchHit[];
+};
