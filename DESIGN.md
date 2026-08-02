@@ -213,7 +213,16 @@ Product UI for the AI-led case platform (Paper design language). Spec: `docs/sup
 - Mobile shell: sidebar collapses below `lg`; open via TopBar control into shadcn `Sheet` (`MobileNav` + shared `SidebarNav`). Touch targets ≥44px on key chrome controls. Case tabs scroll horizontally; dense tables switch to stacked rows below `md`.
 - UI kit: shadcn primitives in `src/components/ui` (Button, Badge, Table, Sheet, Tabs, Input, ScrollArea, Tooltip, Command, Dialog, Dropdown, Separator, Avatar) + Phosphor Duotone icons; themed via console CSS variables
 - Shared empty pattern: `src/features/console/ui/empty-state.tsx` (also demoed at `/console/empty-states`)
-- Dedicated composed pages (not generic list stubs): command center, cases portfolio, intake, search, media workbenches, person profile, overview/timeline/evidence/leads/people, investigative plan
+- Shared composition primitives (`src/features/console/ui/` + classes in `console.css`):
+  - `ConsolePage` — page gap rhythm (`console-page` / `console-page-loose`)
+  - `SectionHeader` — hairline section title + hint/action
+  - `FilterBar` — pressed filter chips (`console-filter`)
+  - `DetailPanel` — right-rail review panel (`console-panel`)
+  - `FixtureCanvas` — map/scene fixture plane (`console-canvas`)
+  - List/row language: `console-list`, `console-row`, `console-row-active`, `console-meta`, `console-action`
+  - Metrics: `console-metric-strip` (connected cells, not scattered cards)
+- Prefer dense hairline lists over card grids; bordered panels only for selection detail, media stage, or hypothesis tiles that aid comparison
+- Dedicated composed pages for all agency/case product routes (typed fixtures + page modules; Paper dumps remain at `/console/reference`)
 - Agency Record/Process case deep-links use `$caseId` resolved with `DEFAULT_CASE_ID` (not hardcoded northridge paths)
 - Product routes: `/console` → `/console/command-center`; agency/media/system under `/console/*`; case workspace `/console/cases/$caseId/...`
 - Paper dumps (exact JSX): `/console/reference` and `/console/reference/$slug` (`src/features/console/screens/paper/*`, Biome-ignored)

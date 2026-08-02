@@ -11,6 +11,7 @@ import {
 } from '#/components/ui/table';
 import { listPeople, type PersonRecord } from '#/features/console/data';
 import { ConsoleLink } from '#/features/console/shell/console-link';
+import { ConsolePage } from '#/features/console/ui/console-page';
 import { EmptyState } from '#/features/console/ui/empty-state';
 import { PageHeader } from '#/features/console/ui/page-header';
 import { StatusDot, type StatusDotTone } from '#/features/console/ui/status-dot';
@@ -39,7 +40,7 @@ export function PeoplePage({ caseId }: { caseId: string }): React.JSX.Element {
   const people = listPeople(caseId);
 
   return (
-    <div className="space-y-6" data-surface="console">
+    <ConsolePage>
       <PageHeader
         title="People"
         meta={
@@ -57,12 +58,12 @@ export function PeoplePage({ caseId }: { caseId: string }): React.JSX.Element {
         />
       ) : (
         <>
-          <ul className="space-y-2 md:hidden">
+          <ul className="console-list md:hidden">
             {people.map((person) => (
               <li key={person.id}>
                 <ConsoleLink
                   to={`/console/cases/${caseId}/people/${person.id}`}
-                  className="block rounded-lg border border-[var(--console-hairline)] px-3 py-3 hover:bg-[var(--console-strip)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]"
+                  className="console-row -mx-1 block rounded-[4px] px-1 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0 space-y-1">
@@ -73,7 +74,7 @@ export function PeoplePage({ caseId }: { caseId: string }): React.JSX.Element {
                         {person.notes}
                       </p>
                     </div>
-                    <span className="inline-flex shrink-0 items-center gap-2 text-[12px] text-[var(--console-muted)]">
+                    <span className="console-meta inline-flex shrink-0 items-center gap-2">
                       <StatusDot tone={roleTone(person.role)} />
                       {ROLE_LABEL[person.role]}
                     </span>
@@ -141,6 +142,6 @@ export function PeoplePage({ caseId }: { caseId: string }): React.JSX.Element {
           </div>
         </>
       )}
-    </div>
+    </ConsolePage>
   );
 }

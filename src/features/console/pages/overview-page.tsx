@@ -23,6 +23,8 @@ import {
 } from '#/features/console/data';
 import { ConsoleLink } from '#/features/console/shell/console-link';
 import { useConsoleRailSetter } from '#/features/console/shell/rail-context';
+import { consoleActionClass } from '#/features/console/ui/console-action';
+import { ConsolePage } from '#/features/console/ui/console-page';
 import { PageHeader } from '#/features/console/ui/page-header';
 import { StatusDot, type StatusDotTone } from '#/features/console/ui/status-dot';
 import { cn } from '#/lib/utils';
@@ -138,7 +140,7 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
       : `${assistant.steps.length} steps`;
 
   return (
-    <div className="space-y-8" data-surface="console">
+    <ConsolePage loose>
       <PageHeader
         title={caseRecord.title}
         meta={
@@ -164,7 +166,10 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
               type="button"
               variant="outline"
               size="sm"
-              className="h-11 border-[var(--console-hairline)] bg-[var(--console-ground)] text-[13px] font-medium text-[var(--console-body)] shadow-none sm:h-[30px]"
+              className={cn(
+                consoleActionClass,
+                'border-[var(--console-hairline)] bg-[var(--console-ground)] text-[13px] font-medium text-[var(--console-body)] shadow-none',
+              )}
               asChild
             >
               <ConsoleLink to={`/console/cases/${caseId}/approvals`}>Request approval</ConsoleLink>
@@ -172,7 +177,10 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
             <Button
               type="button"
               size="sm"
-              className="h-11 bg-[var(--console-ink)] text-[13px] font-medium text-white hover:bg-[var(--console-ink)]/90 sm:h-[30px]"
+              className={cn(
+                consoleActionClass,
+                'bg-[var(--console-ink)] text-[13px] font-medium text-white hover:bg-[var(--console-ink)]/90',
+              )}
               asChild
             >
               <ConsoleLink to={`/console/cases/${caseId}/leads`}>
@@ -435,6 +443,6 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
           </Table>
         </div>
       </section>
-    </div>
+    </ConsolePage>
   );
 }

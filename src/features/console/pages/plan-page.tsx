@@ -6,8 +6,11 @@ import { Badge } from '#/components/ui/badge';
 import { Button } from '#/components/ui/button';
 import { getInvestigativePlan } from '#/features/console/data/agency-getters';
 import { ConsoleLink } from '#/features/console/shell/console-link';
+import { consoleActionClass } from '#/features/console/ui/console-action';
+import { ConsolePage } from '#/features/console/ui/console-page';
 import { EmptyState } from '#/features/console/ui/empty-state';
 import { PageHeader } from '#/features/console/ui/page-header';
+import { SectionHeader } from '#/features/console/ui/section-header';
 import { StatusDot } from '#/features/console/ui/status-dot';
 
 export function PlanPage({ caseId }: { caseId: string }): React.JSX.Element | null {
@@ -17,7 +20,7 @@ export function PlanPage({ caseId }: { caseId: string }): React.JSX.Element | nu
   }
 
   return (
-    <div className="space-y-8" data-surface="console">
+    <ConsolePage loose>
       <PageHeader
         title={model.title}
         description={model.description}
@@ -28,7 +31,7 @@ export function PlanPage({ caseId }: { caseId: string }): React.JSX.Element | nu
           </span>
         }
         actions={
-          <Button type="button" size="sm" className="h-11 gap-1.5 rounded-[7px] sm:h-[30px]">
+          <Button type="button" size="sm" className={`${consoleActionClass} gap-1.5`}>
             <Plus aria-hidden="true" weight="bold" className="size-[11px]" />
             Add a step
           </Button>
@@ -36,32 +39,25 @@ export function PlanPage({ caseId }: { caseId: string }): React.JSX.Element | nu
       />
 
       <section className="space-y-2">
-        <h2 className="text-[13px] font-semibold text-[var(--console-ink)]">Objective</h2>
+        <SectionHeader title="Objective" />
         <p className="max-w-3xl text-[13px] leading-6 text-[var(--console-body)]">
           {model.objective}
         </p>
       </section>
 
       <section className="space-y-3">
-        <div className="flex items-end justify-between gap-3 border-b border-[var(--console-hairline)] pb-2">
-          <h2 className="text-[13px] font-semibold text-[var(--console-ink)]">Active hypotheses</h2>
-          <p className="text-[12px] text-[var(--console-muted)]">
-            Supports and contradicts stay source-cited
-          </p>
-        </div>
+        <SectionHeader
+          title="Active hypotheses"
+          hint="Supports and contradicts stay source-cited"
+        />
         <ul className="grid gap-3 lg:grid-cols-3">
           {model.hypotheses.map((hypothesis) => (
-            <li
-              key={hypothesis.id}
-              className="space-y-3 rounded-lg border border-[var(--console-hairline)] p-4"
-            >
+            <li key={hypothesis.id} className="console-panel console-panel-pad space-y-3">
               <div className="flex items-start justify-between gap-2">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
                     <StatusDot tone={hypothesis.tone} />
-                    <span className="font-[family-name:var(--console-font-mono)] text-[12px] text-[var(--console-muted)]">
-                      {hypothesis.code}
-                    </span>
+                    <span className="console-meta">{hypothesis.code}</span>
                   </div>
                   <h3 className="text-[14px] font-semibold text-[var(--console-ink)]">
                     {hypothesis.title}
@@ -96,27 +92,26 @@ export function PlanPage({ caseId }: { caseId: string }): React.JSX.Element | nu
       </section>
 
       <section className="space-y-3">
-        <div className="flex flex-wrap items-end justify-between gap-3 border-b border-[var(--console-hairline)] pb-2">
-          <h2 className="text-[13px] font-semibold text-[var(--console-ink)]">Planned steps</h2>
-          <ConsoleLink
-            to={`/console/cases/${caseId}/leads`}
-            className="text-[12px] text-[var(--console-muted)] underline-offset-4 hover:underline"
-          >
-            Open leads board
-          </ConsoleLink>
-        </div>
+        <SectionHeader
+          title="Planned steps"
+          action={
+            <ConsoleLink
+              to={`/console/cases/${caseId}/leads`}
+              className="text-[12px] text-[var(--console-muted)] underline-offset-4 hover:underline"
+            >
+              Open leads board
+            </ConsoleLink>
+          }
+        />
         {model.steps.length === 0 ? (
           <EmptyState
             title="No steps planned"
             description="Add sequenced work once hypotheses are approved."
           />
         ) : (
-          <ul className="divide-y divide-[var(--console-strip)]">
+          <ul className="console-list">
             {model.steps.map((step) => (
-              <li
-                key={step.id}
-                className="flex min-h-11 flex-col gap-1 py-2.5 sm:min-h-[38px] sm:flex-row sm:items-center sm:gap-3.5"
-              >
+              <li key={step.id} className="console-row">
                 <div className="flex min-w-0 items-center gap-2.5 sm:contents">
                   {step.tone ? <StatusDot tone={step.tone} /> : null}
                   <span className="min-w-0 flex-1 text-[13px] font-medium text-[var(--console-ink)]">
@@ -136,6 +131,6 @@ export function PlanPage({ caseId }: { caseId: string }): React.JSX.Element | nu
           </ul>
         )}
       </section>
-    </div>
+    </ConsolePage>
   );
 }

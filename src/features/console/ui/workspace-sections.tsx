@@ -3,6 +3,7 @@ import type * as React from 'react';
 import type { WorkspaceSection } from '#/features/console/data/agency-types';
 import { ConsoleLink } from '#/features/console/shell/console-link';
 import { EmptyState } from '#/features/console/ui/empty-state';
+import { SectionHeader } from '#/features/console/ui/section-header';
 import { StatusDot } from '#/features/console/ui/status-dot';
 
 export function WorkspaceSections({
@@ -14,22 +15,17 @@ export function WorkspaceSections({
     <div className="space-y-8">
       {sections.map((section) => (
         <section key={section.id} className="space-y-2">
-          <div className="flex flex-col gap-1 border-b border-[var(--console-hairline)] pb-2 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between sm:gap-3">
-            <h2 className="text-[13px] font-semibold text-[var(--console-ink)]">{section.title}</h2>
-            {section.hint ? (
-              <p className="max-w-xl text-[12px] text-[var(--console-muted)]">{section.hint}</p>
-            ) : null}
-          </div>
+          <SectionHeader title={section.title} {...(section.hint ? { hint: section.hint } : {})} />
           {section.rows.length === 0 ? (
             <EmptyState
               title="Nothing in this queue"
               description="New items will appear here as the office triage and overnight runs complete."
             />
           ) : (
-            <ul className="divide-y divide-[var(--console-strip)]">
+            <ul className="console-list border-t-0">
               {section.rows.map((row) => {
                 const body = (
-                  <div className="flex min-h-11 flex-col gap-1 py-2.5 sm:min-h-[38px] sm:flex-row sm:items-center sm:gap-3.5 sm:py-2">
+                  <div className="console-row">
                     <div className="flex min-w-0 items-center gap-2.5 sm:contents">
                       {row.tone ? <StatusDot tone={row.tone} /> : null}
                       <div className="min-w-0 truncate text-[13px] font-medium text-[var(--console-ink)] sm:w-[150px] sm:shrink-0">
@@ -59,7 +55,7 @@ export function WorkspaceSections({
                     {row.href ? (
                       <ConsoleLink
                         to={row.href}
-                        className="block rounded-md hover:bg-[var(--console-strip)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]"
+                        className="block rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]"
                       >
                         {body}
                       </ConsoleLink>

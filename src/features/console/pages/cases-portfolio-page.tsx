@@ -12,6 +12,7 @@ import {
 } from '#/components/ui/table';
 import { listPortfolioCases } from '#/features/console/data/agency-getters';
 import { ConsoleLink } from '#/features/console/shell/console-link';
+import { ConsolePage } from '#/features/console/ui/console-page';
 import { EmptyState } from '#/features/console/ui/empty-state';
 import { PageHeader } from '#/features/console/ui/page-header';
 import { StatusDot } from '#/features/console/ui/status-dot';
@@ -31,7 +32,7 @@ export function CasesPortfolioPage(): React.JSX.Element {
   const openCount = cases.filter((item) => item.status === 'open').length;
 
   return (
-    <div className="space-y-6" data-surface="console">
+    <ConsolePage>
       <PageHeader
         title="Cases portfolio"
         description="Open and recently closed cases for the Chicago field office."
@@ -148,6 +149,6 @@ export function CasesPortfolioPage(): React.JSX.Element {
           </div>
         </>
       )}
-    </div>
+    </ConsolePage>
   );
 }

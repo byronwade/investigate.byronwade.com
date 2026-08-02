@@ -18,12 +18,12 @@ export function PageHeader({
   return (
     <header
       className={cn(
-        'mb-6 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between',
+        'flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between',
         className,
       )}
     >
-      <div className="min-w-0 space-y-1">
-        <h1 className="font-[family-name:var(--console-font-sans)] text-[22px] font-semibold leading-7 tracking-[-0.02em] text-[var(--console-ink)]">
+      <div className="min-w-0 space-y-1.5">
+        <h1 className="font-[family-name:var(--console-font-sans)] text-[22px] font-semibold leading-7 tracking-[-0.02em] text-[var(--console-ink)] sm:text-[24px] sm:leading-[30px]">
           {title}
         </h1>
         {description ? (
@@ -31,7 +31,9 @@ export function PageHeader({
             {description}
           </p>
         ) : null}
-        {meta ? <div className="pt-1 text-[12px] text-[var(--console-muted)]">{meta}</div> : null}
+        {meta ? (
+          <div className="pt-0.5 text-[12px] leading-4 text-[var(--console-muted)]">{meta}</div>
+        ) : null}
       </div>
       {actions ? (
         <div className="flex w-full shrink-0 flex-wrap items-center gap-2 sm:w-auto">{actions}</div>

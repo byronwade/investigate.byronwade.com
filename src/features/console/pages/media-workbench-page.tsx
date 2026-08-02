@@ -9,12 +9,14 @@ import { Button } from '#/components/ui/button';
 import { ScrollArea } from '#/components/ui/scroll-area';
 import { Separator } from '#/components/ui/separator';
 import type { MediaWorkbenchModel } from '#/features/console/data/agency-types';
+import { ConsolePage } from '#/features/console/ui/console-page';
 import { PageHeader } from '#/features/console/ui/page-header';
+import { SectionHeader } from '#/features/console/ui/section-header';
 import { StatusDot } from '#/features/console/ui/status-dot';
 
 export function MediaWorkbenchPage({ model }: { model: MediaWorkbenchModel }): React.JSX.Element {
   return (
-    <div className="space-y-6" data-surface="console">
+    <ConsolePage>
       <PageHeader
         title={model.title}
         description={model.description}
@@ -25,10 +27,7 @@ export function MediaWorkbenchPage({ model }: { model: MediaWorkbenchModel }): R
           </span>
         }
         actions={
-          <Badge
-            variant="secondary"
-            className="rounded-md font-[family-name:var(--console-font-mono)] text-[11px]"
-          >
+          <Badge variant="secondary" className="rounded-md console-meta !text-[11px]">
             fixture preview
           </Badge>
         }
@@ -82,25 +81,16 @@ export function MediaWorkbenchPage({ model }: { model: MediaWorkbenchModel }): R
               >
                 <SkipForward aria-hidden="true" weight="fill" className="size-4" />
               </Button>
-              <div className="ml-auto font-[family-name:var(--console-font-mono)] text-[11px] text-white/70">
-                00:00 / --:--
-              </div>
+              <div className="ml-auto console-meta !text-white/70">00:00 / --:--</div>
             </div>
           </div>
 
           <section className="space-y-2">
-            <h2 className="text-[13px] font-semibold text-[var(--console-ink)]">
-              Tracks & markers
-            </h2>
-            <ul className="divide-y divide-[var(--console-strip)] border-t border-[var(--console-hairline)]">
+            <SectionHeader title="Tracks & markers" />
+            <ul className="console-list">
               {model.tracks.map((track) => (
-                <li
-                  key={track.id}
-                  className="flex min-h-11 flex-col gap-1 py-2.5 sm:min-h-[38px] sm:flex-row sm:items-center sm:gap-4"
-                >
-                  <span className="shrink-0 font-[family-name:var(--console-font-mono)] text-[11px] text-[var(--console-muted)] sm:w-28">
-                    {track.label}
-                  </span>
+                <li key={track.id} className="console-row">
+                  <span className="console-meta shrink-0 sm:w-28">{track.label}</span>
                   <span className="text-[13px] text-[var(--console-ink)]">{track.detail}</span>
                 </li>
               ))}
@@ -108,7 +98,7 @@ export function MediaWorkbenchPage({ model }: { model: MediaWorkbenchModel }): R
           </section>
         </div>
 
-        <aside className="flex max-h-[420px] flex-col rounded-lg border border-[var(--console-hairline)]">
+        <aside className="console-panel flex max-h-[420px] flex-col overflow-hidden">
           <div className="space-y-1 px-4 py-3">
             <h2 className="text-[12px] font-medium text-[var(--console-muted)]">Session notes</h2>
             <p className="text-[11px] text-[var(--console-muted)]">
@@ -120,9 +110,7 @@ export function MediaWorkbenchPage({ model }: { model: MediaWorkbenchModel }): R
             <ul className="space-y-3 pr-2">
               {model.notes.map((note) => (
                 <li key={note.id} className="space-y-1">
-                  <p className="font-[family-name:var(--console-font-mono)] text-[11px] text-[var(--console-muted)]">
-                    {note.at}
-                  </p>
+                  <p className="console-meta">{note.at}</p>
                   <p className="text-[13px] text-[var(--console-ink)]">{note.text}</p>
                 </li>
               ))}
@@ -130,6 +118,6 @@ export function MediaWorkbenchPage({ model }: { model: MediaWorkbenchModel }): R
           </ScrollArea>
         </aside>
       </div>
-    </div>
+    </ConsolePage>
   );
 }

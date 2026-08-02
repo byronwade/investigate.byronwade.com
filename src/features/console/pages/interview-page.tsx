@@ -3,6 +3,7 @@ import type * as React from 'react';
 
 import { Badge } from '#/components/ui/badge';
 import { getInterviewTranscript } from '#/features/console/data/agency-getters';
+import { ConsolePage } from '#/features/console/ui/console-page';
 import { EmptyState } from '#/features/console/ui/empty-state';
 import { PageHeader } from '#/features/console/ui/page-header';
 import { StatusDot } from '#/features/console/ui/status-dot';
@@ -14,7 +15,7 @@ export function InterviewPage({ caseId }: { caseId: string }): React.JSX.Element
   }
 
   return (
-    <div className="space-y-6" data-surface="console">
+    <ConsolePage>
       <PageHeader
         title={model.title}
         description={model.description}
@@ -32,16 +33,14 @@ export function InterviewPage({ caseId }: { caseId: string }): React.JSX.Element
           description="Transcript excerpts appear after review."
         />
       ) : (
-        <ol className="space-y-0 divide-y divide-[var(--console-strip)] border-t border-[var(--console-hairline)]">
+        <ol className="console-list">
           {model.lines.map((line) => (
             <li
               key={line.id}
               className="grid gap-2 py-3 sm:grid-cols-[88px_minmax(0,1fr)] sm:gap-4"
             >
               <div className="space-y-1">
-                <p className="font-[family-name:var(--console-font-mono)] text-[11px] text-[var(--console-muted)]">
-                  {line.at}
-                </p>
+                <p className="console-meta">{line.at}</p>
                 <p className="text-[12px] font-medium text-[var(--console-ink)]">{line.speaker}</p>
               </div>
               <div className="space-y-2">
@@ -59,6 +58,6 @@ export function InterviewPage({ caseId }: { caseId: string }): React.JSX.Element
           ))}
         </ol>
       )}
-    </div>
+    </ConsolePage>
   );
 }

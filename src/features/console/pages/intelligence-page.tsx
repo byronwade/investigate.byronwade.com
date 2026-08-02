@@ -8,9 +8,13 @@ import { Button } from '#/components/ui/button';
 import { Separator } from '#/components/ui/separator';
 import { getIntelligence } from '#/features/console/data/agency-getters';
 import { ConsoleLink } from '#/features/console/shell/console-link';
+import { consoleActionClass } from '#/features/console/ui/console-action';
+import { ConsolePage } from '#/features/console/ui/console-page';
+import { DetailPanel } from '#/features/console/ui/detail-panel';
 import { EmptyState } from '#/features/console/ui/empty-state';
 import { PageHeader } from '#/features/console/ui/page-header';
 import { StatusDot } from '#/features/console/ui/status-dot';
+import { cn } from '#/lib/utils';
 
 export function IntelligencePage(): React.JSX.Element {
   const model = getIntelligence();
@@ -19,13 +23,13 @@ export function IntelligencePage(): React.JSX.Element {
     model.packages.find((item) => item.id === selectedId) ?? model.packages[0] ?? null;
 
   return (
-    <div className="space-y-6" data-surface="console">
+    <ConsolePage>
       <PageHeader
         title={model.title}
         description={model.description}
         meta={model.meta}
         actions={
-          <Button type="button" size="sm" className="h-11 rounded-[7px] sm:h-[30px]" asChild>
+          <Button type="button" size="sm" className={consoleActionClass} asChild>
             <ConsoleLink to="/console/oversight">View audit blocks</ConsoleLink>
           </Button>
         }
@@ -38,7 +42,7 @@ export function IntelligencePage(): React.JSX.Element {
         />
       ) : (
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
-          <ul className="divide-y divide-[var(--console-strip)] border-t border-[var(--console-hairline)]">
+          <ul className="console-list">
             {model.packages.map((item) => {
               const isSelected = selected?.id === item.id;
               return (
@@ -46,11 +50,7 @@ export function IntelligencePage(): React.JSX.Element {
                   <button
                     type="button"
                     onClick={() => setSelectedId(item.id)}
-                    className={
-                      isSelected
-                        ? 'flex w-full flex-col gap-1 bg-[var(--console-strip)] px-2 py-3 text-left sm:flex-row sm:items-center sm:gap-3.5'
-                        : 'flex w-full flex-col gap-1 px-2 py-3 text-left hover:bg-[var(--console-strip)] sm:flex-row sm:items-center sm:gap-3.5'
-                    }
+                    className={cn('console-row', isSelected && 'console-row-active')}
                     aria-pressed={isSelected}
                   >
                     <div className="flex min-w-0 items-center gap-2.5 sm:w-[220px] sm:shrink-0">
@@ -71,7 +71,7 @@ export function IntelligencePage(): React.JSX.Element {
             })}
           </ul>
 
-          <aside className="space-y-4 rounded-lg border border-[var(--console-hairline)] p-4">
+          <DetailPanel>
             {selected ? (
               <>
                 <div className="space-y-2">
@@ -93,7 +93,7 @@ export function IntelligencePage(): React.JSX.Element {
                 <p className="text-[13px] leading-5 text-[var(--console-body)]">
                   {selected.summary}
                 </p>
-                <Separator />
+                <Separator className="bg-[var(--console-hairline)]" />
                 <div className="space-y-2">
                   <h3 className="text-[11px] font-medium tracking-wide text-[var(--console-muted)] uppercase">
                     Entities
@@ -106,17 +106,12 @@ export function IntelligencePage(): React.JSX.Element {
                     ))}
                   </ul>
                 </div>
-                <Separator />
+                <Separator className="bg-[var(--console-hairline)]" />
                 <p className="text-[12px] leading-5 text-[var(--console-muted)]">
                   {selected.accessNote}
                 </p>
                 {selected.href ? (
-                  <Button
-                    type="button"
-                    size="sm"
-                    className="h-11 rounded-[7px] sm:h-[30px]"
-                    asChild
-                  >
+                  <Button type="button" size="sm" className={consoleActionClass} asChild>
                     <ConsoleLink to={selected.href}>Open analysis board</ConsoleLink>
                   </Button>
                 ) : null}
@@ -127,9 +122,9 @@ export function IntelligencePage(): React.JSX.Element {
                 description="Choose a package to review entities and access boundaries."
               />
             )}
-          </aside>
+          </DetailPanel>
         </div>
       )}
-    </div>
+    </ConsolePage>
   );
 }

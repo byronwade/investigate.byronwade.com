@@ -2,7 +2,9 @@ import { Kanban } from '@phosphor-icons/react/dist/csr/Kanban';
 import type * as React from 'react';
 
 import { type LeadRecord, listLeads } from '#/features/console/data';
+import { ConsolePage } from '#/features/console/ui/console-page';
 import { PageHeader } from '#/features/console/ui/page-header';
+import { SectionHeader } from '#/features/console/ui/section-header';
 
 const COLUMNS: { id: LeadRecord['column']; label: string }[] = [
   { id: 'triage', label: 'Triage' },
@@ -18,7 +20,7 @@ export function LeadsPage({ caseId }: { caseId: string }): React.JSX.Element {
   ) as Record<LeadRecord['column'], LeadRecord[]>;
 
   return (
-    <div className="space-y-6" data-surface="console">
+    <ConsolePage>
       <PageHeader
         title="Leads"
         meta={
@@ -29,34 +31,29 @@ export function LeadsPage({ caseId }: { caseId: string }): React.JSX.Element {
         }
       />
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         {COLUMNS.map((column) => {
           const columnLeads = byColumn[column.id];
           return (
             <section
               key={column.id}
               aria-labelledby={`leads-${column.id}`}
-              className="min-w-0 space-y-2.5"
+              className="min-w-0 space-y-3"
             >
-              <div className="flex items-center justify-between border-b border-[var(--console-hairline)] pb-2">
-                <h2
-                  id={`leads-${column.id}`}
-                  className="text-[13px] font-semibold text-[var(--console-ink)]"
-                >
-                  {column.label}
-                </h2>
-                <span className="font-[family-name:var(--console-font-mono)] text-[11px] text-[var(--console-muted)]">
-                  {columnLeads.length}
-                </span>
-              </div>
-              <ul className="space-y-2">
+              <SectionHeader
+                title={column.label}
+                titleId={`leads-${column.id}`}
+                hint={`${columnLeads.length}`}
+              />
+              <ul className="console-list">
                 {columnLeads.map((lead) => (
-                  <li
-                    key={lead.id}
-                    className="rounded-md border border-[var(--console-hairline)] bg-[var(--console-ground)] px-3 py-2.5"
-                  >
-                    <p className="text-[13px] leading-5 text-[var(--console-ink)]">{lead.title}</p>
-                    <p className="mt-1.5 text-[12px] text-[var(--console-muted)]">{lead.owner}</p>
+                  <li key={lead.id} className="console-row !items-start !py-3">
+                    <div className="min-w-0 space-y-1">
+                      <p className="text-[13px] leading-5 text-[var(--console-ink)]">
+                        {lead.title}
+                      </p>
+                      <p className="text-[12px] text-[var(--console-muted)]">{lead.owner}</p>
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -64,6 +61,6 @@ export function LeadsPage({ caseId }: { caseId: string }): React.JSX.Element {
           );
         })}
       </div>
-    </div>
+    </ConsolePage>
   );
 }

@@ -10,9 +10,13 @@ import { Tabs, TabsList, TabsTrigger } from '#/components/ui/tabs';
 import { getIntake } from '#/features/console/data/agency-getters';
 import type { IntakeQueueItem } from '#/features/console/data/agency-types';
 import { ConsoleLink } from '#/features/console/shell/console-link';
+import { consoleActionClass } from '#/features/console/ui/console-action';
+import { ConsolePage } from '#/features/console/ui/console-page';
+import { DetailPanel } from '#/features/console/ui/detail-panel';
 import { EmptyState } from '#/features/console/ui/empty-state';
 import { PageHeader } from '#/features/console/ui/page-header';
 import { StatusDot } from '#/features/console/ui/status-dot';
+import { cn } from '#/lib/utils';
 
 type QueueFilter = 'all' | 'mine' | 'unassigned' | 'squad';
 
@@ -31,13 +35,13 @@ export function IntakePage(): React.JSX.Element {
   const selected = filtered.find((item) => item.id === selectedId) ?? filtered[0] ?? null;
 
   return (
-    <div className="space-y-6" data-surface="console">
+    <ConsolePage>
       <PageHeader
         title={model.title}
         description={model.description}
         meta={model.meta}
         actions={
-          <Button type="button" size="sm" className="h-11 rounded-[7px] sm:h-[30px]" asChild>
+          <Button type="button" size="sm" className={consoleActionClass} asChild>
             <ConsoleLink to="/console/command-center">Back to command</ConsoleLink>
           </Button>
         }
@@ -71,7 +75,7 @@ export function IntakePage(): React.JSX.Element {
         />
       ) : (
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
-          <ul className="divide-y divide-[var(--console-strip)] border-t border-[var(--console-hairline)]">
+          <ul className="console-list">
             {filtered.map((item) => {
               const isSelected = selected?.id === item.id;
               return (
@@ -79,16 +83,12 @@ export function IntakePage(): React.JSX.Element {
                   <button
                     type="button"
                     onClick={() => setSelectedId(item.id)}
-                    className={
-                      isSelected
-                        ? 'flex w-full flex-col gap-1 bg-[var(--console-strip)] px-2 py-3 text-left sm:flex-row sm:items-center sm:gap-3.5'
-                        : 'flex w-full flex-col gap-1 px-2 py-3 text-left hover:bg-[var(--console-strip)] sm:flex-row sm:items-center sm:gap-3.5'
-                    }
+                    className={cn('console-row', isSelected && 'console-row-active')}
                     aria-pressed={isSelected}
                   >
                     <div className="flex min-w-0 items-center gap-2.5">
                       <StatusDot tone={item.tone} />
-                      <span className="font-[family-name:var(--console-font-mono)] text-[12px] font-medium text-[var(--console-ink)]">
+                      <span className="console-meta !text-[var(--console-ink)] !font-medium">
                         {item.tipId}
                       </span>
                     </div>
@@ -107,13 +107,13 @@ export function IntakePage(): React.JSX.Element {
             })}
           </ul>
 
-          <aside className="space-y-4 rounded-lg border border-[var(--console-hairline)] p-4">
+          <DetailPanel>
             {selected ? (
               <>
                 <div className="space-y-1">
                   <div className="flex flex-wrap items-center gap-2">
                     <StatusDot tone={selected.tone} />
-                    <h2 className="font-[family-name:var(--console-font-mono)] text-[13px] font-semibold text-[var(--console-ink)]">
+                    <h2 className="console-meta !text-[13px] !font-semibold !text-[var(--console-ink)]">
                       {selected.tipId}
                     </h2>
                     <Badge variant="secondary" className="rounded-md">
@@ -127,7 +127,7 @@ export function IntakePage(): React.JSX.Element {
                 <p className="text-[13px] leading-5 text-[var(--console-body)]">
                   {selected.summary}
                 </p>
-                <Separator />
+                <Separator className="bg-[var(--console-hairline)]" />
                 <dl className="space-y-3">
                   {selected.extractedFields.map((field) => (
                     <div key={field.label} className="space-y-1">
@@ -138,25 +138,15 @@ export function IntakePage(): React.JSX.Element {
                     </div>
                   ))}
                 </dl>
-                <Separator />
+                <Separator className="bg-[var(--console-hairline)]" />
                 <div className="flex flex-wrap gap-2">
-                  <Button type="button" size="sm" className="h-11 rounded-[7px] sm:h-[30px]">
+                  <Button type="button" size="sm" className={consoleActionClass}>
                     Open case
                   </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="h-11 rounded-[7px] sm:h-[30px]"
-                  >
+                  <Button type="button" variant="outline" size="sm" className={consoleActionClass}>
                     Refer
                   </Button>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="h-11 rounded-[7px] sm:h-[30px]"
-                  >
+                  <Button type="button" variant="ghost" size="sm" className={consoleActionClass}>
                     Decline
                   </Button>
                 </div>
@@ -170,9 +160,9 @@ export function IntakePage(): React.JSX.Element {
                 description="Choose a queue item to review extraction."
               />
             )}
-          </aside>
+          </DetailPanel>
         </div>
       )}
-    </div>
+    </ConsolePage>
   );
 }
