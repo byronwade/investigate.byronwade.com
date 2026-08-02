@@ -30,7 +30,7 @@ export function SidebarNav({
   return (
     <div className={cn('flex h-full min-h-0 flex-1 flex-col', className)}>
       <nav
-        className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain px-0.5 pb-3"
+        className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain px-0.5 pb-6"
         aria-label="Primary"
       >
         {groups.map((group) => (
