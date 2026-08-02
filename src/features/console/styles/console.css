@@ -25,6 +25,7 @@
   --console-class-height: 26px;
   --console-topbar-height: 48px;
   --console-tabs-height: 42px;
+  --console-tabbar-height: 56px;
 
   /* shadcn semantic tokens → console palette */
   --background: var(--console-ground);
@@ -314,9 +315,122 @@ body:has([data-surface='console']) {
   }
 }
 
+/* Mobile app chrome */
+
+[data-surface='console'] .console-tabbar {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 40;
+  border-top: 1px solid var(--console-hairline);
+  background: color-mix(in srgb, var(--console-ground) 92%, transparent);
+  backdrop-filter: saturate(1.2) blur(16px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+[data-surface='console'] .console-tabbar-list {
+  display: flex;
+  align-items: stretch;
+  min-height: var(--console-tabbar-height);
+  margin: 0;
+  padding: 0.25rem 0.35rem 0.15rem;
+  list-style: none;
+}
+
+[data-surface='console'] .console-tabbar-item {
+  display: flex;
+  width: 100%;
+  min-height: 2.75rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  border-radius: 10px;
+  padding: 0.25rem 0.15rem;
+  color: var(--console-muted);
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  transition:
+    color 120ms ease,
+    background-color 120ms ease;
+}
+
+[data-surface='console'] .console-tabbar-item:hover {
+  color: var(--console-ink);
+  background: var(--console-strip);
+}
+
+[data-surface='console'] .console-tabbar-item:focus-visible {
+  outline: 2px solid var(--console-ink);
+  outline-offset: 2px;
+}
+
+[data-surface='console'] .console-tabbar-item-active,
+[data-surface='console'] .console-tabbar-item[aria-current='page'] {
+  color: var(--console-ink);
+}
+
+[data-surface='console'] .console-shell-main {
+  padding-bottom: calc(var(--console-tabbar-height) + env(safe-area-inset-bottom, 0px) + 1rem);
+}
+
+@media (min-width: 1024px) {
+  [data-surface='console'] .console-shell-main {
+    padding-bottom: 1.5rem;
+  }
+}
+
+[data-surface='console'] .console-toast {
+  border: 1px solid var(--console-hairline);
+}
+
+[data-surface='console'] .console-toast-neutral {
+  background: var(--console-ink);
+  color: #ffffff;
+  border-color: var(--console-ink);
+}
+
+[data-surface='console'] .console-toast-ok {
+  background: var(--console-activity);
+  color: #ffffff;
+  border-color: var(--console-activity);
+}
+
+[data-surface='console'] .console-toast-warn {
+  background: var(--console-sensor);
+  color: #ffffff;
+  border-color: var(--console-sensor);
+}
+
+[data-surface='console'] .console-toast-danger {
+  background: var(--console-danger);
+  color: #ffffff;
+  border-color: var(--console-danger);
+}
+
+@media (max-width: 1023px) {
+  [data-surface='console'] .console-page {
+    gap: 1.25rem;
+  }
+
+  [data-surface='console'] .console-row {
+    min-height: 3rem;
+    padding-block: 0.85rem;
+  }
+
+  [data-surface='console'] .console-action {
+    min-height: 2.75rem;
+    flex: 1 1 auto;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   [data-surface='console'] .console-row,
-  [data-surface='console'] .console-filter {
+  [data-surface='console'] .console-filter,
+  [data-surface='console'] .console-tabbar-item {
     transition: none;
   }
 }

@@ -54,7 +54,7 @@ vi.mock('@tanstack/react-router', () => ({
 
 async function openMobileNav() {
   const user = userEvent.setup();
-  await user.click(screen.getByRole('button', { name: /open navigation/i }));
+  await user.click(screen.getByRole('button', { name: /^More$/i }));
   return screen.getByRole('dialog');
 }
 
@@ -72,7 +72,8 @@ describe('CaseShell', () => {
     );
 
     expect(screen.getAllByText(/245D-CG-3881127/).length).toBeGreaterThan(0);
-    expect(screen.getByRole('navigation', { name: /case/i })).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: /^Case$/i })).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: /case primary/i })).toBeInTheDocument();
     expect(screen.getByText('Main')).toBeInTheDocument();
 
     const dialog = await openMobileNav();
@@ -91,7 +92,7 @@ describe('CaseShell', () => {
       </CaseShell>,
     );
 
-    const caseNav = screen.getByRole('navigation', { name: /case/i });
+    const caseNav = screen.getByRole('navigation', { name: /^Case$/i });
     const overviewTab = within(caseNav).getByRole('link', { name: /^Overview$/i });
     expect(overviewTab).toHaveAttribute('aria-current', 'page');
     expect(overviewTab.className).toContain('border-[var(--console-ink)]');

@@ -51,7 +51,7 @@ vi.mock('@tanstack/react-router', () => ({
 
 async function openMobileNav() {
   const user = userEvent.setup();
-  await user.click(screen.getByRole('button', { name: /open navigation/i }));
+  await user.click(screen.getByRole('button', { name: /^More$/i }));
   return screen.getByRole('dialog');
 }
 
@@ -63,7 +63,8 @@ describe('AgencyShell', () => {
       </AgencyShell>,
     );
 
-    expect(screen.queryByRole('navigation', { name: /case/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('navigation', { name: /^Case$/i })).not.toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: /agency primary/i })).toBeInTheDocument();
     expect(screen.getAllByText('Command center').length).toBeGreaterThan(0);
     expect(screen.getByText('Agency main')).toBeInTheDocument();
 
@@ -85,13 +86,13 @@ describe('AgencyShell', () => {
     );
   });
 
-  it('exposes a mobile navigation trigger', () => {
+  it('exposes a mobile More control for the full destination sheet', () => {
     render(
       <AgencyShell crumb="Command center">
         <p>Agency main</p>
       </AgencyShell>,
     );
 
-    expect(screen.getByRole('button', { name: /open navigation/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /^More$/i })).toBeInTheDocument();
   });
 });
