@@ -53,15 +53,17 @@ export function PlanPage({ caseId }: { caseId: string }): React.JSX.Element | nu
           </span>
         }
         actions={
-          <Button
-            type="button"
-            size="sm"
-            className={`${consoleActionClass} gap-1.5`}
-            onClick={addStep}
-          >
-            <Plus aria-hidden="true" weight="bold" className="size-[11px]" />
-            Add a step
-          </Button>
+          <div className="console-actions">
+            <Button
+              type="button"
+              size="sm"
+              className={`${consoleActionClass} gap-1.5`}
+              onClick={addStep}
+            >
+              <Plus aria-hidden="true" weight="bold" className="size-[11px]" />
+              Add a step
+            </Button>
+          </div>
         }
       />
 
@@ -145,11 +147,11 @@ export function PlanPage({ caseId }: { caseId: string }): React.JSX.Element | nu
                     {step.label}
                   </span>
                 </div>
-                <span className="pl-5 text-[12px] text-[var(--console-muted)] sm:w-[180px] sm:shrink-0 sm:pl-0 sm:text-right">
+                <span className="text-[12px] text-[var(--console-muted)] sm:w-[180px] sm:shrink-0 sm:text-right">
                   {step.owner}
                 </span>
                 {step.due ? (
-                  <span className="pl-5 text-[12px] text-[var(--console-muted)] sm:w-24 sm:shrink-0 sm:pl-0 sm:text-right">
+                  <span className="text-[12px] text-[var(--console-muted)] sm:w-24 sm:shrink-0 sm:text-right">
                     {step.due}
                   </span>
                 ) : null}

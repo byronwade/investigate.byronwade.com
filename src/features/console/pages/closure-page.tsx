@@ -97,9 +97,7 @@ export function ClosurePage({ caseId }: { caseId: string }): React.JSX.Element |
                       {item.status}
                     </Badge>
                   </div>
-                  <p className="pl-5 text-[13px] text-[var(--console-body)] sm:pl-0">
-                    {item.summary}
-                  </p>
+                  <p className="text-[13px] leading-5 text-[var(--console-body)]">{item.summary}</p>
                 </div>
                 <p className="text-[12px] text-[var(--console-muted)] sm:w-24 sm:text-right">
                   {item.complete ? 'Complete' : 'Tap to check'}

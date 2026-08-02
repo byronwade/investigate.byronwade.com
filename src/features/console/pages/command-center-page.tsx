@@ -13,15 +13,15 @@ export function CommandCenterPage(): React.JSX.Element {
 
   return (
     <ConsolePage loose>
-      <header className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
+      <header className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between sm:gap-4">
         <div className="space-y-2">
           <h1 className="font-[family-name:var(--console-font-sans)] text-[22px] font-semibold leading-[28px] tracking-[-0.02em] text-[var(--console-ink)] sm:text-[24px] sm:leading-[30px]">
             {model.greeting}
           </h1>
-          <p className="flex flex-wrap items-center gap-2 text-[13px] text-[var(--console-muted)]">
+          <p className="max-w-2xl text-[13px] leading-5 text-[var(--console-muted)]">
             {model.summary.map((part, index) => (
-              <span key={part} className="inline-flex items-center gap-2">
-                {index > 0 ? <span aria-hidden="true">·</span> : null}
+              <span key={part}>
+                {index > 0 ? ' · ' : null}
                 <span
                   className={
                     index === model.summary.length - 1 ? 'text-[var(--console-sensor)]' : undefined
@@ -33,7 +33,7 @@ export function CommandCenterPage(): React.JSX.Element {
             ))}
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="console-actions">
           <Button type="button" variant="outline" size="sm" className={consoleActionClass} asChild>
             <ConsoleLink to="/console/intake">My queue</ConsoleLink>
           </Button>

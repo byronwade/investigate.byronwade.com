@@ -25,16 +25,21 @@ export function IncidentsPage(): React.JSX.Element {
 
   return (
     <ConsolePage>
-      <PageHeader title={model.title} description={model.description} meta={model.meta} />
+      <PageHeader
+        title={model.title}
+        hideTitleOnMobile
+        description={model.description}
+        meta={model.meta}
+      />
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
+      <div className="grid gap-5 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
         <FixtureCanvas
           label="Chicago field overlay"
           caption="Fixture map · pins are mock locations only"
         >
           {model.pins.map((pin, index) => {
-            const left = `${18 + (index % 4) * 18}%`;
-            const top = `${28 + Math.floor(index / 2) * 18}%`;
+            const left = `${16 + (index % 2) * 36}%`;
+            const top = `${42 + Math.floor(index / 2) * 26}%`;
             const isSelected = selected?.id === pin.id;
             return (
               <button
@@ -42,7 +47,7 @@ export function IncidentsPage(): React.JSX.Element {
                 type="button"
                 onClick={() => setSelectedId(pin.id)}
                 className={cn(
-                  'absolute z-10 inline-flex size-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-md border transition-colors',
+                  'absolute inline-flex size-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-md border shadow-sm transition-colors',
                   isSelected
                     ? 'border-[var(--console-ink)] bg-[var(--console-ink)] text-white'
                     : 'border-[var(--console-hairline)] bg-[var(--console-ground)] text-[var(--console-ink)] hover:bg-[var(--console-strip)]',
@@ -57,8 +62,8 @@ export function IncidentsPage(): React.JSX.Element {
           })}
         </FixtureCanvas>
 
-        <div className="space-y-4">
-          <SectionHeader title="Mapped incidents" hint={`${model.pins.length} pins`} />
+        <div className="space-y-3">
+          <SectionHeader title="Mapped incidents" hint={`${model.pins.length} pins`} inlineHint />
           <ul className="console-list">
             {model.pins.map((pin) => {
               const isSelected = selected?.id === pin.id;
@@ -67,10 +72,7 @@ export function IncidentsPage(): React.JSX.Element {
                   <button
                     type="button"
                     onClick={() => setSelectedId(pin.id)}
-                    className={cn(
-                      'console-row !flex-col !items-stretch',
-                      isSelected && 'console-row-active',
-                    )}
+                    className={cn('console-row', isSelected && 'console-row-active')}
                     aria-pressed={isSelected}
                   >
                     <div className="flex items-center gap-2">
@@ -78,19 +80,27 @@ export function IncidentsPage(): React.JSX.Element {
                       <span className="text-[13px] font-medium text-[var(--console-ink)]">
                         {pin.label}
                       </span>
+                      <span className="ml-auto text-[12px] text-[var(--console-muted)]">
+                        {pin.when}
+                      </span>
                     </div>
-                    <p className="pl-5 text-[13px] text-[var(--console-body)]">{pin.summary}</p>
-                    <p className="console-meta pl-5">
-                      {pin.coords} · {pin.when}
-                    </p>
+                    <p className="text-[13px] text-[var(--console-body)]">{pin.summary}</p>
+                    <p className="console-meta">{pin.coords}</p>
                   </button>
+                  {isSelected && selected.href ? (
+                    <div className="px-1 pt-1 pb-3 xl:hidden">
+                      <Button type="button" size="sm" className={consoleActionClass} asChild>
+                        <ConsoleLink to={selected.href}>Open scene package</ConsoleLink>
+                      </Button>
+                    </div>
+                  ) : null}
                 </li>
               );
             })}
           </ul>
 
           {selected ? (
-            <DetailPanel>
+            <DetailPanel className="hidden xl:block">
               <div className="flex flex-wrap items-center gap-2">
                 <StatusDot tone={selected.tone} />
                 <h2 className="text-[14px] font-semibold text-[var(--console-ink)]">

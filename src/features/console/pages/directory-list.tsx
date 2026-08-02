@@ -85,7 +85,7 @@ export function DirectoryList({
                     <p className="text-[13px] text-[var(--console-body)]">{entry.summary}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 pl-5 sm:pl-0">
+                <div className="flex flex-wrap items-center gap-3">
                   {entry.meta ? <span className="console-meta">{entry.meta}</span> : null}
                   <span className="text-[12px] text-[var(--console-muted)] sm:w-24 sm:text-right">
                     {entry.status}

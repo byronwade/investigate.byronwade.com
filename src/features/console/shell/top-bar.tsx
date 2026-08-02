@@ -42,7 +42,7 @@ export function TopBar({
 
   return (
     <TooltipProvider>
-      <header className="console-topbar sticky top-0 z-30 flex shrink-0 items-center gap-2 border-b border-[var(--console-hairline)] bg-[var(--console-ground)]/96 px-3 backdrop-blur-xl sm:gap-3 sm:px-5 lg:static lg:h-[var(--console-topbar-height)] lg:bg-[var(--console-ground)] lg:backdrop-blur-none">
+      <header className="console-topbar sticky top-0 z-30 flex shrink-0 items-center gap-2 border-b border-[var(--console-hairline)] bg-[var(--console-ground)] px-3 sm:gap-3 sm:px-5 lg:h-[var(--console-topbar-height)]">
         <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-2.5">
           <Triangle
             aria-hidden="true"

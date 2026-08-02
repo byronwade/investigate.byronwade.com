@@ -161,24 +161,13 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
         title={caseRecord.title}
         hideTitleOnMobile
         meta={
-          <span className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-[var(--console-muted)]">
-            <span>Full investigation</span>
-            <span aria-hidden="true" className="text-[var(--console-hairline)]">
-              ·
-            </span>
-            <span>{caseRecord.openedLabel}</span>
-            <span aria-hidden="true" className="hidden text-[var(--console-hairline)] sm:inline">
-              ·
-            </span>
-            <span className="w-full sm:w-auto">{caseRecord.assigneesLabel}</span>
-            <span aria-hidden="true" className="text-[var(--console-hairline)]">
-              ·
-            </span>
+          <span className="max-w-2xl text-[13px] leading-5 text-[var(--console-muted)]">
+            Full investigation · {caseRecord.openedLabel} · {caseRecord.assigneesLabel} ·{' '}
             <span className="text-[var(--console-sensor)]">{caseRecord.reviewDueLabel}</span>
           </span>
         }
         actions={
-          <>
+          <div className="console-actions">
             <Button
               type="button"
               variant="outline"
@@ -205,7 +194,7 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
                 New lead
               </ConsoleLink>
             </Button>
-          </>
+          </div>
         }
       />
 
@@ -337,10 +326,10 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
                       {decision.label}
                     </span>
                   </div>
-                  <span className="pl-5 text-[12px] text-[var(--console-muted)] sm:w-[92px] sm:shrink-0 sm:truncate sm:pl-0 sm:text-right">
+                  <span className="text-[12px] text-[var(--console-muted)] sm:w-[92px] sm:shrink-0 sm:truncate sm:text-right">
                     {decision.assignee}
                   </span>
-                  <div className="flex gap-1.5 pl-5 sm:w-[120px] sm:shrink-0 sm:justify-end sm:pl-0">
+                  <div className="console-actions sm:w-[120px] sm:shrink-0 sm:justify-end">
                     <Button
                       type="button"
                       size="xs"

@@ -27,6 +27,25 @@ type TabItem = {
   onSelect?: () => void;
 };
 
+function isAgencyPrimary(pathname: string): boolean {
+  return (
+    pathname === '/console' ||
+    pathname.startsWith('/console/command-center') ||
+    pathname.startsWith('/console/intake') ||
+    pathname === '/console/cases' ||
+    pathname.startsWith('/console/search')
+  );
+}
+
+function isCasePrimary(pathname: string): boolean {
+  return (
+    pathname.endsWith('/overview') ||
+    pathname.endsWith('/timeline') ||
+    pathname.endsWith('/evidence') ||
+    pathname.endsWith('/leads')
+  );
+}
+
 function agencyTabs(onMore: () => void): TabItem[] {
   return [
     {
@@ -62,6 +81,7 @@ function agencyTabs(onMore: () => void): TabItem[] {
       label: 'More',
       icon: DotsThreeOutline,
       onSelect: onMore,
+      match: (pathname) => !isAgencyPrimary(pathname),
     },
   ];
 }
@@ -101,6 +121,7 @@ function casePrimaryTabs(caseId: string, onMore: () => void): TabItem[] {
       label: 'More',
       icon: DotsThreeOutline,
       onSelect: onMore,
+      match: (pathname) => !isCasePrimary(pathname),
     },
   ];
 }
@@ -135,6 +156,7 @@ export function MobileTabBar({
                   onClick={tab.onSelect}
                   className={cn('console-tabbar-item', active && 'console-tabbar-item-active')}
                   aria-label={tab.label}
+                  aria-current={active ? 'page' : undefined}
                 >
                   <Icon
                     aria-hidden="true"
