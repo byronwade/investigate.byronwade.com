@@ -3,13 +3,14 @@ import type * as React from 'react';
 import { Badge } from '#/components/ui/badge';
 import type { CaseQueueModel } from '#/features/console/data/agency-types';
 import { ConsoleLink } from '#/features/console/shell/console-link';
+import { ConsolePage } from '#/features/console/ui/console-page';
 import { EmptyState } from '#/features/console/ui/empty-state';
 import { PageHeader } from '#/features/console/ui/page-header';
 import { StatusDot } from '#/features/console/ui/status-dot';
 
 export function CaseQueuePage({ model }: { model: CaseQueueModel }): React.JSX.Element {
   return (
-    <div className="space-y-6" data-surface="console">
+    <ConsolePage>
       <PageHeader title={model.title} description={model.description} meta={model.meta} />
 
       {model.items.length === 0 ? (
@@ -18,10 +19,10 @@ export function CaseQueuePage({ model }: { model: CaseQueueModel }): React.JSX.E
           description="Items appear here as the investigation advances."
         />
       ) : (
-        <ul className="divide-y divide-[var(--console-strip)] border-t border-[var(--console-hairline)]">
+        <ul className="console-list">
           {model.items.map((item) => {
             const body = (
-              <div className="flex min-h-11 flex-col gap-2 py-3 sm:flex-row sm:items-center sm:gap-3.5">
+              <div className="console-row">
                 <div className="flex min-w-0 flex-1 items-start gap-2.5">
                   <StatusDot tone={item.tone} />
                   <div className="min-w-0 space-y-1">
@@ -52,7 +53,7 @@ export function CaseQueuePage({ model }: { model: CaseQueueModel }): React.JSX.E
                 {item.href ? (
                   <ConsoleLink
                     to={item.href}
-                    className="block rounded-md hover:bg-[var(--console-strip)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]"
+                    className="block rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]"
                   >
                     {body}
                   </ConsoleLink>
@@ -64,6 +65,6 @@ export function CaseQueuePage({ model }: { model: CaseQueueModel }): React.JSX.E
           })}
         </ul>
       )}
-    </div>
+    </ConsolePage>
   );
 }

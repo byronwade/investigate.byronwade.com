@@ -2,12 +2,14 @@ import type * as React from 'react';
 
 import { Button } from '#/components/ui/button';
 import { ConsoleLink } from '#/features/console/shell/console-link';
+import { consoleActionClass } from '#/features/console/ui/console-action';
+import { ConsolePage } from '#/features/console/ui/console-page';
 import { EmptyState } from '#/features/console/ui/empty-state';
 import { PageHeader } from '#/features/console/ui/page-header';
 
 export function EmptyStatesPage(): React.JSX.Element {
   return (
-    <div className="space-y-8" data-surface="console">
+    <ConsolePage loose>
       <PageHeader
         title="Empty states"
         description="Canonical empty patterns for queues, search, and media sessions. Prefer these over blank tables."
@@ -18,7 +20,7 @@ export function EmptyStatesPage(): React.JSX.Element {
           title="Queue is clear"
           description="Nothing is waiting on you. Overnight runs and intake packets will land here."
           action={
-            <Button type="button" size="sm" className="h-11 rounded-[7px] sm:h-[30px]" asChild>
+            <Button type="button" size="sm" className={consoleActionClass} asChild>
               <ConsoleLink to="/console/command-center">Back to command center</ConsoleLink>
             </Button>
           }
@@ -31,7 +33,7 @@ export function EmptyStatesPage(): React.JSX.Element {
               type="button"
               variant="outline"
               size="sm"
-              className="h-11 rounded-[7px] sm:h-[30px]"
+              className={consoleActionClass}
               asChild
             >
               <ConsoleLink to="/console/search">Open search</ConsoleLink>
@@ -46,7 +48,7 @@ export function EmptyStatesPage(): React.JSX.Element {
               type="button"
               variant="outline"
               size="sm"
-              className="h-11 rounded-[7px] sm:h-[30px]"
+              className={consoleActionClass}
               asChild
             >
               <ConsoleLink to="/console/media/video-review">Open video review</ConsoleLink>
@@ -61,7 +63,7 @@ export function EmptyStatesPage(): React.JSX.Element {
               type="button"
               variant="outline"
               size="sm"
-              className="h-11 rounded-[7px] sm:h-[30px]"
+              className={consoleActionClass}
               asChild
             >
               <ConsoleLink to="/console/cases">View portfolio</ConsoleLink>
@@ -69,6 +71,6 @@ export function EmptyStatesPage(): React.JSX.Element {
           }
         />
       </div>
-    </div>
+    </ConsolePage>
   );
 }

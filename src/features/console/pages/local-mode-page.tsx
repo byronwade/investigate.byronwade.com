@@ -4,14 +4,16 @@ import type * as React from 'react';
 import { Badge } from '#/components/ui/badge';
 import { getLocalMode } from '#/features/console/data/agency-getters';
 import { DirectoryList } from '#/features/console/pages/directory-list';
+import { ConsolePage } from '#/features/console/ui/console-page';
 import { PageHeader } from '#/features/console/ui/page-header';
+import { SectionHeader } from '#/features/console/ui/section-header';
 import { StatusDot } from '#/features/console/ui/status-dot';
 
 export function LocalModePage(): React.JSX.Element {
   const model = getLocalMode();
 
   return (
-    <div className="space-y-8" data-surface="console">
+    <ConsolePage loose>
       <PageHeader
         title={model.title}
         description={model.description}
@@ -23,7 +25,7 @@ export function LocalModePage(): React.JSX.Element {
         }
       />
 
-      <section className="flex flex-col gap-3 rounded-lg border border-[var(--console-hairline)] px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+      <section className="console-panel console-panel-pad flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-2.5">
           <StatusDot tone={model.networkTone} />
           <div>
@@ -39,13 +41,16 @@ export function LocalModePage(): React.JSX.Element {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-[13px] font-semibold text-[var(--console-ink)]">Local queues</h2>
+        <SectionHeader
+          title="Local queues"
+          hint="Mutations and media wait here until the network returns"
+        />
         <DirectoryList
           entries={model.queue}
           filters={['All', 'Queue', 'Media']}
           filterLabel="Filter local queues"
         />
       </section>
-    </div>
+    </ConsolePage>
   );
 }

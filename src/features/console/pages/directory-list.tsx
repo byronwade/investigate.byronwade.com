@@ -8,6 +8,7 @@ import { Input } from '#/components/ui/input';
 import type { DirectoryEntry } from '#/features/console/data/agency-types';
 import { ConsoleLink } from '#/features/console/shell/console-link';
 import { EmptyState } from '#/features/console/ui/empty-state';
+import { FilterBar } from '#/features/console/ui/filter-bar';
 import { StatusDot } from '#/features/console/ui/status-dot';
 
 export function DirectoryList({
@@ -45,24 +46,12 @@ export function DirectoryList({
   return (
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <fieldset className="flex flex-wrap gap-2 border-0 p-0">
-          <legend className="sr-only">Directory filters</legend>
-          {filters.map((item) => (
-            <button
-              key={item}
-              type="button"
-              onClick={() => setFilter(item)}
-              className={
-                filter === item
-                  ? 'inline-flex min-h-10 items-center rounded-md bg-[var(--console-ink)] px-3 text-[12px] font-medium text-white'
-                  : 'inline-flex min-h-10 items-center rounded-md border border-[var(--console-hairline)] px-3 text-[12px] text-[var(--console-muted)] hover:bg-[var(--console-strip)]'
-              }
-              aria-pressed={filter === item}
-            >
-              {item}
-            </button>
-          ))}
-        </fieldset>
+        <FilterBar
+          options={filters}
+          value={filter}
+          onChange={setFilter}
+          legend="Directory filters"
+        />
         <Input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
@@ -78,10 +67,10 @@ export function DirectoryList({
           description="Clear the filter or broaden the query."
         />
       ) : (
-        <ul className="divide-y divide-[var(--console-strip)] border-t border-[var(--console-hairline)]">
+        <ul className="console-list">
           {filtered.map((entry) => {
             const body = (
-              <div className="flex min-h-11 flex-col gap-1 py-3 sm:min-h-[44px] sm:flex-row sm:items-center sm:gap-3.5">
+              <div className="console-row">
                 <div className="flex min-w-0 items-center gap-2.5 sm:contents">
                   <StatusDot tone={entry.tone} />
                   <div className="min-w-0 flex-1 space-y-1">
@@ -97,11 +86,7 @@ export function DirectoryList({
                   </div>
                 </div>
                 <div className="flex items-center gap-3 pl-5 sm:pl-0">
-                  {entry.meta ? (
-                    <span className="font-[family-name:var(--console-font-mono)] text-[11px] text-[var(--console-muted)]">
-                      {entry.meta}
-                    </span>
-                  ) : null}
+                  {entry.meta ? <span className="console-meta">{entry.meta}</span> : null}
                   <span className="text-[12px] text-[var(--console-muted)] sm:w-24 sm:text-right">
                     {entry.status}
                   </span>
@@ -114,7 +99,7 @@ export function DirectoryList({
                 {entry.href ? (
                   <ConsoleLink
                     to={entry.href}
-                    className="block rounded-md hover:bg-[var(--console-strip)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]"
+                    className="block rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]"
                   >
                     {body}
                   </ConsoleLink>

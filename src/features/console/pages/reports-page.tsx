@@ -3,14 +3,16 @@ import type * as React from 'react';
 
 import { getReports } from '#/features/console/data/agency-getters';
 import { DirectoryList } from '#/features/console/pages/directory-list';
+import { ConsolePage } from '#/features/console/ui/console-page';
 import { PageHeader } from '#/features/console/ui/page-header';
+import { SectionHeader } from '#/features/console/ui/section-header';
 import { StatusDot } from '#/features/console/ui/status-dot';
 
 export function ReportsPage(): React.JSX.Element {
   const model = getReports();
 
   return (
-    <div className="space-y-8" data-surface="console">
+    <ConsolePage loose>
       <PageHeader
         title={model.title}
         description={model.description}
@@ -22,12 +24,9 @@ export function ReportsPage(): React.JSX.Element {
         }
       />
 
-      <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <section aria-label="Weekly metrics" className="console-metric-strip">
         {model.metrics.map((metric) => (
-          <div
-            key={metric.id}
-            className="space-y-2 rounded-lg border border-[var(--console-hairline)] px-4 py-4"
-          >
+          <div key={metric.id} className="console-metric-cell">
             <div className="flex items-center gap-2">
               <StatusDot tone={metric.tone} />
               <p className="text-[12px] text-[var(--console-muted)]">{metric.label}</p>
@@ -41,13 +40,16 @@ export function ReportsPage(): React.JSX.Element {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-[13px] font-semibold text-[var(--console-ink)]">Watch items</h2>
+        <SectionHeader
+          title="Watch items"
+          hint="Aggregate notes without case facts in the metric tiles"
+        />
         <DirectoryList
           entries={model.notes}
           filters={['All', 'SLA', 'Assistants']}
           filterLabel="Filter report notes"
         />
       </section>
-    </div>
+    </ConsolePage>
   );
 }

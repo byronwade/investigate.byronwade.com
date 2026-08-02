@@ -8,7 +8,9 @@ import { Badge } from '#/components/ui/badge';
 import { Input } from '#/components/ui/input';
 import { getSearch } from '#/features/console/data/agency-getters';
 import { ConsoleLink } from '#/features/console/shell/console-link';
+import { ConsolePage } from '#/features/console/ui/console-page';
 import { EmptyState } from '#/features/console/ui/empty-state';
+import { FilterBar } from '#/features/console/ui/filter-bar';
 import { PageHeader } from '#/features/console/ui/page-header';
 import { StatusDot } from '#/features/console/ui/status-dot';
 
@@ -37,15 +39,15 @@ export function SearchPage(): React.JSX.Element {
   const hiddenHits = hits.filter((hit) => hit.clearanceHidden);
 
   return (
-    <div className="space-y-6" data-surface="console">
+    <ConsolePage>
       <PageHeader
         title={model.title}
         description={model.description}
         meta={`${model.visibleCount} visible · ${model.hiddenCount} hidden by clearance`}
       />
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="relative min-w-0 flex-1">
+      <div className="space-y-3">
+        <div className="relative min-w-0">
           <MagnifyingGlass
             aria-hidden="true"
             weight="duotone"
@@ -58,26 +60,13 @@ export function SearchPage(): React.JSX.Element {
             className="h-11 rounded-[7px] border-[var(--console-hairline)] bg-transparent pl-9 text-[13px] sm:h-9"
           />
         </div>
+        <FilterBar
+          options={model.filters}
+          value={filter}
+          onChange={setFilter}
+          legend="Result filters"
+        />
       </div>
-
-      <fieldset className="flex flex-wrap gap-2 border-0 p-0">
-        <legend className="sr-only">Result filters</legend>
-        {model.filters.map((item) => (
-          <button
-            key={item}
-            type="button"
-            onClick={() => setFilter(item)}
-            className={
-              filter === item
-                ? 'inline-flex min-h-10 items-center rounded-md bg-[var(--console-ink)] px-3 text-[12px] font-medium text-white'
-                : 'inline-flex min-h-10 items-center rounded-md border border-[var(--console-hairline)] px-3 text-[12px] text-[var(--console-muted)] hover:bg-[var(--console-strip)]'
-            }
-            aria-pressed={filter === item}
-          >
-            {item}
-          </button>
-        ))}
-      </fieldset>
 
       {visibleHits.length === 0 && hiddenHits.length === 0 ? (
         <EmptyState
@@ -93,23 +82,23 @@ export function SearchPage(): React.JSX.Element {
           }
         />
       ) : (
-        <ul className="space-y-3">
+        <ul className="console-list">
           {visibleHits.map((hit) => {
             const body = (
-              <div className="space-y-2 rounded-lg border border-[var(--console-hairline)] px-3 py-3 hover:bg-[var(--console-strip)]">
-                <div className="flex flex-wrap items-center gap-2">
-                  {hit.tone ? <StatusDot tone={hit.tone} /> : null}
-                  <Badge variant="secondary" className="rounded-md">
-                    {hit.kind}
-                  </Badge>
-                  <h2 className="text-[14px] font-semibold text-[var(--console-ink)]">
-                    {hit.title}
-                  </h2>
+              <div className="console-row !items-start !py-3">
+                <div className="min-w-0 flex-1 space-y-1.5">
+                  <div className="flex flex-wrap items-center gap-2">
+                    {hit.tone ? <StatusDot tone={hit.tone} /> : null}
+                    <Badge variant="secondary" className="rounded-md">
+                      {hit.kind}
+                    </Badge>
+                    <h2 className="text-[14px] font-semibold text-[var(--console-ink)]">
+                      {hit.title}
+                    </h2>
+                  </div>
+                  <p className="text-[13px] leading-5 text-[var(--console-body)]">{hit.snippet}</p>
+                  <p className="console-meta">{hit.provenance}</p>
                 </div>
-                <p className="text-[13px] leading-5 text-[var(--console-body)]">{hit.snippet}</p>
-                <p className="font-[family-name:var(--console-font-mono)] text-[11px] text-[var(--console-muted)]">
-                  {hit.provenance}
-                </p>
               </div>
             );
 
@@ -118,7 +107,7 @@ export function SearchPage(): React.JSX.Element {
                 {hit.href ? (
                   <ConsoleLink
                     to={hit.href}
-                    className="block rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]"
+                    className="block rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]"
                   >
                     {body}
                   </ConsoleLink>
@@ -130,25 +119,25 @@ export function SearchPage(): React.JSX.Element {
           })}
           {hiddenHits.map((hit) => (
             <li key={hit.id}>
-              <div className="space-y-2 rounded-lg border border-dashed border-[var(--console-hairline)] px-3 py-3">
-                <div className="flex flex-wrap items-center gap-2">
-                  <StatusDot tone="danger" />
-                  <Badge variant="outline" className="rounded-md">
-                    Restricted
-                  </Badge>
-                  <h2 className="text-[14px] font-semibold text-[var(--console-muted)]">
-                    {hit.title}
-                  </h2>
+              <div className="console-row !items-start !py-3 opacity-80">
+                <div className="min-w-0 flex-1 space-y-1.5">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <StatusDot tone="danger" />
+                    <Badge variant="outline" className="rounded-md">
+                      Restricted
+                    </Badge>
+                    <h2 className="text-[14px] font-semibold text-[var(--console-muted)]">
+                      {hit.title}
+                    </h2>
+                  </div>
+                  <p className="text-[13px] text-[var(--console-muted)]">{hit.snippet}</p>
+                  <p className="console-meta">{hit.provenance}</p>
                 </div>
-                <p className="text-[13px] text-[var(--console-muted)]">{hit.snippet}</p>
-                <p className="font-[family-name:var(--console-font-mono)] text-[11px] text-[var(--console-muted)]">
-                  {hit.provenance}
-                </p>
               </div>
             </li>
           ))}
         </ul>
       )}
-    </div>
+    </ConsolePage>
   );
 }

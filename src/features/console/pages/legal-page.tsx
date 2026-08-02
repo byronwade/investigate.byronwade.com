@@ -3,6 +3,7 @@ import type * as React from 'react';
 
 import { Badge } from '#/components/ui/badge';
 import { getLegalProcess } from '#/features/console/data/agency-getters';
+import { ConsolePage } from '#/features/console/ui/console-page';
 import { EmptyState } from '#/features/console/ui/empty-state';
 import { PageHeader } from '#/features/console/ui/page-header';
 import { StatusDot } from '#/features/console/ui/status-dot';
@@ -14,7 +15,7 @@ export function LegalPage({ caseId }: { caseId: string }): React.JSX.Element | n
   }
 
   return (
-    <div className="space-y-6" data-surface="console">
+    <ConsolePage>
       <PageHeader
         title={model.title}
         description={model.description}
@@ -32,12 +33,9 @@ export function LegalPage({ caseId }: { caseId: string }): React.JSX.Element | n
           description="Subpoenas and warrants will appear as process is opened."
         />
       ) : (
-        <ul className="divide-y divide-[var(--console-strip)] border-t border-[var(--console-hairline)]">
+        <ul className="console-list">
           {model.items.map((item) => (
-            <li
-              key={item.id}
-              className="flex min-h-11 flex-col gap-2 py-3 sm:flex-row sm:items-center sm:gap-3.5"
-            >
+            <li key={item.id} className="console-row">
               <div className="flex min-w-0 flex-1 items-start gap-2.5">
                 <StatusDot tone={item.tone} />
                 <div className="min-w-0 space-y-1">
@@ -64,6 +62,6 @@ export function LegalPage({ caseId }: { caseId: string }): React.JSX.Element | n
           ))}
         </ul>
       )}
-    </div>
+    </ConsolePage>
   );
 }

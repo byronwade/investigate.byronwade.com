@@ -4,13 +4,15 @@ import type * as React from 'react';
 import { Button } from '#/components/ui/button';
 import { getCommandCenter } from '#/features/console/data/agency-getters';
 import { ConsoleLink } from '#/features/console/shell/console-link';
+import { consoleActionClass } from '#/features/console/ui/console-action';
+import { ConsolePage } from '#/features/console/ui/console-page';
 import { WorkspaceSections } from '#/features/console/ui/workspace-sections';
 
 export function CommandCenterPage(): React.JSX.Element {
   const model = getCommandCenter();
 
   return (
-    <div className="space-y-8" data-surface="console">
+    <ConsolePage loose>
       <header className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
         <div className="space-y-2">
           <h1 className="font-[family-name:var(--console-font-sans)] text-[22px] font-semibold leading-[28px] tracking-[-0.02em] text-[var(--console-ink)] sm:text-[24px] sm:leading-[30px]">
@@ -32,21 +34,10 @@ export function CommandCenterPage(): React.JSX.Element {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="h-11 rounded-[7px] sm:h-[30px]"
-            asChild
-          >
+          <Button type="button" variant="outline" size="sm" className={consoleActionClass} asChild>
             <ConsoleLink to="/console/intake">My queue</ConsoleLink>
           </Button>
-          <Button
-            type="button"
-            size="sm"
-            className="h-11 gap-1.5 rounded-[7px] sm:h-[30px]"
-            asChild
-          >
+          <Button type="button" size="sm" className={`${consoleActionClass} gap-1.5`} asChild>
             <ConsoleLink to="/console/intelligence">
               <Plus aria-hidden="true" weight="bold" className="size-[11px]" />
               Task an assistant
@@ -56,6 +47,6 @@ export function CommandCenterPage(): React.JSX.Element {
       </header>
 
       <WorkspaceSections sections={[model.waiting, model.overnight, model.attention]} />
-    </div>
+    </ConsolePage>
   );
 }

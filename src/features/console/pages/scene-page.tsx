@@ -3,8 +3,11 @@ import type * as React from 'react';
 
 import { Badge } from '#/components/ui/badge';
 import { getSceneDiagram } from '#/features/console/data/agency-getters';
+import { ConsolePage } from '#/features/console/ui/console-page';
 import { EmptyState } from '#/features/console/ui/empty-state';
+import { FixtureCanvas } from '#/features/console/ui/fixture-canvas';
 import { PageHeader } from '#/features/console/ui/page-header';
+import { SectionHeader } from '#/features/console/ui/section-header';
 import { StatusDot } from '#/features/console/ui/status-dot';
 
 export function ScenePage({ caseId }: { caseId: string }): React.JSX.Element | null {
@@ -14,7 +17,7 @@ export function ScenePage({ caseId }: { caseId: string }): React.JSX.Element | n
   }
 
   return (
-    <div className="space-y-6" data-surface="console">
+    <ConsolePage>
       <PageHeader
         title={model.title}
         description={model.description}
@@ -27,50 +30,42 @@ export function ScenePage({ caseId }: { caseId: string }): React.JSX.Element | n
       />
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
-        <div className="overflow-hidden rounded-lg border border-[var(--console-hairline)] bg-[linear-gradient(180deg,#f7f7f5_0%,#ecece8_100%)]">
-          <div className="relative min-h-[280px] sm:min-h-[360px]">
+        <FixtureCanvas
+          label={model.location}
+          caption="Fixture diagram · measurements locked"
+          showGrid
+        >
+          <div
+            aria-hidden="true"
+            className="absolute inset-8 z-[1] rounded-md border border-dashed border-[var(--console-ink)]/15"
+          />
+          <div
+            aria-hidden="true"
+            className="absolute top-[28%] left-[22%] z-[1] h-[36%] w-[56%] rounded-sm border border-[var(--console-ink)]/20 bg-[var(--console-ground)]/55"
+          />
+          {model.anchors.map((anchor, index) => (
             <div
-              aria-hidden="true"
-              className="absolute inset-8 rounded-md border border-dashed border-[var(--console-ink)]/20"
-            />
-            <div
-              aria-hidden="true"
-              className="absolute top-[28%] left-[22%] h-[36%] w-[56%] rounded-sm border border-[var(--console-ink)]/25 bg-white/50"
-            />
-            <div className="absolute inset-0 flex items-center justify-center px-4">
-              <div className="space-y-2 text-center">
-                <p className="text-[13px] font-medium text-[var(--console-ink)]">
-                  {model.location}
-                </p>
-                <p className="text-[12px] text-[var(--console-muted)]">
-                  Fixture diagram · measurements locked
-                </p>
-              </div>
+              key={anchor.id}
+              className="absolute z-10 inline-flex items-center gap-1.5 rounded-md bg-[var(--console-ink)] px-2 py-1 text-[11px] text-white"
+              style={{
+                left: `${20 + index * 22}%`,
+                top: `${30 + (index % 2) * 28}%`,
+              }}
+            >
+              <span className="console-meta !text-white/90">{anchor.label}</span>
             </div>
-            {model.anchors.map((anchor, index) => (
-              <div
-                key={anchor.id}
-                className="absolute inline-flex items-center gap-1.5 rounded-md bg-[var(--console-ink)] px-2 py-1 text-[11px] text-white"
-                style={{
-                  left: `${20 + index * 22}%`,
-                  top: `${30 + (index % 2) * 28}%`,
-                }}
-              >
-                <span className="font-[family-name:var(--console-font-mono)]">{anchor.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+          ))}
+        </FixtureCanvas>
 
         <div className="space-y-6">
           <section className="space-y-3">
-            <h2 className="text-[13px] font-semibold text-[var(--console-ink)]">Layers</h2>
+            <SectionHeader title="Layers" hint="Primary plan and provisional overlays" />
             {model.layers.length === 0 ? (
               <EmptyState title="No layers" description="Add a floor plan to begin." />
             ) : (
-              <ul className="divide-y divide-[var(--console-strip)] border-t border-[var(--console-hairline)]">
+              <ul className="console-list">
                 {model.layers.map((layer) => (
-                  <li key={layer.id} className="flex items-start gap-2.5 py-3">
+                  <li key={layer.id} className="console-row !items-start">
                     <StatusDot tone={layer.tone} />
                     <div className="min-w-0 flex-1 space-y-1">
                       <div className="flex flex-wrap items-center gap-2">
@@ -90,16 +85,11 @@ export function ScenePage({ caseId }: { caseId: string }): React.JSX.Element | n
           </section>
 
           <section className="space-y-3">
-            <h2 className="text-[13px] font-semibold text-[var(--console-ink)]">Photo anchors</h2>
-            <ul className="space-y-2">
+            <SectionHeader title="Photo anchors" hint="Locked to measured corners" />
+            <ul className="console-list">
               {model.anchors.map((anchor) => (
-                <li
-                  key={anchor.id}
-                  className="flex items-center justify-between gap-3 rounded-md border border-[var(--console-hairline)] px-3 py-2.5"
-                >
-                  <span className="font-[family-name:var(--console-font-mono)] text-[12px] text-[var(--console-muted)]">
-                    {anchor.label}
-                  </span>
+                <li key={anchor.id} className="console-row">
+                  <span className="console-meta sm:w-20">{anchor.label}</span>
                   <span className="text-[13px] text-[var(--console-ink)]">{anchor.note}</span>
                 </li>
               ))}
@@ -107,6 +97,6 @@ export function ScenePage({ caseId }: { caseId: string }): React.JSX.Element | n
           </section>
         </div>
       </div>
-    </div>
+    </ConsolePage>
   );
 }
