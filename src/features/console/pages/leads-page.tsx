@@ -23,6 +23,7 @@ export function LeadsPage({ caseId }: { caseId: string }): React.JSX.Element {
     <ConsolePage>
       <PageHeader
         title="Leads"
+        hideTitleOnMobile
         meta={
           <span className="inline-flex items-center gap-2 text-[13px] text-[var(--console-muted)]">
             <Kanban aria-hidden="true" weight="duotone" className="size-3.5" />
@@ -31,31 +32,36 @@ export function LeadsPage({ caseId }: { caseId: string }): React.JSX.Element {
         }
       />
 
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
         {COLUMNS.map((column) => {
           const columnLeads = byColumn[column.id];
           return (
             <section
               key={column.id}
               aria-labelledby={`leads-${column.id}`}
-              className="min-w-0 space-y-3"
+              className="min-w-0 space-y-2"
             >
               <SectionHeader
                 title={column.label}
                 titleId={`leads-${column.id}`}
                 hint={`${columnLeads.length}`}
+                inlineHint
               />
               <ul className="console-list">
-                {columnLeads.map((lead) => (
-                  <li key={lead.id} className="console-row !items-start !py-3">
-                    <div className="min-w-0 space-y-1">
-                      <p className="text-[13px] leading-5 text-[var(--console-ink)]">
-                        {lead.title}
-                      </p>
-                      <p className="text-[12px] text-[var(--console-muted)]">{lead.owner}</p>
-                    </div>
-                  </li>
-                ))}
+                {columnLeads.length === 0 ? (
+                  <li className="console-row text-[12px] text-[var(--console-muted)]">Empty</li>
+                ) : (
+                  columnLeads.map((lead) => (
+                    <li key={lead.id} className="console-row !items-start !py-3">
+                      <div className="min-w-0 space-y-1">
+                        <p className="text-[13px] leading-5 text-[var(--console-ink)]">
+                          {lead.title}
+                        </p>
+                        <p className="text-[12px] text-[var(--console-muted)]">{lead.owner}</p>
+                      </div>
+                    </li>
+                  ))
+                )}
               </ul>
             </section>
           );

@@ -67,7 +67,7 @@ function CaseShellLayout({
         <main
           id="console-main"
           tabIndex={-1}
-          className="console-shell-main min-w-0 flex-1 overflow-auto p-4 outline-none sm:p-6"
+          className="console-shell-main min-w-0 flex-1 overflow-auto px-4 pt-3.5 outline-none sm:p-6"
         >
           {children}
         </main>

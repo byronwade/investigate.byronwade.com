@@ -42,17 +42,16 @@ export function TopBar({
 
   return (
     <TooltipProvider>
-      <header className="sticky top-0 z-30 flex h-[var(--console-topbar-height)] shrink-0 items-center gap-2 border-b border-[var(--console-hairline)] bg-[var(--console-ground)]/95 px-3 backdrop-blur-md sm:gap-3 sm:px-5 lg:static lg:bg-[var(--console-ground)] lg:backdrop-blur-none">
+      <header className="console-topbar sticky top-0 z-30 flex shrink-0 items-center gap-2 border-b border-[var(--console-hairline)] bg-[var(--console-ground)]/96 px-3 backdrop-blur-xl sm:gap-3 sm:px-5 lg:static lg:h-[var(--console-topbar-height)] lg:bg-[var(--console-ground)] lg:backdrop-blur-none">
         <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-2.5">
           <Triangle
             aria-hidden="true"
             weight="fill"
-            className="hidden size-[15px] shrink-0 text-[var(--console-ink)] sm:block"
+            className="hidden size-[15px] shrink-0 text-[var(--console-ink)] lg:block"
           />
 
-          {/* Mobile title — app-like */}
           <div className="min-w-0 lg:hidden">
-            <p className="truncate text-[15px] font-semibold tracking-[-0.01em] text-[var(--console-ink)]">
+            <p className="truncate text-[17px] font-semibold tracking-[-0.02em] text-[var(--console-ink)]">
               {mobileTitle}
             </p>
             <p className="truncate text-[11px] text-[var(--console-muted)]">
@@ -60,7 +59,6 @@ export function TopBar({
             </p>
           </div>
 
-          {/* Desktop breadcrumb */}
           <div className="hidden min-w-0 items-center gap-1.5 sm:gap-2.5 lg:flex">
             <span className="truncate text-[13px] text-[var(--console-muted)]">FBI Chicago</span>
             {caseRecord ? (
@@ -101,17 +99,17 @@ export function TopBar({
           </div>
         </div>
 
-        <div className="flex shrink-0 items-center gap-1.5 sm:min-w-0 sm:max-w-[560px] sm:flex-[1.2] sm:gap-2">
+        <div className="flex shrink-0 items-center gap-0.5 sm:min-w-0 sm:max-w-[560px] sm:flex-[1.2] sm:gap-2">
           <button
             type="button"
             onClick={() => setCommandOpen(true)}
-            className="relative flex size-11 items-center justify-center rounded-[10px] border border-[var(--console-hairline)] text-[var(--console-muted)] hover:bg-[var(--console-strip)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)] sm:h-[30px] sm:w-auto sm:min-w-0 sm:flex-1 sm:justify-start sm:rounded-[7px] sm:pr-12 sm:pl-9 sm:text-left sm:text-[13px]"
+            className="relative flex size-11 items-center justify-center rounded-full text-[var(--console-ink)] hover:bg-[var(--console-strip)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)] sm:h-[30px] sm:w-auto sm:min-w-0 sm:flex-1 sm:justify-start sm:rounded-[7px] sm:border sm:border-[var(--console-hairline)] sm:pr-12 sm:pl-9 sm:text-left sm:text-[13px] sm:text-[var(--console-muted)]"
             aria-label="Open command palette"
           >
             <MagnifyingGlass
               aria-hidden="true"
               weight="duotone"
-              className="size-[15px] text-[var(--console-offence)] sm:pointer-events-none sm:absolute sm:top-1/2 sm:left-3 sm:size-[13px] sm:-translate-y-1/2"
+              className="size-[18px] text-[var(--console-offence)] sm:pointer-events-none sm:absolute sm:top-1/2 sm:left-3 sm:size-[13px] sm:-translate-y-1/2"
             />
             <span className="hidden truncate sm:inline">Ask the case…</span>
             <kbd className="pointer-events-none absolute top-1/2 right-3 hidden -translate-y-1/2 font-[family-name:var(--console-font-mono)] text-[11px] text-[var(--console-muted)] sm:inline">
@@ -122,11 +120,12 @@ export function TopBar({
             <DropdownMenuTrigger asChild>
               <Button
                 type="button"
+                variant="ghost"
                 size="sm"
-                className="size-11 gap-1.5 rounded-[10px] px-0 text-[13px] sm:h-[30px] sm:w-auto sm:rounded-[7px] sm:px-3"
+                className="size-11 rounded-full px-0 text-[var(--console-ink)] hover:bg-[var(--console-strip)] sm:h-[30px] sm:w-auto sm:gap-1.5 sm:rounded-[7px] sm:bg-[var(--console-ink)] sm:px-3 sm:text-[13px] sm:text-white sm:hover:bg-[var(--console-ink)]/90 sm:hover:text-white"
                 aria-label="New"
               >
-                <Plus aria-hidden="true" weight="bold" className="size-[11px]" />
+                <Plus aria-hidden="true" weight="bold" className="size-4 sm:size-[11px]" />
                 <span className="hidden sm:inline">New</span>
                 <Separator
                   orientation="vertical"

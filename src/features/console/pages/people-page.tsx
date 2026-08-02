@@ -43,6 +43,7 @@ export function PeoplePage({ caseId }: { caseId: string }): React.JSX.Element {
     <ConsolePage>
       <PageHeader
         title="People"
+        hideTitleOnMobile
         meta={
           <span className="inline-flex items-center gap-2 text-[13px] text-[var(--console-muted)]">
             <Users aria-hidden="true" weight="duotone" className="size-3.5" />

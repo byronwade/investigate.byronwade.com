@@ -35,18 +35,29 @@ export function CasesPortfolioPage(): React.JSX.Element {
     <ConsolePage>
       <PageHeader
         title="Cases portfolio"
+        hideTitleOnMobile
         description="Open and recently closed cases for the Chicago field office."
         meta={`${openCount} open`}
-        actions={
-          <Input
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Filter cases…"
-            aria-label="Filter cases"
-            className="h-11 w-full max-w-xs rounded-[7px] border-[var(--console-hairline)] bg-transparent text-[13px] sm:h-9"
-          />
-        }
       />
+
+      <div className="md:hidden">
+        <Input
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Filter cases…"
+          aria-label="Filter cases"
+          className="h-11 w-full rounded-[10px] border-[var(--console-hairline)] bg-[var(--console-strip)] text-[15px]"
+        />
+      </div>
+      <div className="hidden md:block">
+        <Input
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Filter cases…"
+          aria-label="Filter cases"
+          className="h-9 w-full max-w-xs rounded-[7px] border-[var(--console-hairline)] bg-transparent text-[13px]"
+        />
+      </div>
 
       {filtered.length === 0 ? (
         <EmptyState
@@ -63,29 +74,29 @@ export function CasesPortfolioPage(): React.JSX.Element {
         />
       ) : (
         <>
-          <ul className="space-y-2 md:hidden">
+          <ul className="console-list md:hidden">
             {filtered.map((item) => (
               <li key={item.id}>
                 <ConsoleLink
                   to={item.href}
-                  className="block rounded-lg border border-[var(--console-hairline)] px-3 py-3 hover:bg-[var(--console-strip)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]"
+                  className="console-row !items-start block py-3.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]"
                 >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0 space-y-1">
-                      <p className="truncate text-[13px] font-medium text-[var(--console-ink)]">
+                  <div className="flex min-w-0 flex-col gap-1.5">
+                    <div className="flex items-start justify-between gap-3">
+                      <p className="line-clamp-2 text-[15px] font-medium leading-5 text-[var(--console-ink)]">
                         {item.title}
                       </p>
-                      <p className="font-[family-name:var(--console-font-mono)] text-[11px] text-[var(--console-muted)]">
-                        {item.number}
-                      </p>
-                      <p className="text-[12px] text-[var(--console-body)]">
-                        {item.squad} · {item.openedLabel}
-                      </p>
+                      <span className="inline-flex shrink-0 items-center gap-2 pt-0.5 text-[12px] text-[var(--console-muted)]">
+                        <StatusDot tone={item.status === 'open' ? 'ok' : 'muted'} />
+                        {item.status}
+                      </span>
                     </div>
-                    <span className="inline-flex shrink-0 items-center gap-2 text-[12px] text-[var(--console-muted)]">
-                      <StatusDot tone={item.status === 'open' ? 'ok' : 'muted'} />
-                      {item.status}
-                    </span>
+                    <p className="font-[family-name:var(--console-font-mono)] text-[11px] text-[var(--console-muted)]">
+                      {item.number}
+                    </p>
+                    <p className="text-[12px] text-[var(--console-body)]">
+                      {item.squad} · {item.openedLabel}
+                    </p>
                   </div>
                 </ConsoleLink>
               </li>

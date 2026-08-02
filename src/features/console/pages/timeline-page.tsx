@@ -13,6 +13,7 @@ export function TimelinePage({ caseId }: { caseId: string }): React.JSX.Element 
     <ConsolePage>
       <PageHeader
         title="Timeline"
+        hideTitleOnMobile
         meta={
           <span className="text-[13px] text-[var(--console-muted)]">{events.length} events</span>
         }

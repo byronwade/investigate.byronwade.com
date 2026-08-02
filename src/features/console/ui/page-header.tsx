@@ -8,26 +8,42 @@ export function PageHeader({
   meta,
   actions,
   className,
+  /** Hide the large title below `lg` when the sticky top bar already shows it. */
+  hideTitleOnMobile = false,
 }: {
   title: string;
   description?: string;
   meta?: React.ReactNode;
   actions?: React.ReactNode;
   className?: string;
+  hideTitleOnMobile?: boolean;
 }): React.JSX.Element {
+  const hasMobileBody = Boolean(description || meta || actions);
+
   return (
     <header
       className={cn(
-        'flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between',
+        'flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between sm:gap-4',
+        hideTitleOnMobile && !hasMobileBody && 'hidden lg:flex',
         className,
       )}
     >
       <div className="min-w-0 space-y-1.5">
-        <h1 className="font-[family-name:var(--console-font-sans)] text-[22px] font-semibold leading-7 tracking-[-0.02em] text-[var(--console-ink)] sm:text-[24px] sm:leading-[30px]">
+        <h1
+          className={cn(
+            'font-[family-name:var(--console-font-sans)] text-[22px] font-semibold leading-7 tracking-[-0.02em] text-[var(--console-ink)] sm:text-[24px] sm:leading-[30px]',
+            hideTitleOnMobile && 'hidden lg:block',
+          )}
+        >
           {title}
         </h1>
         {description ? (
-          <p className="max-w-2xl text-[13px] leading-5 text-[var(--console-body)]">
+          <p
+            className={cn(
+              'max-w-2xl text-[13px] leading-5 text-[var(--console-body)]',
+              hideTitleOnMobile && 'lg:block',
+            )}
+          >
             {description}
           </p>
         ) : null}
