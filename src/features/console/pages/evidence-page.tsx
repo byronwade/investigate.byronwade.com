@@ -11,6 +11,7 @@ import {
   TableRow,
 } from '#/components/ui/table';
 import { type EvidenceRecord, listEvidence } from '#/features/console/data';
+import { ConsolePage } from '#/features/console/ui/console-page';
 import { EmptyState } from '#/features/console/ui/empty-state';
 import { PageHeader } from '#/features/console/ui/page-header';
 
@@ -40,7 +41,7 @@ export function EvidencePage({ caseId }: { caseId: string }): React.JSX.Element 
   const items = listEvidence(caseId);
 
   return (
-    <div className="space-y-6" data-surface="console">
+    <ConsolePage>
       <PageHeader
         title="Evidence"
         meta={
@@ -58,15 +59,12 @@ export function EvidencePage({ caseId }: { caseId: string }): React.JSX.Element 
         />
       ) : (
         <>
-          <ul className="space-y-2 md:hidden">
+          <ul className="console-list md:hidden">
             {items.map((item) => (
-              <li
-                key={item.id}
-                className="rounded-lg border border-[var(--console-hairline)] px-3 py-3"
-              >
+              <li key={item.id} className="console-row flex flex-col gap-2 py-3">
                 <p className="text-[13px] font-medium text-[var(--console-ink)]">{item.label}</p>
-                <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
-                  <span className="text-[12px] text-[var(--console-muted)]">{item.kind}</span>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="console-meta">{item.kind}</span>
                   <Badge
                     variant={custodyVariant(item.custody)}
                     className="rounded-md border-[var(--console-hairline)] font-[family-name:var(--console-font-mono)] text-[11px] font-normal tracking-normal"
@@ -120,6 +118,6 @@ export function EvidencePage({ caseId }: { caseId: string }): React.JSX.Element 
           </div>
         </>
       )}
-    </div>
+    </ConsolePage>
   );
 }

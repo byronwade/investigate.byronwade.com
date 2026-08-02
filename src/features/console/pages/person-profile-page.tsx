@@ -7,8 +7,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '#/components/ui/tabs';
 import type { PersonRecord } from '#/features/console/data';
 import { getPerson } from '#/features/console/data/agency-getters';
 import { ConsoleLink } from '#/features/console/shell/console-link';
+import { consoleActionClass } from '#/features/console/ui/console-action';
+import { ConsolePage } from '#/features/console/ui/console-page';
 import { EmptyState } from '#/features/console/ui/empty-state';
 import { PageHeader } from '#/features/console/ui/page-header';
+import { SectionHeader } from '#/features/console/ui/section-header';
 import { StatusDot, type StatusDotTone } from '#/features/console/ui/status-dot';
 
 const ROLE_LABEL: Record<PersonRecord['role'], string> = {
@@ -44,7 +47,7 @@ export function PersonProfilePage({
   }
 
   return (
-    <div className="space-y-6" data-surface="console">
+    <ConsolePage>
       <PageHeader
         title={person.name}
         description={person.notes}
@@ -58,27 +61,21 @@ export function PersonProfilePage({
           </span>
         }
         actions={
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="h-11 rounded-[7px] sm:h-[30px]"
-            asChild
-          >
+          <Button type="button" variant="outline" size="sm" className={consoleActionClass} asChild>
             <ConsoleLink to={`/console/cases/${caseId}/people`}>Back to people</ConsoleLink>
           </Button>
         }
       />
 
-      <dl className="grid gap-4 rounded-lg border border-[var(--console-hairline)] p-4 sm:grid-cols-3">
-        <div className="space-y-1">
-          <dt className="text-[12px] text-[var(--console-muted)]">Role</dt>
+      <dl className="console-metric-strip">
+        <div className="console-metric-cell space-y-1">
+          <dt className="console-meta">Role</dt>
           <dd className="text-[13px] font-medium text-[var(--console-ink)]">
             {ROLE_LABEL[person.role]}
           </dd>
         </div>
-        <div className="space-y-1">
-          <dt className="text-[12px] text-[var(--console-muted)]">Contradictions</dt>
+        <div className="console-metric-cell space-y-1">
+          <dt className="console-meta">Contradictions</dt>
           <dd className="text-[13px] font-medium text-[var(--console-ink)]">
             {person.contradictionCount > 0 ? (
               <span className="text-[var(--console-sensor)]">
@@ -89,8 +86,8 @@ export function PersonProfilePage({
             )}
           </dd>
         </div>
-        <div className="space-y-1">
-          <dt className="text-[12px] text-[var(--console-muted)]">Linked case</dt>
+        <div className="console-metric-cell space-y-1">
+          <dt className="console-meta">Linked case</dt>
           <dd>
             <ConsoleLink
               to={`/console/cases/${caseId}/overview`}
@@ -115,7 +112,7 @@ export function PersonProfilePage({
           </TabsTrigger>
         </TabsList>
         <TabsContent value="summary" className="space-y-3">
-          <h2 className="text-[13px] font-semibold text-[var(--console-ink)]">Working summary</h2>
+          <SectionHeader title="Working summary" />
           <p className="max-w-3xl text-[13px] leading-6 text-[var(--console-body)]">
             {person.notes}
           </p>
@@ -125,32 +122,32 @@ export function PersonProfilePage({
           </p>
         </TabsContent>
         <TabsContent value="links" className="space-y-3">
-          <ul className="divide-y divide-[var(--console-strip)] border-t border-[var(--console-hairline)]">
+          <ul className="console-list">
             <li>
               <ConsoleLink
                 to={`/console/cases/${caseId}/timeline`}
-                className="flex min-h-11 items-center justify-between py-2 text-[13px] hover:bg-[var(--console-strip)]"
+                className="console-row justify-between py-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]"
               >
-                <span>Timeline mentions</span>
-                <span className="text-[var(--console-muted)]">Open</span>
+                <span className="text-[13px] text-[var(--console-ink)]">Timeline mentions</span>
+                <span className="console-meta">Open</span>
               </ConsoleLink>
             </li>
             <li>
               <ConsoleLink
                 to={`/console/cases/${caseId}/interview`}
-                className="flex min-h-11 items-center justify-between py-2 text-[13px] hover:bg-[var(--console-strip)]"
+                className="console-row justify-between py-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]"
               >
-                <span>Interview workspace</span>
-                <span className="text-[var(--console-muted)]">Open</span>
+                <span className="text-[13px] text-[var(--console-ink)]">Interview workspace</span>
+                <span className="console-meta">Open</span>
               </ConsoleLink>
             </li>
             <li>
               <ConsoleLink
                 to={`/console/cases/${caseId}/leads`}
-                className="flex min-h-11 items-center justify-between py-2 text-[13px] hover:bg-[var(--console-strip)]"
+                className="console-row justify-between py-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]"
               >
-                <span>Related leads</span>
-                <span className="text-[var(--console-muted)]">Open</span>
+                <span className="text-[13px] text-[var(--console-ink)]">Related leads</span>
+                <span className="console-meta">Open</span>
               </ConsoleLink>
             </li>
           </ul>
@@ -177,6 +174,6 @@ export function PersonProfilePage({
           )}
         </TabsContent>
       </Tabs>
-    </div>
+    </ConsolePage>
   );
 }

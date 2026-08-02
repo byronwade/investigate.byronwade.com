@@ -2,8 +2,10 @@ import { CirclesThreePlus } from '@phosphor-icons/react/dist/csr/CirclesThreePlu
 import type * as React from 'react';
 
 import { getAnalysisBoard } from '#/features/console/data/agency-getters';
+import { ConsolePage } from '#/features/console/ui/console-page';
 import { EmptyState } from '#/features/console/ui/empty-state';
 import { PageHeader } from '#/features/console/ui/page-header';
+import { SectionHeader } from '#/features/console/ui/section-header';
 import { StatusDot } from '#/features/console/ui/status-dot';
 
 export function AnalysisPage({ caseId }: { caseId: string }): React.JSX.Element | null {
@@ -13,7 +15,7 @@ export function AnalysisPage({ caseId }: { caseId: string }): React.JSX.Element 
   }
 
   return (
-    <div className="space-y-6" data-surface="console">
+    <ConsolePage>
       <PageHeader
         title={model.title}
         description={model.description}
@@ -25,45 +27,32 @@ export function AnalysisPage({ caseId }: { caseId: string }): React.JSX.Element 
         }
       />
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {model.columns.map((column) => (
-          <section
-            key={column.id}
-            aria-labelledby={`analysis-${column.id}`}
-            className="space-y-2.5"
-          >
-            <div className="flex items-center justify-between border-b border-[var(--console-hairline)] pb-2">
-              <h2
-                id={`analysis-${column.id}`}
-                className="text-[13px] font-semibold text-[var(--console-ink)]"
-              >
-                {column.title}
-              </h2>
-              <span className="font-[family-name:var(--console-font-mono)] text-[11px] text-[var(--console-muted)]">
-                {column.items.length}
-              </span>
-            </div>
+          <section key={column.id} aria-labelledby={`analysis-${column.id}`} className="space-y-3">
+            <SectionHeader
+              title={column.title}
+              titleId={`analysis-${column.id}`}
+              hint={`${column.items.length}`}
+            />
             {column.items.length === 0 ? (
               <EmptyState
                 title="Empty column"
                 description="Items move here as analysis progresses."
               />
             ) : (
-              <ul className="space-y-2">
+              <ul className="console-list">
                 {column.items.map((item) => (
-                  <li
-                    key={item.id}
-                    className="space-y-2 rounded-md border border-[var(--console-hairline)] px-3 py-2.5"
-                  >
-                    <div className="flex items-start gap-2">
-                      {item.tone ? <StatusDot tone={item.tone} /> : null}
+                  <li key={item.id} className="console-row !items-start !py-3">
+                    {item.tone ? <StatusDot tone={item.tone} /> : null}
+                    <div className="min-w-0 flex-1 space-y-1">
                       <p className="text-[13px] font-medium leading-5 text-[var(--console-ink)]">
                         {item.label}
                       </p>
+                      <p className="text-[12px] leading-5 text-[var(--console-muted)]">
+                        {item.detail}
+                      </p>
                     </div>
-                    <p className="pl-5 text-[12px] leading-5 text-[var(--console-muted)]">
-                      {item.detail}
-                    </p>
                   </li>
                 ))}
               </ul>
@@ -71,6 +60,6 @@ export function AnalysisPage({ caseId }: { caseId: string }): React.JSX.Element 
           </section>
         ))}
       </div>
-    </div>
+    </ConsolePage>
   );
 }
