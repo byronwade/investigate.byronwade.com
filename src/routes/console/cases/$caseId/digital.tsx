@@ -1,19 +1,19 @@
 import { createFileRoute, notFound } from '@tanstack/react-router';
 
-import { getCase, getCaseWorkspacePage } from '#/features/console/data';
-import { WorkspacePage } from '#/features/console/pages/workspace-page';
+import { getCase, getDigitalEvidence } from '#/features/console/data';
+import { DigitalPage } from '#/features/console/pages/digital-page';
 
 export const Route = createFileRoute('/console/cases/$caseId/digital')({
   component: Page,
   head: ({ params }) => {
     const caseRecord = getCase(params.caseId);
-    const model = getCaseWorkspacePage(params.caseId, 'digital');
+    const model = getDigitalEvidence(params.caseId);
     return {
       meta: [
         {
           title: caseRecord
-            ? `${model?.title ?? 'digital'} · ${caseRecord.title} · Investigation Console`
-            : 'digital · Investigation Console',
+            ? `${model?.title ?? 'Digital'} · ${caseRecord.title} · Investigation Console`
+            : 'Digital · Investigation Console',
         },
       ],
     };
@@ -22,9 +22,9 @@ export const Route = createFileRoute('/console/cases/$caseId/digital')({
 
 function Page() {
   const { caseId } = Route.useParams();
-  const model = getCaseWorkspacePage(caseId, 'digital');
+  const model = getDigitalEvidence(caseId);
   if (!model) {
     throw notFound();
   }
-  return <WorkspacePage model={model} />;
+  return <DigitalPage caseId={caseId} />;
 }

@@ -1,22 +1,10 @@
-import { createFileRoute, notFound } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 
-import { getWorkspacePage } from '#/features/console/data';
-import { WorkspacePage } from '#/features/console/pages/workspace-page';
+import { LocalModePage } from '#/features/console/pages/local-mode-page';
 
 export const Route = createFileRoute('/console/_workspace/local-mode')({
-  component: Page,
-  head: () => {
-    const model = getWorkspacePage('local-mode');
-    return {
-      meta: [{ title: `${model?.title ?? 'local-mode'} · Investigation Console` }],
-    };
-  },
+  component: LocalModePage,
+  head: () => ({
+    meta: [{ title: 'Local mode · Investigation Console' }],
+  }),
 });
-
-function Page() {
-  const model = getWorkspacePage('local-mode');
-  if (!model) {
-    throw notFound();
-  }
-  return <WorkspacePage model={model} />;
-}

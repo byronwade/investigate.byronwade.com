@@ -1,12 +1,36 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  getAdministration,
+  getAnalysisBoard,
+  getApprovals,
   getCaseWorkspacePage,
+  getClosure,
   getCommandCenter,
+  getCourtProduction,
+  getDigitalEvidence,
+  getDiscovery,
+  getForensics,
+  getFoundationsDocs,
+  getHandoff,
+  getIncidents,
   getIntake,
+  getIntelligence,
+  getInterviewsIndex,
+  getInterviewTranscript,
   getInvestigativePlan,
+  getLegalProcess,
+  getLocalMode,
   getMediaWorkbench,
+  getMotionDocs,
+  getOversight,
+  getPeopleOrgs,
   getPerson,
+  getProsecution,
+  getRecords,
+  getReports,
+  getSceneDiagram,
+  getScenesIndex,
   getSearch,
   getWorkspacePage,
   listPortfolioCases,
@@ -42,6 +66,39 @@ describe('agency getters', () => {
     expect(getInvestigativePlan(DEFAULT_CASE_ID)?.hypotheses.length).toBeGreaterThan(0);
     expect(getInvestigativePlan('missing')).toBeNull();
     expect(getSearch().hits.some((hit) => hit.clearanceHidden)).toBe(true);
+  });
+
+  it('loads composed agency product fixtures', () => {
+    expect(getIntelligence().packages.length).toBeGreaterThan(1);
+    expect(getIncidents().pins.length).toBeGreaterThan(1);
+    expect(getInterviewsIndex().entries.length).toBeGreaterThan(1);
+    expect(getPeopleOrgs().entries.some((entry) => entry.kind === 'Org')).toBe(true);
+    expect(getScenesIndex().entries[0]?.href).toContain('/scene');
+    expect(getProsecution().packets.some((packet) => packet.bradyOpen > 0)).toBe(true);
+    expect(getReports().metrics.length).toBeGreaterThan(3);
+    expect(getOversight().entries.length).toBeGreaterThan(1);
+    expect(getRecords().entries.length).toBeGreaterThan(1);
+    expect(getAdministration().entries.length).toBeGreaterThan(1);
+    expect(getLocalMode().queue.length).toBeGreaterThan(1);
+    expect(getHandoff().entries.length).toBeGreaterThan(0);
+    expect(getCourtProduction().entries.length).toBeGreaterThan(0);
+    expect(getFoundationsDocs().principles.length).toBeGreaterThan(1);
+    expect(getMotionDocs().principles.length).toBeGreaterThan(1);
+  });
+
+  it('loads composed case product fixtures only for known cases', () => {
+    expect(getAnalysisBoard(DEFAULT_CASE_ID)?.columns.length).toBe(3);
+    expect(getInterviewTranscript(DEFAULT_CASE_ID)?.lines.length).toBeGreaterThan(2);
+    expect(getLegalProcess(DEFAULT_CASE_ID)?.items.length).toBeGreaterThan(2);
+    expect(getApprovals(DEFAULT_CASE_ID)?.items.length).toBeGreaterThan(0);
+    expect(getSceneDiagram(DEFAULT_CASE_ID)?.layers.length).toBeGreaterThan(1);
+    expect(getDigitalEvidence(DEFAULT_CASE_ID)?.items.length).toBeGreaterThan(1);
+    expect(getForensics(DEFAULT_CASE_ID)?.items.length).toBeGreaterThan(0);
+    expect(getDiscovery(DEFAULT_CASE_ID)?.items.length).toBeGreaterThan(1);
+    expect(getClosure(DEFAULT_CASE_ID)?.items.some((item) => !item.complete)).toBe(true);
+    expect(getAnalysisBoard('missing')).toBeNull();
+    expect(getSceneDiagram('missing')).toBeNull();
+    expect(getClosure('missing')).toBeNull();
   });
 
   it('resolves northridge people', () => {
