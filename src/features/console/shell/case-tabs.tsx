@@ -1,6 +1,5 @@
 import type * as React from 'react';
 
-import { Separator } from '#/components/ui/separator';
 import { StatusDot } from '#/features/console/ui/status-dot';
 import { cn } from '#/lib/utils';
 
@@ -9,29 +8,18 @@ import { caseTabs, resolveCaseNavTo } from './nav';
 
 export function CaseTabs({
   caseId,
-  caseNumber,
-  caseLabel,
   reviewDueLabel,
 }: {
   caseId: string;
-  caseNumber: string;
-  caseLabel: string;
+  caseNumber?: string;
+  caseLabel?: string;
   reviewDueLabel?: string;
 }): React.JSX.Element {
   return (
-    <div className="hidden h-[var(--console-tabs-height)] shrink-0 items-center gap-3 border-b border-[var(--console-hairline)] bg-[var(--console-ground)] px-3 sm:gap-4 sm:px-8 lg:flex">
-      <div className="flex shrink-0 items-center gap-2.5">
-        <span className="hidden text-[12px] font-medium text-[var(--console-ink)] sm:inline">
-          {caseLabel}
-        </span>
-        <span className="font-[family-name:var(--console-font-mono)] text-[10px] text-[var(--console-muted)]">
-          {caseNumber}
-        </span>
-      </div>
-      <Separator orientation="vertical" className="h-4" />
+    <div className="hidden h-[var(--console-tabs-height)] shrink-0 items-center gap-4 border-b border-[var(--console-hairline)] bg-[var(--console-ground)] px-5 lg:flex lg:px-8">
       <nav
         aria-label="Case"
-        className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto sm:gap-4"
+        className="console-h-scroll flex min-w-0 flex-1 items-center gap-4 overflow-x-auto"
       >
         {caseTabs.map((tab) => {
           const Icon = tab.icon;
@@ -42,7 +30,7 @@ export function CaseTabs({
               to={href}
               activeOptions={{ exact: true }}
               className={cn(
-                'inline-flex shrink-0 items-center gap-1.5 border-b-2 border-transparent px-2 py-1 text-[12px] text-[var(--console-muted)] sm:px-0',
+                'inline-flex shrink-0 items-center gap-1.5 border-b-2 border-transparent py-1 text-[12px] text-[var(--console-muted)]',
                 'hover:text-[var(--console-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]',
               )}
               activeProps={{
@@ -57,7 +45,7 @@ export function CaseTabs({
         })}
       </nav>
       {reviewDueLabel ? (
-        <div className="hidden shrink-0 items-center gap-2 md:flex">
+        <div className="hidden shrink-0 items-center gap-2 xl:flex">
           <StatusDot tone="sensor" />
           <span className="text-[11px] text-[var(--console-muted)]">{reviewDueLabel}</span>
         </div>

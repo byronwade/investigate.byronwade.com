@@ -61,7 +61,7 @@ export function ConsoleToastProvider({
         role="status"
         aria-live="polite"
         aria-atomic="true"
-        className="pointer-events-none fixed inset-x-0 bottom-[calc(var(--console-tabbar-height)+env(safe-area-inset-bottom,0px)+0.75rem)] z-50 flex justify-center px-4 lg:bottom-6"
+        className="pointer-events-none fixed inset-x-0 bottom-[calc(var(--console-toast-offset)+env(safe-area-inset-bottom,0px))] z-[60] flex justify-center px-4 lg:bottom-6"
       >
         {toast ? (
           <p

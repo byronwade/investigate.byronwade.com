@@ -40,24 +40,13 @@ export function CasesPortfolioPage(): React.JSX.Element {
         meta={`${openCount} open`}
       />
 
-      <div className="md:hidden">
-        <Input
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder="Filter cases…"
-          aria-label="Filter cases"
-          className="h-11 w-full rounded-[10px] border-[var(--console-hairline)] bg-[var(--console-strip)] text-[15px]"
-        />
-      </div>
-      <div className="hidden md:block">
-        <Input
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder="Filter cases…"
-          aria-label="Filter cases"
-          className="h-9 w-full max-w-xs rounded-[7px] border-[var(--console-hairline)] bg-transparent text-[13px]"
-        />
-      </div>
+      <Input
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+        placeholder="Filter cases…"
+        aria-label="Filter cases"
+        className="console-field h-11 w-full max-w-md sm:h-9"
+      />
 
       {filtered.length === 0 ? (
         <EmptyState

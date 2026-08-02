@@ -29,7 +29,7 @@ test('console mobile navigation opens agency destinations', async ({ page }) => 
     .click();
   await expect(page).toHaveURL(/\/console\/cases$/);
   await expect(page.getByRole('textbox', { name: /filter cases/i })).toBeVisible();
-  await expect(page.getByText(/open/i).first()).toBeVisible();
+  await expect(page.getByText(/\d+ open/i)).toBeVisible();
 });
 
 test('console intake actions confirm with status feedback', async ({ page }) => {

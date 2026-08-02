@@ -58,7 +58,7 @@ export function SearchPage(): React.JSX.Element {
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             aria-label="Search records"
-            className="h-11 rounded-[7px] border-[var(--console-hairline)] bg-transparent pl-9 text-[13px] sm:h-9"
+            className="console-field h-11 pl-9 sm:h-9"
           />
         </div>
         <FilterBar

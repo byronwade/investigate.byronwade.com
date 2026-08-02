@@ -220,9 +220,11 @@ Product UI for the AI-led case platform (Paper design language). Spec: `docs/sup
   - `FilterBar` — pressed filter chips (`console-filter`)
   - `DetailPanel` — right-rail review panel (`console-panel`)
   - `FixtureCanvas` — map/scene fixture plane (`console-canvas`)
-  - List/row language: `console-list`, `console-row`, `console-row-active`, `console-meta`, `console-action`
+  - List/row language: `console-list`, `console-row`, `console-row-active`, `console-meta`, `console-action`, `console-actions`
+  - Fields/filters: `console-field` (ink outline focus), `console-filter` / `FilterBar`
   - Metrics: `console-metric-strip` (connected cells, not scattered cards)
 - Prefer dense hairline lists over card grids; bordered panels only for selection detail, media stage, or hypothesis tiles that aid comparison
+- Mobile: sticky top title + bottom tab bar; hide page title/description below `lg` via `PageHeader.hideTitleOnMobile`; detail panels become inline selected-row actions below `xl`
 - Dedicated composed pages for all agency/case product routes (typed fixtures + page modules; Paper dumps remain at `/console/reference`)
 - Agency Record/Process case deep-links use `$caseId` resolved with `DEFAULT_CASE_ID` (not hardcoded northridge paths)
 - Product routes: `/console` → `/console/command-center`; agency/media/system under `/console/*`; case workspace `/console/cases/$caseId/...`

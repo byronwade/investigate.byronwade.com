@@ -14,8 +14,8 @@ export function CommandCenterPage(): React.JSX.Element {
   return (
     <ConsolePage loose>
       <header className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between sm:gap-4">
-        <div className="space-y-2">
-          <h1 className="font-[family-name:var(--console-font-sans)] text-[22px] font-semibold leading-[28px] tracking-[-0.02em] text-[var(--console-ink)] sm:text-[24px] sm:leading-[30px]">
+        <div className="min-w-0 space-y-1.5">
+          <h1 className="font-[family-name:var(--console-font-sans)] text-[20px] font-semibold leading-7 tracking-[-0.02em] text-[var(--console-ink)] sm:text-[24px] sm:leading-[30px]">
             {model.greeting}
           </h1>
           <p className="max-w-2xl text-[13px] leading-5 text-[var(--console-muted)]">

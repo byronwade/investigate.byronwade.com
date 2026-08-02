@@ -10,7 +10,6 @@ import { CaseTabs } from './case-tabs';
 import { ClassificationStrip } from './classification-strip';
 import { MobileNav } from './mobile-nav';
 import { MobileTabBar } from './mobile-tab-bar';
-import { shortCaseTitle } from './nav';
 import { ConsoleRailProvider, useConsoleRail } from './rail-context';
 import { Sidebar } from './sidebar';
 import { TopBar } from './top-bar';
@@ -46,7 +45,6 @@ function CaseShellLayout({
 }): React.JSX.Element {
   const contextRail = useConsoleRail();
   const resolvedRail = rail ?? contextRail;
-  const caseLabel = shortCaseTitle(caseRecord.title);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   return (
@@ -56,12 +54,7 @@ function CaseShellLayout({
     >
       <ClassificationStrip />
       <TopBar caseRecord={caseRecord} navVariant="case" onOpenNav={() => setMobileNavOpen(true)} />
-      <CaseTabs
-        caseId={caseRecord.id}
-        caseNumber={caseRecord.number}
-        caseLabel={caseLabel}
-        reviewDueLabel={caseRecord.reviewDueLabel}
-      />
+      <CaseTabs caseId={caseRecord.id} reviewDueLabel={caseRecord.reviewDueLabel} />
       <div className="flex min-h-0 flex-1">
         <Sidebar variant="case" caseId={caseRecord.id} />
         <main

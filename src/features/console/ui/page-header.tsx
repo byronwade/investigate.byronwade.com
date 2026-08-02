@@ -8,7 +8,7 @@ export function PageHeader({
   meta,
   actions,
   className,
-  /** Hide the large title below `lg` when the sticky top bar already shows it. */
+  /** Hide title + description below `lg` when the sticky top bar already names the screen. */
   hideTitleOnMobile = false,
 }: {
   title: string;
@@ -18,7 +18,7 @@ export function PageHeader({
   className?: string;
   hideTitleOnMobile?: boolean;
 }): React.JSX.Element {
-  const hasMobileBody = Boolean(description || meta || actions);
+  const hasMobileBody = Boolean(meta || actions);
 
   return (
     <header
@@ -41,19 +41,17 @@ export function PageHeader({
           <p
             className={cn(
               'max-w-2xl text-[13px] leading-5 text-[var(--console-body)]',
-              hideTitleOnMobile && 'lg:block',
+              hideTitleOnMobile && 'hidden lg:block',
             )}
           >
             {description}
           </p>
         ) : null}
         {meta ? (
-          <div className="pt-0.5 text-[12px] leading-4 text-[var(--console-muted)]">{meta}</div>
+          <div className="text-[12px] leading-4 text-[var(--console-muted)]">{meta}</div>
         ) : null}
       </div>
-      {actions ? (
-        <div className="flex w-full shrink-0 flex-wrap items-center gap-2 sm:w-auto">{actions}</div>
-      ) : null}
+      {actions ? <div className="console-actions sm:w-auto">{actions}</div> : null}
     </header>
   );
 }

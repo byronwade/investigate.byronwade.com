@@ -27,6 +27,7 @@ import { consoleActionClass } from '#/features/console/ui/console-action';
 import { ConsolePage } from '#/features/console/ui/console-page';
 import { useConsoleToast } from '#/features/console/ui/console-toast';
 import { PageHeader } from '#/features/console/ui/page-header';
+import { SectionHeader } from '#/features/console/ui/section-header';
 import { StatusDot, type StatusDotTone } from '#/features/console/ui/status-dot';
 import { cn } from '#/lib/utils';
 
@@ -162,39 +163,27 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
         hideTitleOnMobile
         meta={
           <span className="max-w-2xl text-[13px] leading-5 text-[var(--console-muted)]">
-            Full investigation · {caseRecord.openedLabel} · {caseRecord.assigneesLabel} ·{' '}
-            <span className="text-[var(--console-sensor)]">{caseRecord.reviewDueLabel}</span>
+            {caseRecord.openedLabel} · {caseRecord.assigneesLabel}
           </span>
         }
         actions={
-          <div className="console-actions">
+          <>
             <Button
               type="button"
               variant="outline"
               size="sm"
-              className={cn(
-                consoleActionClass,
-                'border-[var(--console-hairline)] bg-[var(--console-ground)] text-[13px] font-medium text-[var(--console-body)] shadow-none',
-              )}
+              className={consoleActionClass}
               asChild
             >
               <ConsoleLink to={`/console/cases/${caseId}/approvals`}>Request approval</ConsoleLink>
             </Button>
-            <Button
-              type="button"
-              size="sm"
-              className={cn(
-                consoleActionClass,
-                'bg-[var(--console-ink)] text-[13px] font-medium text-white hover:bg-[var(--console-ink)]/90',
-              )}
-              asChild
-            >
+            <Button type="button" size="sm" className={`${consoleActionClass} gap-1.5`} asChild>
               <ConsoleLink to={`/console/cases/${caseId}/leads`}>
-                <Plus aria-hidden="true" weight="duotone" className="size-3.5" />
+                <Plus aria-hidden="true" weight="bold" className="size-[11px]" />
                 New lead
               </ConsoleLink>
             </Button>
-          </div>
+          </>
         }
       />
 
@@ -329,11 +318,11 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
                   <span className="text-[12px] text-[var(--console-muted)] sm:w-[92px] sm:shrink-0 sm:truncate sm:text-right">
                     {decision.assignee}
                   </span>
-                  <div className="console-actions sm:w-[120px] sm:shrink-0 sm:justify-end">
+                  <div className="console-actions sm:w-auto sm:shrink-0 sm:justify-end">
                     <Button
                       type="button"
-                      size="xs"
-                      className="h-9 bg-[var(--console-ink)] px-2.5 text-[12px] text-white hover:bg-[var(--console-ink)]/90 sm:h-6"
+                      size="sm"
+                      className={consoleActionClass}
                       aria-label={`Review: ${decision.label}`}
                       onClick={() => resolveDecision(decision.id, 'review')}
                     >
@@ -342,8 +331,8 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
                     <Button
                       type="button"
                       variant="outline"
-                      size="xs"
-                      className="h-9 border-[var(--console-hairline)] bg-[var(--console-ground)] px-2.5 text-[12px] text-[var(--console-body)] shadow-none sm:h-6"
+                      size="sm"
+                      className={consoleActionClass}
                       aria-label={`Reject: ${decision.label}`}
                       onClick={() => resolveDecision(decision.id, 'reject')}
                     >
@@ -358,52 +347,43 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
       </section>
 
       <section aria-labelledby="access-compact-heading" className="space-y-3 xl:hidden">
-        <h2
-          id="access-compact-heading"
-          className="border-b border-[var(--console-hairline)] pb-2 text-[13px] font-semibold text-[var(--console-ink)]"
-        >
-          Techniques & access
-        </h2>
+        <SectionHeader title="Techniques & access" titleId="access-compact-heading" />
         <OverviewRailPanel rail={overview.rail} className="p-0" />
       </section>
 
       <section aria-labelledby="people-preview-heading" className="space-y-2">
-        <div className="flex items-center justify-between gap-4 border-b border-[var(--console-hairline)] pb-2">
-          <h2
-            id="people-preview-heading"
-            className="text-[13px] font-semibold text-[var(--console-ink)]"
-          >
-            People
-          </h2>
-          <ConsoleLink
-            to={`/console/cases/${caseId}/people`}
-            className="text-[12px] text-[var(--console-muted)] underline-offset-4 hover:text-[var(--console-ink)] hover:underline"
-          >
-            {people.length} linked · open directory
-          </ConsoleLink>
-        </div>
+        <SectionHeader
+          title="People"
+          titleId="people-preview-heading"
+          action={
+            <ConsoleLink
+              to={`/console/cases/${caseId}/people`}
+              className="text-[12px] text-[var(--console-muted)] underline-offset-4 hover:text-[var(--console-ink)] hover:underline"
+            >
+              {people.length} linked · open directory
+            </ConsoleLink>
+          }
+        />
 
-        <ul className="space-y-2 md:hidden">
+        <ul className="console-list md:hidden">
           {people.map((person) => (
             <li key={person.id}>
               <ConsoleLink
                 to={`/console/cases/${caseId}/people/${person.id}`}
-                className="block rounded-lg border border-[var(--console-hairline)] px-3 py-3 hover:bg-[var(--console-strip)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]"
+                className="console-row !items-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]"
               >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0 space-y-1">
-                    <p className="truncate text-[13px] font-medium text-[var(--console-ink)]">
-                      {person.name}
-                    </p>
-                    <p className="line-clamp-2 text-[12px] text-[var(--console-body)]">
-                      {person.notes}
-                    </p>
-                  </div>
-                  <span className="inline-flex shrink-0 items-center gap-2 text-[12px] text-[var(--console-muted)]">
-                    <StatusDot tone={roleTone(person.role)} />
+                <div className="flex min-w-0 items-center gap-2">
+                  <StatusDot tone={roleTone(person.role)} />
+                  <p className="min-w-0 flex-1 truncate text-[13px] font-medium text-[var(--console-ink)]">
+                    {person.name}
+                  </p>
+                  <span className="shrink-0 text-[12px] text-[var(--console-muted)]">
                     {ROLE_LABEL[person.role]}
                   </span>
                 </div>
+                <p className="line-clamp-2 text-[12px] leading-5 text-[var(--console-body)]">
+                  {person.notes}
+                </p>
               </ConsoleLink>
             </li>
           ))}

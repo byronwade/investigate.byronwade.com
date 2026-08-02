@@ -6,7 +6,6 @@ import { useState } from 'react';
 import { Badge } from '#/components/ui/badge';
 import { Button } from '#/components/ui/button';
 import { Separator } from '#/components/ui/separator';
-import { Tabs, TabsList, TabsTrigger } from '#/components/ui/tabs';
 import { DEFAULT_CASE_ID } from '#/features/console/data';
 import { getIntake } from '#/features/console/data/agency-getters';
 import type { IntakeQueueItem } from '#/features/console/data/agency-types';
@@ -16,17 +15,20 @@ import { ConsolePage } from '#/features/console/ui/console-page';
 import { useConsoleToast } from '#/features/console/ui/console-toast';
 import { DetailPanel } from '#/features/console/ui/detail-panel';
 import { EmptyState } from '#/features/console/ui/empty-state';
+import { FilterBar } from '#/features/console/ui/filter-bar';
 import { PageHeader } from '#/features/console/ui/page-header';
 import { StatusDot } from '#/features/console/ui/status-dot';
 import { cn } from '#/lib/utils';
 
-type QueueFilter = 'all' | 'mine' | 'unassigned' | 'squad';
+const QUEUE_FILTERS = ['All', 'Mine', 'Unassigned', 'Squad'] as const;
+type QueueFilter = (typeof QUEUE_FILTERS)[number];
 
 function filterQueue(queue: IntakeQueueItem[], filter: QueueFilter): IntakeQueueItem[] {
-  if (filter === 'all') {
+  if (filter === 'All') {
     return queue;
   }
-  return queue.filter((item) => item.owner === filter);
+  const owner = filter.toLowerCase() as IntakeQueueItem['owner'];
+  return queue.filter((item) => item.owner === owner);
 }
 
 function caseHrefForTip(item: IntakeQueueItem): string {
@@ -79,11 +81,15 @@ function TipActions({
 export function IntakePage(): React.JSX.Element {
   const model = getIntake();
   const { push } = useConsoleToast();
-  const [filter, setFilter] = useState<QueueFilter>('all');
+  const [filter, setFilter] = useState<QueueFilter>('All');
   const [queue, setQueue] = useState(model.queue);
   const [selectedId, setSelectedId] = useState(model.selectedId);
   const filtered = filterQueue(queue, filter);
   const selected = filtered.find((item) => item.id === selectedId) ?? filtered[0] ?? null;
+  const filterOptions = QUEUE_FILTERS.map((option) =>
+    option === 'All' ? `All (${queue.length})` : option,
+  );
+  const filterValue = filter === 'All' ? `All (${queue.length})` : filter;
 
   function dismiss(item: IntakeQueueItem, action: 'referred' | 'declined') {
     setQueue((current) => current.filter((entry) => entry.id !== item.id));
@@ -102,26 +108,14 @@ export function IntakePage(): React.JSX.Element {
         meta={`${queue.length} awaiting triage`}
       />
 
-      <Tabs
-        value={filter}
-        onValueChange={(value) => setFilter(value as QueueFilter)}
-        className="gap-3"
-      >
-        <TabsList className="console-h-scroll h-auto w-full justify-start overflow-x-auto rounded-md bg-[var(--console-strip)] p-1">
-          <TabsTrigger value="all" className="min-h-10 flex-none px-3 text-[13px]">
-            All ({queue.length})
-          </TabsTrigger>
-          <TabsTrigger value="mine" className="min-h-10 flex-none px-3 text-[13px]">
-            Mine
-          </TabsTrigger>
-          <TabsTrigger value="unassigned" className="min-h-10 flex-none px-3 text-[13px]">
-            Unassigned
-          </TabsTrigger>
-          <TabsTrigger value="squad" className="min-h-10 flex-none px-3 text-[13px]">
-            Squad
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
+      <FilterBar
+        options={[...filterOptions]}
+        value={filterValue}
+        onChange={(value) => {
+          setFilter(value.startsWith('All') ? 'All' : (value as QueueFilter));
+        }}
+        legend="Intake queue filters"
+      />
 
       {filtered.length === 0 ? (
         <EmptyState

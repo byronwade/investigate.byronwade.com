@@ -18,7 +18,7 @@
   --console-activity: #15682f;
   --console-danger: #e5484d;
   --console-ok: #45a557;
-  --console-font-sans: 'Geist', 'Inter', system-ui, sans-serif;
+  --console-font-sans: 'Geist', system-ui, sans-serif;
   --console-font-mono: 'Geist Mono', 'IBM Plex Mono', ui-monospace, monospace;
   --console-sidebar-width: 212px;
   --console-rail-width: 344px;
@@ -26,6 +26,7 @@
   --console-topbar-height: 48px;
   --console-tabs-height: 42px;
   --console-tabbar-height: 56px;
+  --console-toast-offset: 4.75rem;
 
   /* shadcn semantic tokens → console palette */
   --background: var(--console-ground);
@@ -197,6 +198,25 @@ body:has([data-surface='console']) {
 [data-surface='console'] .console-row:focus-visible {
   outline: 2px solid var(--console-ink);
   outline-offset: 2px;
+}
+
+[data-surface='console'] .console-field {
+  border: 1px solid var(--console-hairline);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--console-ink);
+  font-size: 13px;
+  box-shadow: none;
+}
+
+[data-surface='console'] .console-field:focus-visible,
+[data-surface='console'] .console-field:focus {
+  border-color: var(--console-ink);
+  outline: 2px solid var(--console-ink);
+  outline-offset: 2px;
+  box-shadow: none;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-ring-offset-shadow: 0 0 #0000;
 }
 
 [data-surface='console'] .console-filter {
@@ -440,6 +460,13 @@ body:has([data-surface='console']) {
   border-color: var(--console-danger);
 }
 
+[data-surface='console'] .console-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 @media (max-width: 1023px) {
   [data-surface='console'] .console-page {
     gap: 1.1rem;
@@ -454,10 +481,7 @@ body:has([data-surface='console']) {
   }
 
   [data-surface='console'] .console-actions {
-    display: flex;
     width: 100%;
-    flex-wrap: wrap;
-    gap: 0.5rem;
   }
 
   [data-surface='console'] .console-actions > * {

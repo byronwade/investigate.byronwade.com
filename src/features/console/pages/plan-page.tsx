@@ -53,17 +53,15 @@ export function PlanPage({ caseId }: { caseId: string }): React.JSX.Element | nu
           </span>
         }
         actions={
-          <div className="console-actions">
-            <Button
-              type="button"
-              size="sm"
-              className={`${consoleActionClass} gap-1.5`}
-              onClick={addStep}
-            >
-              <Plus aria-hidden="true" weight="bold" className="size-[11px]" />
-              Add a step
-            </Button>
-          </div>
+          <Button
+            type="button"
+            size="sm"
+            className={`${consoleActionClass} gap-1.5`}
+            onClick={addStep}
+          >
+            <Plus aria-hidden="true" weight="bold" className="size-[11px]" />
+            Add a step
+          </Button>
         }
       />
 
