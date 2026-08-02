@@ -18,7 +18,7 @@ export function FilterBar({
   return (
     <fieldset className={cn('-mx-1 border-0 p-0', className)}>
       <legend className="sr-only">{legend}</legend>
-      <div className="flex gap-2 overflow-x-auto px-1 pb-1">
+      <div className="console-h-scroll flex gap-2 overflow-x-auto px-1 pb-1">
         {options.map((option) => (
           <button
             key={option}

@@ -389,10 +389,21 @@ body:has([data-surface='console']) {
 [data-surface='console'] .console-tabbar-item-active,
 [data-surface='console'] .console-tabbar-item[aria-current='page'] {
   color: var(--console-ink);
+  font-weight: 600;
+  background: var(--console-strip);
+}
+
+[data-surface='console'] .console-h-scroll {
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+[data-surface='console'] .console-h-scroll::-webkit-scrollbar {
+  display: none;
 }
 
 [data-surface='console'] .console-shell-main {
-  padding-bottom: calc(var(--console-tabbar-height) + env(safe-area-inset-bottom, 0px) + 1.25rem);
+  padding-bottom: calc(var(--console-tabbar-height) + env(safe-area-inset-bottom, 0px) + 1.75rem);
 }
 
 @media (min-width: 1024px) {
@@ -450,8 +461,13 @@ body:has([data-surface='console']) {
   }
 
   [data-surface='console'] .console-actions > * {
-    flex: 1 1 calc(50% - 0.25rem);
-    min-width: 8.5rem;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  [data-surface='console'] .console-actions > *:only-child {
+    flex: 0 1 auto;
+    min-width: min(100%, 12rem);
   }
 }
 

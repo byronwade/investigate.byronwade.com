@@ -107,7 +107,7 @@ export function IntakePage(): React.JSX.Element {
         onValueChange={(value) => setFilter(value as QueueFilter)}
         className="gap-3"
       >
-        <TabsList className="h-auto w-full justify-start overflow-x-auto rounded-md bg-[var(--console-strip)] p-1">
+        <TabsList className="console-h-scroll h-auto w-full justify-start overflow-x-auto rounded-md bg-[var(--console-strip)] p-1">
           <TabsTrigger value="all" className="min-h-10 flex-none px-3 text-[13px]">
             All ({queue.length})
           </TabsTrigger>

@@ -32,7 +32,7 @@ export function LeadsPage({ caseId }: { caseId: string }): React.JSX.Element {
         }
       />
 
-      <div className="-mx-1 flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-2 md:mx-0 md:grid md:snap-none md:grid-cols-2 md:overflow-visible md:px-0 xl:grid-cols-4">
+      <div className="console-h-scroll -mx-1 flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-2 md:mx-0 md:grid md:snap-none md:grid-cols-2 md:overflow-visible md:px-0 xl:grid-cols-4">
         {COLUMNS.map((column) => {
           const columnLeads = byColumn[column.id];
           return (
