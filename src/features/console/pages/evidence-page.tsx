@@ -44,6 +44,7 @@ export function EvidencePage({ caseId }: { caseId: string }): React.JSX.Element 
     <ConsolePage>
       <PageHeader
         title="Evidence"
+        hideTitleOnMobile
         meta={
           <span className="inline-flex items-center gap-2 text-[13px] text-[var(--console-muted)]">
             <Package aria-hidden="true" weight="duotone" className="size-3.5" />

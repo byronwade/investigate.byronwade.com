@@ -159,17 +159,18 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
     <ConsolePage loose>
       <PageHeader
         title={caseRecord.title}
+        hideTitleOnMobile
         meta={
-          <span className="flex flex-wrap items-center gap-2 text-[13px] text-[var(--console-muted)]">
+          <span className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-[var(--console-muted)]">
             <span>Full investigation</span>
             <span aria-hidden="true" className="text-[var(--console-hairline)]">
               ·
             </span>
             <span>{caseRecord.openedLabel}</span>
-            <span aria-hidden="true" className="text-[var(--console-hairline)]">
+            <span aria-hidden="true" className="hidden text-[var(--console-hairline)] sm:inline">
               ·
             </span>
-            <span>{caseRecord.assigneesLabel}</span>
+            <span className="w-full sm:w-auto">{caseRecord.assigneesLabel}</span>
             <span aria-hidden="true" className="text-[var(--console-hairline)]">
               ·
             </span>
@@ -209,7 +210,7 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
       />
 
       <section aria-labelledby="assistant-heading" className="space-y-4">
-        <div className="flex items-center justify-between gap-4 border-b border-[var(--console-hairline)] pb-3">
+        <div className="space-y-1.5 border-b border-[var(--console-hairline)] pb-3">
           <div className="flex min-w-0 items-center gap-2.5">
             <Sparkle
               aria-hidden="true"
@@ -222,19 +223,23 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
             >
               Investigative assistant
             </h2>
-            <span className="truncate text-[13px] text-[var(--console-muted)]">
-              {assistant.durationLabel}
-            </span>
           </div>
-          <div className="flex shrink-0 items-center gap-3 text-[13px] text-[var(--console-muted)]">
+          <p className="flex flex-wrap items-center gap-x-2 gap-y-1 pl-[26px] text-[12px] text-[var(--console-muted)]">
+            <span>{assistant.durationLabel}</span>
+            <span aria-hidden="true" className="text-[var(--console-hairline)]">
+              ·
+            </span>
             <span>{stepProgress}</span>
+            <span aria-hidden="true" className="text-[var(--console-hairline)]">
+              ·
+            </span>
             <Badge
               variant="outline"
               className="rounded-md border-transparent px-0 font-[family-name:var(--console-font-mono)] text-[11px] font-normal tracking-normal text-[var(--console-muted)]"
             >
               {assistant.runLabel}
             </Badge>
-          </div>
+          </p>
         </div>
 
         <ol className="max-w-[900px] space-y-0">
@@ -243,12 +248,12 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
             return (
               <li
                 key={step.id}
-                className="flex h-[30px] items-center gap-2.5 text-[13px] leading-4"
+                className="flex min-h-[34px] items-start gap-2.5 py-1.5 text-[13px] leading-5"
               >
                 <StatusDot
                   tone={stepTone(step.state)}
                   label={step.state}
-                  {...(isRunning ? { className: 'bg-[var(--console-offence)]' } : {})}
+                  className={cn('mt-1', isRunning && 'bg-[var(--console-offence)]')}
                 />
                 <span
                   className={
@@ -263,8 +268,8 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
                   <span
                     className={
                       isRunning
-                        ? 'w-[52px] shrink-0 text-right font-[family-name:var(--console-font-mono)] text-[11px] text-[var(--console-offence)]'
-                        : 'w-[52px] shrink-0 text-right font-[family-name:var(--console-font-mono)] text-[11px] text-[var(--console-muted)]'
+                        ? 'w-[52px] shrink-0 pt-0.5 text-right font-[family-name:var(--console-font-mono)] text-[11px] text-[var(--console-offence)]'
+                        : 'w-[52px] shrink-0 pt-0.5 text-right font-[family-name:var(--console-font-mono)] text-[11px] text-[var(--console-muted)]'
                     }
                   >
                     {step.durationLabel}

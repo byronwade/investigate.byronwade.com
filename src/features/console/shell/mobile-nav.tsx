@@ -27,12 +27,16 @@ export function MobileNav({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
-        side="left"
+        side="bottom"
         showCloseButton
         data-surface="console"
-        className="w-[min(100%,calc(var(--console-sidebar-width)+2rem))] gap-0 border-[var(--console-hairline)] bg-[var(--console-sidebar)] p-0 text-[var(--console-ink)] sm:max-w-none"
+        className="h-[min(92dvh,100%)] gap-0 rounded-t-[18px] border-[var(--console-hairline)] bg-[var(--console-ground)] p-0 text-[var(--console-ink)] sm:max-w-none"
       >
-        <SheetHeader className="border-b border-[var(--console-hairline)] px-5 pt-5 pb-4 text-left">
+        <div
+          aria-hidden="true"
+          className="mx-auto mt-2 h-1 w-10 shrink-0 rounded-full bg-[var(--console-hairline)]"
+        />
+        <SheetHeader className="border-b border-[var(--console-hairline)] px-5 pt-3 pb-3.5 text-left">
           <SheetTitle className="text-[17px] font-semibold tracking-[-0.01em] text-[var(--console-ink)]">
             More
           </SheetTitle>
@@ -42,8 +46,13 @@ export function MobileNav({
               : 'Case workspaces and agency jump links'}
           </SheetDescription>
         </SheetHeader>
-        <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-3 py-4 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
-          <SidebarNav variant={variant} caseId={caseId} onNavigate={() => onOpenChange(false)} />
+        <div className="flex min-h-0 flex-1 flex-col px-2 pt-2 pb-[env(safe-area-inset-bottom,0px)]">
+          <SidebarNav
+            variant={variant}
+            caseId={caseId}
+            onNavigate={() => onOpenChange(false)}
+            className="min-h-0"
+          />
         </div>
       </SheetContent>
     </Sheet>

@@ -44,6 +44,7 @@ export function PlanPage({ caseId }: { caseId: string }): React.JSX.Element | nu
     <ConsolePage loose>
       <PageHeader
         title={model.title}
+        hideTitleOnMobile
         description={model.description}
         meta={
           <span className="inline-flex items-center gap-2">

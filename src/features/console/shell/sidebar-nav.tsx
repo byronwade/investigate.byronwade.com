@@ -28,12 +28,15 @@ export function SidebarNav({
   const ReferenceIcon = paperReferenceNav.icon;
 
   return (
-    <div className={cn('flex min-h-0 flex-1 flex-col gap-0.5', className)}>
-      <nav className="flex min-h-0 flex-1 flex-col gap-4" aria-label="Primary">
+    <div className={cn('flex h-full min-h-0 flex-1 flex-col', className)}>
+      <nav
+        className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain px-0.5 pb-3"
+        aria-label="Primary"
+      >
         {groups.map((group) => (
-          <div key={group.id} className="flex flex-col gap-px">
-            <div className="flex h-6 items-center px-2">
-              <span className="text-[12px] font-medium text-[var(--console-muted)]">
+          <div key={group.id} className="flex flex-col gap-0.5">
+            <div className="flex h-7 items-center px-3">
+              <span className="text-[11px] font-semibold tracking-[0.04em] text-[var(--console-muted)] uppercase">
                 {group.label}
               </span>
             </div>
@@ -47,7 +50,7 @@ export function SidebarNav({
                   activeOptions={{ exact: true }}
                   {...(onNavigate ? { onClick: onNavigate } : {})}
                   className={cn(
-                    'flex min-h-11 items-center gap-2.5 rounded-md px-2 text-[13px] text-[var(--console-body)] lg:h-7 lg:min-h-0',
+                    'flex min-h-12 items-center gap-3 rounded-[10px] px-3 text-[15px] text-[var(--console-body)] lg:h-7 lg:min-h-0 lg:gap-2.5 lg:rounded-md lg:px-2 lg:text-[13px]',
                     'hover:bg-[var(--console-row-active)] hover:text-[var(--console-ink)]',
                     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]',
                   )}
@@ -57,14 +60,10 @@ export function SidebarNav({
                     'aria-current': 'page',
                   }}
                 >
-                  <Icon
-                    aria-hidden="true"
-                    weight="duotone"
-                    className="size-3.5 shrink-0 lg:size-3"
-                  />
+                  <Icon aria-hidden="true" weight="duotone" className="size-5 shrink-0 lg:size-3" />
                   <span className="min-w-0 flex-1 truncate">{item.label}</span>
                   {item.badge ? (
-                    <span className="shrink-0 text-[12px] text-[var(--console-muted)]">
+                    <span className="shrink-0 rounded-md bg-[var(--console-strip)] px-1.5 py-0.5 font-[family-name:var(--console-font-mono)] text-[11px] text-[var(--console-muted)]">
                       {item.badge}
                     </span>
                   ) : null}
@@ -75,15 +74,15 @@ export function SidebarNav({
         ))}
       </nav>
 
-      <div className="mt-auto flex flex-col gap-2 pt-3">
+      <div className="shrink-0 border-t border-[var(--console-hairline)] bg-[var(--console-ground)] px-1 pt-3 pb-2">
         {variant === 'agency' ? (
-          <div className="space-y-1.5 px-2 pb-1">
+          <div className="space-y-1 px-3 pb-2">
             <div className="flex items-center gap-2">
               <span
                 className="size-1.5 shrink-0 rounded-[3px] bg-[var(--console-activity)]"
                 aria-hidden="true"
               />
-              <span className="truncate text-[12px] text-[var(--console-body)]">
+              <span className="truncate text-[13px] text-[var(--console-body)]">
                 SA D. Okonjo-Ramirez
               </span>
             </div>
@@ -92,12 +91,12 @@ export function SidebarNav({
             </p>
           </div>
         ) : null}
-        <Separator />
+        <Separator className="mb-2 bg-[var(--console-hairline)]" />
         <ConsoleLink
           to={paperReferenceNav.to}
           {...(onNavigate ? { onClick: onNavigate } : {})}
           className={cn(
-            'flex min-h-11 items-center gap-2.5 rounded-md px-2 text-[13px] text-[var(--console-muted)] lg:h-7 lg:min-h-0',
+            'flex min-h-12 items-center gap-3 rounded-[10px] px-3 text-[15px] text-[var(--console-muted)] lg:h-7 lg:min-h-0 lg:gap-2.5 lg:rounded-md lg:px-2 lg:text-[13px]',
             'hover:bg-[var(--console-row-active)] hover:text-[var(--console-ink)]',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]',
           )}
@@ -109,7 +108,7 @@ export function SidebarNav({
           <ReferenceIcon
             aria-hidden="true"
             weight="duotone"
-            className="size-3.5 shrink-0 lg:size-3"
+            className="size-5 shrink-0 lg:size-3"
           />
           <span className="min-w-0 flex-1 truncate">{paperReferenceNav.label}</span>
         </ConsoleLink>

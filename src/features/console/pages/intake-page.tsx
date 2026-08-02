@@ -57,12 +57,21 @@ export function IntakePage(): React.JSX.Element {
     <ConsolePage>
       <PageHeader
         title={model.title}
+        hideTitleOnMobile
         description={model.description}
-        meta={`${queue.length} awaiting triage`}
-        actions={
-          <Button type="button" size="sm" className={consoleActionClass} asChild>
-            <ConsoleLink to="/console/command-center">Back to command</ConsoleLink>
-          </Button>
+        meta={
+          <span className="inline-flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span>{queue.length} awaiting triage</span>
+            <span aria-hidden="true" className="text-[var(--console-hairline)]">
+              ·
+            </span>
+            <ConsoleLink
+              to="/console/command-center"
+              className="text-[var(--console-muted)] underline-offset-4 hover:text-[var(--console-ink)] hover:underline"
+            >
+              Command center
+            </ConsoleLink>
+          </span>
         }
       />
 
