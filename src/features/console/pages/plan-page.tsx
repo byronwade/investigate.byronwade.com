@@ -1,13 +1,18 @@
+'use client';
+
 import { Path } from '@phosphor-icons/react/dist/csr/Path';
 import { Plus } from '@phosphor-icons/react/dist/csr/Plus';
 import type * as React from 'react';
+import { useState } from 'react';
 
 import { Badge } from '#/components/ui/badge';
 import { Button } from '#/components/ui/button';
 import { getInvestigativePlan } from '#/features/console/data/agency-getters';
+import type { PlanStep } from '#/features/console/data/agency-types';
 import { ConsoleLink } from '#/features/console/shell/console-link';
 import { consoleActionClass } from '#/features/console/ui/console-action';
 import { ConsolePage } from '#/features/console/ui/console-page';
+import { useConsoleToast } from '#/features/console/ui/console-toast';
 import { EmptyState } from '#/features/console/ui/empty-state';
 import { PageHeader } from '#/features/console/ui/page-header';
 import { SectionHeader } from '#/features/console/ui/section-header';
@@ -15,8 +20,24 @@ import { StatusDot } from '#/features/console/ui/status-dot';
 
 export function PlanPage({ caseId }: { caseId: string }): React.JSX.Element | null {
   const model = getInvestigativePlan(caseId);
+  const { push } = useConsoleToast();
+  const [steps, setSteps] = useState<PlanStep[]>(() => model?.steps ?? []);
+
   if (!model) {
     return null;
+  }
+
+  function addStep() {
+    const nextIndex = steps.length + 1;
+    const step: PlanStep = {
+      id: `local-step-${nextIndex}`,
+      label: `Draft step ${nextIndex} — pending technique approval`,
+      owner: 'You',
+      due: 'TBD',
+      tone: 'muted',
+    };
+    setSteps((current) => [...current, step]);
+    push('Step added to plan', 'ok');
   }
 
   return (
@@ -27,11 +48,16 @@ export function PlanPage({ caseId }: { caseId: string }): React.JSX.Element | nu
         meta={
           <span className="inline-flex items-center gap-2">
             <Path aria-hidden="true" weight="duotone" className="size-3.5" />
-            {model.hypotheses.length} hypotheses · {model.steps.length} steps
+            {model.hypotheses.length} hypotheses · {steps.length} steps
           </span>
         }
         actions={
-          <Button type="button" size="sm" className={`${consoleActionClass} gap-1.5`}>
+          <Button
+            type="button"
+            size="sm"
+            className={`${consoleActionClass} gap-1.5`}
+            onClick={addStep}
+          >
             <Plus aria-hidden="true" weight="bold" className="size-[11px]" />
             Add a step
           </Button>
@@ -103,14 +129,14 @@ export function PlanPage({ caseId }: { caseId: string }): React.JSX.Element | nu
             </ConsoleLink>
           }
         />
-        {model.steps.length === 0 ? (
+        {steps.length === 0 ? (
           <EmptyState
             title="No steps planned"
             description="Add sequenced work once hypotheses are approved."
           />
         ) : (
           <ul className="console-list">
-            {model.steps.map((step) => (
+            {steps.map((step) => (
               <li key={step.id} className="console-row">
                 <div className="flex min-w-0 items-center gap-2.5 sm:contents">
                   {step.tone ? <StatusDot tone={step.tone} /> : null}

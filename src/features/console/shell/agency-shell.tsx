@@ -1,6 +1,13 @@
+'use client';
+
 import type * as React from 'react';
+import { useState } from 'react';
+
+import { ConsoleToastProvider } from '#/features/console/ui/console-toast';
 
 import { ClassificationStrip } from './classification-strip';
+import { MobileNav } from './mobile-nav';
+import { MobileTabBar } from './mobile-tab-bar';
 import { ConsoleRailProvider, useConsoleRail } from './rail-context';
 import { Sidebar } from './sidebar';
 import { TopBar } from './top-bar';
@@ -16,9 +23,11 @@ export function AgencyShell({
 }): React.JSX.Element {
   return (
     <ConsoleRailProvider>
-      <AgencyShellLayout crumb={crumb} rail={rail}>
-        {children}
-      </AgencyShellLayout>
+      <ConsoleToastProvider>
+        <AgencyShellLayout crumb={crumb} rail={rail}>
+          {children}
+        </AgencyShellLayout>
+      </ConsoleToastProvider>
     </ConsoleRailProvider>
   );
 }
@@ -34,6 +43,7 @@ function AgencyShellLayout({
 }): React.JSX.Element {
   const contextRail = useConsoleRail();
   const resolvedRail = rail ?? contextRail;
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   return (
     <div
@@ -41,13 +51,13 @@ function AgencyShellLayout({
       className="flex min-h-dvh flex-col bg-[var(--console-ground)] text-[var(--console-ink)]"
     >
       <ClassificationStrip />
-      <TopBar crumb={crumb} navVariant="agency" />
+      <TopBar crumb={crumb} navVariant="agency" onOpenNav={() => setMobileNavOpen(true)} />
       <div className="flex min-h-0 flex-1">
         <Sidebar variant="agency" />
         <main
           id="console-main"
           tabIndex={-1}
-          className="min-w-0 flex-1 overflow-auto p-4 outline-none sm:p-6"
+          className="console-shell-main min-w-0 flex-1 overflow-auto p-4 outline-none sm:p-6"
         >
           {children}
         </main>
@@ -57,6 +67,8 @@ function AgencyShellLayout({
           </aside>
         ) : null}
       </div>
+      <MobileTabBar variant="agency" onMore={() => setMobileNavOpen(true)} />
+      <MobileNav open={mobileNavOpen} onOpenChange={setMobileNavOpen} variant="agency" />
     </div>
   );
 }

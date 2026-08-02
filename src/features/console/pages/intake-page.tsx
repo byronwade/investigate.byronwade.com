@@ -7,11 +7,13 @@ import { Badge } from '#/components/ui/badge';
 import { Button } from '#/components/ui/button';
 import { Separator } from '#/components/ui/separator';
 import { Tabs, TabsList, TabsTrigger } from '#/components/ui/tabs';
+import { DEFAULT_CASE_ID } from '#/features/console/data';
 import { getIntake } from '#/features/console/data/agency-getters';
 import type { IntakeQueueItem } from '#/features/console/data/agency-types';
 import { ConsoleLink } from '#/features/console/shell/console-link';
 import { consoleActionClass } from '#/features/console/ui/console-action';
 import { ConsolePage } from '#/features/console/ui/console-page';
+import { useConsoleToast } from '#/features/console/ui/console-toast';
 import { DetailPanel } from '#/features/console/ui/detail-panel';
 import { EmptyState } from '#/features/console/ui/empty-state';
 import { PageHeader } from '#/features/console/ui/page-header';
@@ -27,19 +29,36 @@ function filterQueue(queue: IntakeQueueItem[], filter: QueueFilter): IntakeQueue
   return queue.filter((item) => item.owner === filter);
 }
 
+function caseHrefForTip(item: IntakeQueueItem): string {
+  if (item.summary.toLowerCase().includes('halstead')) {
+    return '/console/cases/halstead/overview';
+  }
+  return `/console/cases/${DEFAULT_CASE_ID}/overview`;
+}
+
 export function IntakePage(): React.JSX.Element {
   const model = getIntake();
+  const { push } = useConsoleToast();
   const [filter, setFilter] = useState<QueueFilter>('all');
+  const [queue, setQueue] = useState(model.queue);
   const [selectedId, setSelectedId] = useState(model.selectedId);
-  const filtered = filterQueue(model.queue, filter);
+  const filtered = filterQueue(queue, filter);
   const selected = filtered.find((item) => item.id === selectedId) ?? filtered[0] ?? null;
+
+  function dismiss(item: IntakeQueueItem, action: 'referred' | 'declined') {
+    setQueue((current) => current.filter((entry) => entry.id !== item.id));
+    push(
+      action === 'referred' ? `Referred · ${item.tipId}` : `Declined · ${item.tipId}`,
+      action === 'referred' ? 'warn' : 'neutral',
+    );
+  }
 
   return (
     <ConsolePage>
       <PageHeader
         title={model.title}
         description={model.description}
-        meta={model.meta}
+        meta={`${queue.length} awaiting triage`}
         actions={
           <Button type="button" size="sm" className={consoleActionClass} asChild>
             <ConsoleLink to="/console/command-center">Back to command</ConsoleLink>
@@ -54,7 +73,7 @@ export function IntakePage(): React.JSX.Element {
       >
         <TabsList className="h-auto w-full flex-wrap justify-start rounded-md bg-[var(--console-strip)] p-1">
           <TabsTrigger value="all" className="min-h-10 flex-none px-3 text-[13px]">
-            All ({model.queue.length})
+            All ({queue.length})
           </TabsTrigger>
           <TabsTrigger value="mine" className="min-h-10 flex-none px-3 text-[13px]">
             Mine
@@ -140,13 +159,30 @@ export function IntakePage(): React.JSX.Element {
                 </dl>
                 <Separator className="bg-[var(--console-hairline)]" />
                 <div className="flex flex-wrap gap-2">
-                  <Button type="button" size="sm" className={consoleActionClass}>
-                    Open case
+                  <Button type="button" size="sm" className={consoleActionClass} asChild>
+                    <ConsoleLink
+                      to={caseHrefForTip(selected)}
+                      onClick={() => push(`Opening case from ${selected.tipId}`, 'ok')}
+                    >
+                      Open case
+                    </ConsoleLink>
                   </Button>
-                  <Button type="button" variant="outline" size="sm" className={consoleActionClass}>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className={consoleActionClass}
+                    onClick={() => dismiss(selected, 'referred')}
+                  >
                     Refer
                   </Button>
-                  <Button type="button" variant="ghost" size="sm" className={consoleActionClass}>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className={consoleActionClass}
+                    onClick={() => dismiss(selected, 'declined')}
+                  >
                     Decline
                   </Button>
                 </div>

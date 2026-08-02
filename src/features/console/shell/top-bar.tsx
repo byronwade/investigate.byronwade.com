@@ -1,7 +1,6 @@
 'use client';
 
 import { CaretDown } from '@phosphor-icons/react/dist/csr/CaretDown';
-import { List } from '@phosphor-icons/react/dist/csr/List';
 import { MagnifyingGlass } from '@phosphor-icons/react/dist/csr/MagnifyingGlass';
 import { Plus } from '@phosphor-icons/react/dist/csr/Plus';
 import { Triangle } from '@phosphor-icons/react/dist/csr/Triangle';
@@ -18,12 +17,11 @@ import {
   DropdownMenuTrigger,
 } from '#/components/ui/dropdown-menu';
 import { Separator } from '#/components/ui/separator';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '#/components/ui/tooltip';
+import { TooltipProvider } from '#/components/ui/tooltip';
 import { type CaseRecord, DEFAULT_CASE_ID } from '#/features/console/data';
 
 import { CommandPalette } from './command-palette';
 import { ConsoleLink } from './console-link';
-import { MobileNav } from './mobile-nav';
 import { paperReferenceNav, shortCaseTitle } from './nav';
 
 export function TopBar({
@@ -34,48 +32,43 @@ export function TopBar({
   caseRecord?: CaseRecord;
   crumb?: string;
   navVariant?: 'agency' | 'case';
+  /** Kept for shell API compatibility; mobile nav opens from the tab bar More control. */
+  onOpenNav?: () => void;
 }): React.JSX.Element {
   const caseLabel = caseRecord ? shortCaseTitle(caseRecord.title) : null;
   const [commandOpen, setCommandOpen] = useState(false);
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const paletteCaseId = caseRecord?.id ?? DEFAULT_CASE_ID;
+  const mobileTitle = caseLabel ?? crumb ?? (navVariant === 'agency' ? 'Command' : 'Case');
 
   return (
     <TooltipProvider>
-      <header className="flex h-[var(--console-topbar-height)] shrink-0 items-center gap-2 border-b border-[var(--console-hairline)] bg-[var(--console-ground)] px-3 sm:gap-3 sm:px-5">
+      <header className="sticky top-0 z-30 flex h-[var(--console-topbar-height)] shrink-0 items-center gap-2 border-b border-[var(--console-hairline)] bg-[var(--console-ground)]/95 px-3 backdrop-blur-md sm:gap-3 sm:px-5 lg:static lg:bg-[var(--console-ground)] lg:backdrop-blur-none">
         <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-2.5">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="size-11 shrink-0 rounded-md lg:hidden"
-                aria-label="Open navigation"
-                onClick={() => setMobileNavOpen(true)}
-              >
-                <List aria-hidden="true" weight="bold" className="size-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="bottom">Open navigation</TooltipContent>
-          </Tooltip>
-
           <Triangle
             aria-hidden="true"
             weight="fill"
             className="hidden size-[15px] shrink-0 text-[var(--console-ink)] sm:block"
           />
-          <div className="flex min-w-0 items-center gap-1.5 sm:gap-2.5">
+
+          {/* Mobile title — app-like */}
+          <div className="min-w-0 lg:hidden">
+            <p className="truncate text-[15px] font-semibold tracking-[-0.01em] text-[var(--console-ink)]">
+              {mobileTitle}
+            </p>
+            <p className="truncate text-[11px] text-[var(--console-muted)]">
+              {caseRecord ? caseRecord.number : 'FBI Chicago'}
+            </p>
+          </div>
+
+          {/* Desktop breadcrumb */}
+          <div className="hidden min-w-0 items-center gap-1.5 sm:gap-2.5 lg:flex">
             <span className="truncate text-[13px] text-[var(--console-muted)]">FBI Chicago</span>
             {caseRecord ? (
               <>
-                <span
-                  className="hidden text-[13px] text-[var(--console-hairline)] sm:inline"
-                  aria-hidden="true"
-                >
+                <span className="text-[13px] text-[var(--console-hairline)]" aria-hidden="true">
                   /
                 </span>
-                <span className="hidden font-[family-name:var(--console-font-mono)] text-[12px] text-[var(--console-muted)] sm:inline">
+                <span className="font-[family-name:var(--console-font-mono)] text-[12px] text-[var(--console-muted)]">
                   {caseRecord.number}
                 </span>
                 <span className="text-[13px] text-[var(--console-hairline)]" aria-hidden="true">
@@ -87,13 +80,10 @@ export function TopBar({
               </>
             ) : (
               <>
-                <span
-                  className="hidden text-[13px] text-[var(--console-hairline)] md:inline"
-                  aria-hidden="true"
-                >
+                <span className="text-[13px] text-[var(--console-hairline)]" aria-hidden="true">
                   /
                 </span>
-                <span className="hidden truncate text-[13px] text-[var(--console-muted)] md:inline">
+                <span className="truncate text-[13px] text-[var(--console-muted)]">
                   Chicago field office
                 </span>
                 {crumb ? (
@@ -111,19 +101,19 @@ export function TopBar({
           </div>
         </div>
 
-        <div className="flex min-w-0 max-w-[560px] flex-[1.2] items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1.5 sm:min-w-0 sm:max-w-[560px] sm:flex-[1.2] sm:gap-2">
           <button
             type="button"
             onClick={() => setCommandOpen(true)}
-            className="relative flex h-11 min-w-0 flex-1 items-center rounded-[7px] border border-[var(--console-hairline)] bg-transparent pr-3 pl-9 text-left text-[13px] text-[var(--console-muted)] hover:bg-[var(--console-strip)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)] sm:h-[30px] sm:pr-12"
+            className="relative flex size-11 items-center justify-center rounded-[10px] border border-[var(--console-hairline)] text-[var(--console-muted)] hover:bg-[var(--console-strip)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)] sm:h-[30px] sm:w-auto sm:min-w-0 sm:flex-1 sm:justify-start sm:rounded-[7px] sm:pr-12 sm:pl-9 sm:text-left sm:text-[13px]"
             aria-label="Open command palette"
           >
             <MagnifyingGlass
               aria-hidden="true"
               weight="duotone"
-              className="pointer-events-none absolute top-1/2 left-3 size-[13px] -translate-y-1/2 text-[var(--console-offence)]"
+              className="size-[15px] text-[var(--console-offence)] sm:pointer-events-none sm:absolute sm:top-1/2 sm:left-3 sm:size-[13px] sm:-translate-y-1/2"
             />
-            <span className="truncate">Ask the case…</span>
+            <span className="hidden truncate sm:inline">Ask the case…</span>
             <kbd className="pointer-events-none absolute top-1/2 right-3 hidden -translate-y-1/2 font-[family-name:var(--console-font-mono)] text-[11px] text-[var(--console-muted)] sm:inline">
               ⌘K
             </kbd>
@@ -133,7 +123,8 @@ export function TopBar({
               <Button
                 type="button"
                 size="sm"
-                className="h-11 gap-1.5 rounded-[7px] px-3 text-[13px] sm:h-[30px]"
+                className="size-11 gap-1.5 rounded-[10px] px-0 text-[13px] sm:h-[30px] sm:w-auto sm:rounded-[7px] sm:px-3"
+                aria-label="New"
               >
                 <Plus aria-hidden="true" weight="bold" className="size-[11px]" />
                 <span className="hidden sm:inline">New</span>
@@ -166,7 +157,7 @@ export function TopBar({
           </DropdownMenu>
         </div>
 
-        <div className="flex shrink-0 items-center gap-2 sm:gap-3.5">
+        <div className="hidden shrink-0 items-center gap-2 sm:gap-3.5 md:flex">
           <div className="hidden items-center gap-3 lg:flex">
             <Badge variant="secondary" className="rounded-md px-2 py-0.5 text-[13px] font-medium">
               Federal · FBI
@@ -188,12 +179,6 @@ export function TopBar({
         </div>
 
         <CommandPalette caseId={paletteCaseId} open={commandOpen} onOpenChange={setCommandOpen} />
-        <MobileNav
-          open={mobileNavOpen}
-          onOpenChange={setMobileNavOpen}
-          variant={navVariant}
-          caseId={paletteCaseId}
-        />
       </header>
     </TooltipProvider>
   );

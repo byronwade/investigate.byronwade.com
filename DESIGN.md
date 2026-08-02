@@ -210,7 +210,8 @@ Product UI for the AI-led case platform (Paper design language). Spec: `docs/sup
 - Ink palette: `#111111`, `#3D3D3D`, `#6B6B6B` (floor), `#ECECEC` (hairline)
 - Categorical: offence `#0070F3`, sensor `#B45309`, tip `#8E4EC6`, activity `#15682F`
 - App shells: `CaseShell` (case tabs) and `AgencyShell` (no case tabs) — classification strip, top bar, 212px sidebar, main, optional 344px rail
-- Mobile shell: sidebar collapses below `lg`; open via TopBar control into shadcn `Sheet` (`MobileNav` + shared `SidebarNav`). Touch targets ≥44px on key chrome controls. Case tabs scroll horizontally; dense tables switch to stacked rows below `md`.
+- Mobile shell (app-like below `lg`): fixed bottom tab bar (`MobileTabBar`) for primary destinations; **More** opens `MobileNav` sheet with full `SidebarNav`. Sticky compact top title bar (search + New). Classification strip and desktop case tabs hidden on small screens. Main content reserves safe-area + tab-bar padding. Touch targets ≥44px. Dense tables switch to stacked rows below `md`.
+- Action feedback: `ConsoleToastProvider` / `useConsoleToast()` for short status confirmations on Approve / Refer / playback / plan edits (fixture-local state until backend wiring)
 - UI kit: shadcn primitives in `src/components/ui` (Button, Badge, Table, Sheet, Tabs, Input, ScrollArea, Tooltip, Command, Dialog, Dropdown, Separator, Avatar) + Phosphor Duotone icons; themed via console CSS variables
 - Shared empty pattern: `src/features/console/ui/empty-state.tsx` (also demoed at `/console/empty-states`)
 - Shared composition primitives (`src/features/console/ui/` + classes in `console.css`):

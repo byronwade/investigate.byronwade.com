@@ -1,9 +1,15 @@
+'use client';
+
 import type * as React from 'react';
+import { useState } from 'react';
 
 import type { CaseRecord } from '#/features/console/data';
+import { ConsoleToastProvider } from '#/features/console/ui/console-toast';
 
 import { CaseTabs } from './case-tabs';
 import { ClassificationStrip } from './classification-strip';
+import { MobileNav } from './mobile-nav';
+import { MobileTabBar } from './mobile-tab-bar';
 import { shortCaseTitle } from './nav';
 import { ConsoleRailProvider, useConsoleRail } from './rail-context';
 import { Sidebar } from './sidebar';
@@ -20,9 +26,11 @@ export function CaseShell({
 }): React.JSX.Element {
   return (
     <ConsoleRailProvider>
-      <CaseShellLayout caseRecord={caseRecord} rail={rail}>
-        {children}
-      </CaseShellLayout>
+      <ConsoleToastProvider>
+        <CaseShellLayout caseRecord={caseRecord} rail={rail}>
+          {children}
+        </CaseShellLayout>
+      </ConsoleToastProvider>
     </ConsoleRailProvider>
   );
 }
@@ -39,6 +47,7 @@ function CaseShellLayout({
   const contextRail = useConsoleRail();
   const resolvedRail = rail ?? contextRail;
   const caseLabel = shortCaseTitle(caseRecord.title);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   return (
     <div
@@ -46,7 +55,7 @@ function CaseShellLayout({
       className="flex min-h-dvh flex-col bg-[var(--console-ground)] text-[var(--console-ink)]"
     >
       <ClassificationStrip />
-      <TopBar caseRecord={caseRecord} navVariant="case" />
+      <TopBar caseRecord={caseRecord} navVariant="case" onOpenNav={() => setMobileNavOpen(true)} />
       <CaseTabs
         caseId={caseRecord.id}
         caseNumber={caseRecord.number}
@@ -58,7 +67,7 @@ function CaseShellLayout({
         <main
           id="console-main"
           tabIndex={-1}
-          className="min-w-0 flex-1 overflow-auto p-4 outline-none sm:p-6"
+          className="console-shell-main min-w-0 flex-1 overflow-auto p-4 outline-none sm:p-6"
         >
           {children}
         </main>
@@ -68,6 +77,13 @@ function CaseShellLayout({
           </aside>
         ) : null}
       </div>
+      <MobileTabBar variant="case" caseId={caseRecord.id} onMore={() => setMobileNavOpen(true)} />
+      <MobileNav
+        open={mobileNavOpen}
+        onOpenChange={setMobileNavOpen}
+        variant="case"
+        caseId={caseRecord.id}
+      />
     </div>
   );
 }

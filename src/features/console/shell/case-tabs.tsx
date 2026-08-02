@@ -19,7 +19,7 @@ export function CaseTabs({
   reviewDueLabel?: string;
 }): React.JSX.Element {
   return (
-    <div className="flex h-[var(--console-tabs-height)] shrink-0 items-center gap-3 border-b border-[var(--console-hairline)] bg-[var(--console-ground)] px-3 sm:gap-4 sm:px-8">
+    <div className="hidden h-[var(--console-tabs-height)] shrink-0 items-center gap-3 border-b border-[var(--console-hairline)] bg-[var(--console-ground)] px-3 sm:gap-4 sm:px-8 lg:flex">
       <div className="flex shrink-0 items-center gap-2.5">
         <span className="hidden text-[12px] font-medium text-[var(--console-ink)] sm:inline">
           {caseLabel}

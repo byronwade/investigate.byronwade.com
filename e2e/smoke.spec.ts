@@ -20,7 +20,8 @@ test('console case overview remains reachable', async ({ page }) => {
 test('console mobile navigation opens agency destinations', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/console/command-center');
-  await page.getByRole('button', { name: /open navigation/i }).click();
+  await expect(page.getByRole('navigation', { name: /agency primary/i })).toBeVisible();
+  await page.getByRole('button', { name: /^More$/i }).click();
   await expect(page.getByRole('dialog')).toBeVisible();
   await page
     .getByRole('dialog')
@@ -28,4 +29,11 @@ test('console mobile navigation opens agency destinations', async ({ page }) => 
     .click();
   await expect(page).toHaveURL(/\/console\/cases$/);
   await expect(page.getByRole('heading', { name: /Cases portfolio/i })).toBeVisible();
+});
+
+test('console intake actions confirm with status feedback', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/console/intake');
+  await page.getByRole('button', { name: /^Decline$/i }).click();
+  await expect(page.getByRole('status')).toContainText(/Declined/i);
 });

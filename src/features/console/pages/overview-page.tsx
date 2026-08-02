@@ -25,6 +25,7 @@ import { ConsoleLink } from '#/features/console/shell/console-link';
 import { useConsoleRailSetter } from '#/features/console/shell/rail-context';
 import { consoleActionClass } from '#/features/console/ui/console-action';
 import { ConsolePage } from '#/features/console/ui/console-page';
+import { useConsoleToast } from '#/features/console/ui/console-toast';
 import { PageHeader } from '#/features/console/ui/page-header';
 import { StatusDot, type StatusDotTone } from '#/features/console/ui/status-dot';
 import { cn } from '#/lib/utils';
@@ -114,6 +115,8 @@ export function OverviewRailPanel({
 export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element | null {
   const overview = getOverview(caseId);
   const setRail = useConsoleRailSetter();
+  const { push } = useConsoleToast();
+  const [humanOnly, setHumanOnly] = React.useState(() => overview?.assistant.humanOnly ?? []);
 
   React.useEffect(() => {
     const next = getOverview(caseId);
@@ -121,6 +124,7 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
       setRail(null);
       return;
     }
+    setHumanOnly(next.assistant.humanOnly);
     setRail(<OverviewRailPanel rail={next.rail} />);
     return () => {
       setRail(null);
@@ -138,6 +142,18 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
     runningIndex >= 0
       ? `Step ${runningIndex + 1} of ${assistant.steps.length}`
       : `${assistant.steps.length} steps`;
+
+  function resolveDecision(id: string, action: 'review' | 'reject') {
+    const decision = humanOnly.find((entry) => entry.id === id);
+    setHumanOnly((current) => current.filter((entry) => entry.id !== id));
+    if (!decision) {
+      return;
+    }
+    push(
+      action === 'review' ? `Queued review · ${decision.label}` : `Rejected · ${decision.label}`,
+      action === 'review' ? 'ok' : 'warn',
+    );
+  }
 
   return (
     <ConsolePage loose>
@@ -300,41 +316,49 @@ export function OverviewPage({ caseId }: { caseId: string }): React.JSX.Element 
             </p>
           </div>
           <ul>
-            {assistant.humanOnly.map((decision) => (
-              <li
-                key={decision.id}
-                className="flex flex-col gap-2 border-b border-[var(--console-strip)] py-2.5 last:border-b-0 sm:min-h-[34px] sm:flex-row sm:items-center sm:gap-3 sm:py-0"
-              >
-                <div className="flex min-w-0 items-center gap-3">
-                  <StatusDot tone="warn" label="Needs review" />
-                  <span className="min-w-0 flex-1 text-[13px] text-[var(--console-ink)] sm:truncate">
-                    {decision.label}
-                  </span>
-                </div>
-                <span className="pl-5 text-[12px] text-[var(--console-muted)] sm:w-[92px] sm:shrink-0 sm:truncate sm:pl-0 sm:text-right">
-                  {decision.assignee}
-                </span>
-                <div className="flex gap-1.5 pl-5 sm:w-[120px] sm:shrink-0 sm:justify-end sm:pl-0">
-                  <Button
-                    type="button"
-                    size="xs"
-                    className="h-9 bg-[var(--console-ink)] px-2.5 text-[12px] text-white hover:bg-[var(--console-ink)]/90 sm:h-6"
-                    aria-label={`Review: ${decision.label}`}
-                  >
-                    Review
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="xs"
-                    className="h-9 border-[var(--console-hairline)] bg-[var(--console-ground)] px-2.5 text-[12px] text-[var(--console-body)] shadow-none sm:h-6"
-                    aria-label={`Reject: ${decision.label}`}
-                  >
-                    Reject
-                  </Button>
-                </div>
+            {humanOnly.length === 0 ? (
+              <li className="py-2.5 text-[13px] text-[var(--console-muted)]">
+                No human-only decisions waiting.
               </li>
-            ))}
+            ) : (
+              humanOnly.map((decision) => (
+                <li
+                  key={decision.id}
+                  className="flex flex-col gap-2 border-b border-[var(--console-strip)] py-2.5 last:border-b-0 sm:min-h-[34px] sm:flex-row sm:items-center sm:gap-3 sm:py-0"
+                >
+                  <div className="flex min-w-0 items-center gap-3">
+                    <StatusDot tone="warn" label="Needs review" />
+                    <span className="min-w-0 flex-1 text-[13px] text-[var(--console-ink)] sm:truncate">
+                      {decision.label}
+                    </span>
+                  </div>
+                  <span className="pl-5 text-[12px] text-[var(--console-muted)] sm:w-[92px] sm:shrink-0 sm:truncate sm:pl-0 sm:text-right">
+                    {decision.assignee}
+                  </span>
+                  <div className="flex gap-1.5 pl-5 sm:w-[120px] sm:shrink-0 sm:justify-end sm:pl-0">
+                    <Button
+                      type="button"
+                      size="xs"
+                      className="h-9 bg-[var(--console-ink)] px-2.5 text-[12px] text-white hover:bg-[var(--console-ink)]/90 sm:h-6"
+                      aria-label={`Review: ${decision.label}`}
+                      onClick={() => resolveDecision(decision.id, 'review')}
+                    >
+                      Review
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="xs"
+                      className="h-9 border-[var(--console-hairline)] bg-[var(--console-ground)] px-2.5 text-[12px] text-[var(--console-body)] shadow-none sm:h-6"
+                      aria-label={`Reject: ${decision.label}`}
+                      onClick={() => resolveDecision(decision.id, 'reject')}
+                    >
+                      Reject
+                    </Button>
+                  </div>
+                </li>
+              ))
+            )}
           </ul>
         </div>
       </section>
