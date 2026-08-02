@@ -29,7 +29,8 @@ export function MobileNav({
       <SheetContent
         side="left"
         showCloseButton
-        className="w-[min(100%,var(--console-sidebar-width)+2rem)] gap-0 border-[var(--console-hairline)] bg-[var(--console-sidebar)] p-0 sm:max-w-none"
+        data-surface="console"
+        className="w-[min(100%,calc(var(--console-sidebar-width)+2rem))] gap-0 border-[var(--console-hairline)] bg-[var(--console-sidebar)] p-0 text-[var(--console-ink)] sm:max-w-none"
       >
         <SheetHeader className="border-b border-[var(--console-hairline)] px-5 pt-5 pb-4 text-left">
           <SheetTitle className="text-[17px] font-semibold tracking-[-0.01em] text-[var(--console-ink)]">
