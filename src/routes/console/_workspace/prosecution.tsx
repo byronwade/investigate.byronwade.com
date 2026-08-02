@@ -1,22 +1,10 @@
-import { createFileRoute, notFound } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 
-import { getWorkspacePage } from '#/features/console/data';
-import { WorkspacePage } from '#/features/console/pages/workspace-page';
+import { ProsecutionPage } from '#/features/console/pages/prosecution-page';
 
 export const Route = createFileRoute('/console/_workspace/prosecution')({
-  component: Page,
-  head: () => {
-    const model = getWorkspacePage('prosecution');
-    return {
-      meta: [{ title: `${model?.title ?? 'prosecution'} · Investigation Console` }],
-    };
-  },
+  component: ProsecutionPage,
+  head: () => ({
+    meta: [{ title: 'Prosecution · Investigation Console' }],
+  }),
 });
-
-function Page() {
-  const model = getWorkspacePage('prosecution');
-  if (!model) {
-    throw notFound();
-  }
-  return <WorkspacePage model={model} />;
-}

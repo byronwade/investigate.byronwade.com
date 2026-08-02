@@ -15,3 +15,9 @@ Final review fixes: ade041d (active nav, focus, rail)
 - Agency workspace + media + system/modes + case extras + foundations routes
 - `/console` → command-center; Paper reference retained
 - Tests: agency getters + AgencyShell; smoke updated
+- Composed product pages (no longer generic WorkspacePage stubs):
+  intake, plan, search, command-center, cases, empty-states, media workbenches,
+  intelligence, incidents, interviews, people-orgs, scenes, prosecution,
+  reports, oversight, records, administration, local-mode, handoff,
+  court-production, foundations, motion,
+  analysis, interview, legal, approvals, scene, digital, forensics, discovery, closure

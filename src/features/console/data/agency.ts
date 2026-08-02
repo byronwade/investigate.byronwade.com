@@ -1,9 +1,23 @@
 import type {
+  AnalysisBoardModel,
+  ApprovalsModel,
+  CaseQueueModel,
+  ClosureModel,
   CommandCenterModel,
+  DirectoryModel,
+  DocsPageModel,
+  IncidentsModel,
   IntakeModel,
+  IntelligenceModel,
+  InterviewTranscriptModel,
   InvestigativePlanModel,
+  LegalProcessModel,
+  LocalModeModel,
   MediaWorkbenchModel,
   PortfolioCase,
+  ProsecutionModel,
+  ReportsModel,
+  SceneDiagramModel,
   SearchModel,
   WorkspacePageModel,
 } from './agency-types';
@@ -1301,6 +1315,854 @@ export const searchModel: SearchModel = {
       provenance: 'Need-to-know filter',
       tone: 'danger',
       clearanceHidden: true,
+    },
+  ],
+};
+
+export const intelligenceModel: IntelligenceModel = {
+  title: 'Intelligence',
+  description: 'Cross-case link analysis and source packages with explicit access boundaries.',
+  meta: '2 active packages · 1 blocked lane',
+  selectedId: 'p1',
+  packages: [
+    {
+      id: 'p1',
+      title: 'Northridge vendor cluster',
+      summary: 'Six entities share three bank routing numbers across contested awards.',
+      lane: 'FOUO · federal',
+      status: 'updated 2h',
+      tone: 'ok',
+      entities: ['Vance, Curtis A.', 'Northridge Township', 'Brightline Vendors LLC'],
+      accessNote: 'Readable at current clearance · ORCON applies to export',
+      href: `/console/cases/${DEFAULT_CASE_ID}/analysis`,
+    },
+    {
+      id: 'p2',
+      title: 'Halstead subcontractors',
+      summary: 'Awaiting FINCEN query — foreign-intel lane requested and blocked.',
+      lane: 'Foreign intel',
+      status: 'blocked',
+      tone: 'danger',
+      entities: ['Halstead Transit', 'Unknown shell vendor'],
+      accessNote: 'Denied — no foreign-intel clearance on this session',
+    },
+    {
+      id: 'p3',
+      title: 'Cortland Wire money flow',
+      summary: 'Draft link chart of remittance hops; assistant proposed, human must accept edges.',
+      lane: 'Crim-intel',
+      status: 'draft',
+      tone: 'warn',
+      entities: ['Cortland Wire', 'Two remittance desks'],
+      accessNote: 'Readable · edge acceptance is a human-only decision',
+    },
+  ],
+};
+
+export const incidentsModel: IncidentsModel = {
+  title: 'Incidents map',
+  description: 'Geographic and temporal incident overlays tied to open cases — mock pins only.',
+  meta: '4 pins · Chicago field',
+  selectedId: 'm1',
+  pins: [
+    {
+      id: 'm1',
+      label: 'Northridge Township Hall',
+      summary: 'Award vote night · badge-access anomaly cluster',
+      coords: '41.921°N · 87.701°W',
+      when: '11 Feb',
+      tone: 'warn',
+      href: `/console/cases/${DEFAULT_CASE_ID}/scene`,
+    },
+    {
+      id: 'm2',
+      label: 'Halstead depot',
+      summary: 'Subcontractor cash drop allegation — uncorroborated',
+      coords: '41.882°N · 87.642°W',
+      when: '22 Jan',
+      tone: 'muted',
+    },
+    {
+      id: 'm3',
+      label: 'Vendor warehouse — invoice staging',
+      summary: 'Walkthrough pending · access request open',
+      coords: '41.867°N · 87.689°W',
+      when: 'pending',
+      tone: 'warn',
+      href: `/console/cases/${DEFAULT_CASE_ID}/scene`,
+    },
+    {
+      id: 'm4',
+      label: 'Cortland remittance desk',
+      summary: 'Wire pattern observation · no scene package yet',
+      coords: '41.895°N · 87.628°W',
+      when: '18 Nov',
+      tone: 'ok',
+    },
+  ],
+};
+
+export const interviewsIndexModel: DirectoryModel = {
+  title: 'Interviews index',
+  description: 'Interview schedule, transcripts, and contradiction flags.',
+  meta: '1 complete · 1 upcoming',
+  filters: ['All', 'Complete', 'Upcoming', 'Draft'],
+  entries: [
+    {
+      id: 'iv1',
+      title: 'Bright, Renata — statement 08-B',
+      summary: 'Recorded · transcript reviewed · 0 contradictions',
+      kind: 'Witness',
+      status: 'Complete',
+      tone: 'ok',
+      href: `/console/cases/${DEFAULT_CASE_ID}/interview`,
+      meta: '08-B',
+    },
+    {
+      id: 'iv2',
+      title: 'Vance, Curtis A. — subject interview',
+      summary: 'Scheduled · counsel present required',
+      kind: 'Subject',
+      status: 'Upcoming',
+      tone: 'warn',
+      meta: '12 Mar',
+    },
+    {
+      id: 'iv3',
+      title: 'Municipal clerk — badge export',
+      summary: 'Draft outline only · not yet scheduled',
+      kind: 'Witness',
+      status: 'Draft',
+      tone: 'muted',
+      meta: 'outline',
+    },
+  ],
+};
+
+export const peopleOrgsModel: DirectoryModel = {
+  title: 'People & organizations',
+  description: 'Agency-wide directory of people and orgs linked across cases.',
+  meta: '3 directory rows',
+  filters: ['All', 'Person', 'Org'],
+  entries: [
+    {
+      id: 'po1',
+      title: 'Vance, Curtis A.',
+      summary: 'Subject · Northridge · 4 contradictions',
+      kind: 'Person',
+      status: 'Subject',
+      tone: 'danger',
+      href: `/console/cases/${DEFAULT_CASE_ID}/people/person-vance`,
+    },
+    {
+      id: 'po2',
+      title: 'Northridge Township',
+      summary: 'Municipal org · awards board · records custodian',
+      kind: 'Org',
+      status: 'Custodian',
+      tone: 'muted',
+    },
+    {
+      id: 'po3',
+      title: 'Bright, Renata',
+      summary: 'Witness · recorded statement 08-B',
+      kind: 'Person',
+      status: 'Witness',
+      tone: 'ok',
+      href: `/console/cases/${DEFAULT_CASE_ID}/people/person-bright`,
+    },
+    {
+      id: 'po4',
+      title: 'Brightline Vendors LLC',
+      summary: 'Vendor org · contested awards NR-14 / NR-18',
+      kind: 'Org',
+      status: 'Vendor',
+      tone: 'warn',
+    },
+  ],
+};
+
+export const scenesIndexModel: DirectoryModel = {
+  title: 'Scenes index',
+  description: 'Scene diagrams and location packages across the portfolio.',
+  meta: '2 scene packages',
+  filters: ['All', 'Primary', 'Secondary'],
+  entries: [
+    {
+      id: 'sc1',
+      title: 'Northridge Township Hall — council chamber',
+      summary: 'Diagram v3 · photo set 14 · measurements locked',
+      kind: 'Primary',
+      status: 'Locked',
+      tone: 'ok',
+      href: `/console/cases/${DEFAULT_CASE_ID}/scene`,
+    },
+    {
+      id: 'sc2',
+      title: 'Vendor warehouse — invoice staging',
+      summary: 'Walkthrough pending · access request open',
+      kind: 'Secondary',
+      status: 'Pending',
+      tone: 'warn',
+    },
+  ],
+};
+
+export const prosecutionModel: ProsecutionModel = {
+  title: 'Prosecution',
+  description: 'Packets, Brady indexes, and AUSA handoffs — human-gated release.',
+  meta: '2 packets · 1 Brady flag',
+  packets: [
+    {
+      id: 'pr1',
+      title: 'Northridge · NDIL',
+      summary: 'Brady index incomplete · 2 items awaiting confirmation',
+      owner: 'AUSA Chen',
+      status: 'flagged',
+      tone: 'danger',
+      bradyOpen: 2,
+      href: `/console/cases/${DEFAULT_CASE_ID}/discovery`,
+    },
+    {
+      id: 'pr2',
+      title: 'Halstead · warrant support',
+      summary: 'Affidavit ready for human signature',
+      owner: 'PC package',
+      status: 'ready',
+      tone: 'warn',
+      bradyOpen: 0,
+    },
+  ],
+};
+
+export const analysisBoard: AnalysisBoardModel = {
+  title: 'Analysis board',
+  description: 'Working theories, contradictions, and evidence links on one board.',
+  columns: [
+    {
+      id: 'supported',
+      title: 'Supported',
+      items: [
+        {
+          id: 'an1',
+          label: 'Invoice 8812 over peer awards',
+          detail: 'Linked to Brightline Vendors · custody DE-1183',
+          tone: 'ok',
+        },
+        {
+          id: 'an2',
+          label: 'Badge log places Vance at vote',
+          detail: 'Access events 18:41–19:12 · chamber door',
+          tone: 'ok',
+        },
+        {
+          id: 'an3',
+          label: 'Bright statement 08-B',
+          detail: 'Identifies Vance at awards table',
+          tone: 'ok',
+        },
+      ],
+    },
+    {
+      id: 'contradicted',
+      title: 'Contradicted',
+      items: [
+        {
+          id: 'an4',
+          label: 'Osei tip vs. absence of record',
+          detail: 'No corroborating municipal or bank record yet',
+          tone: 'danger',
+        },
+      ],
+    },
+    {
+      id: 'open',
+      title: 'Open questions',
+      items: [
+        {
+          id: 'an5',
+          label: 'Who altered badge export?',
+          detail: 'Clerk tip linked · extraction incomplete',
+          tone: 'warn',
+        },
+        {
+          id: 'an6',
+          label: 'Counsel interview window for Vance',
+          detail: 'Scheduled 12 Mar · do not contact without counsel',
+          tone: 'warn',
+        },
+      ],
+    },
+  ],
+};
+
+export const interviewTranscript: InterviewTranscriptModel = {
+  title: 'Interview transcript',
+  description: 'Bright statement 08-B — transcript with contradiction markers.',
+  subject: 'Bright, Renata',
+  meta: '08-B · recorded · reviewed',
+  lines: [
+    {
+      id: 'tr1',
+      at: '00:04:12',
+      speaker: 'Bright',
+      text: 'I was at the award vote. Curtis Vance sat at the table for three of the four packages.',
+      marker: 'corroborates',
+      tone: 'ok',
+    },
+    {
+      id: 'tr2',
+      at: '00:11:05',
+      speaker: 'SA Okonjo-Ramirez',
+      text: 'Did anyone discuss invoice line items for community outreach that night?',
+    },
+    {
+      id: 'tr3',
+      at: '00:18:40',
+      speaker: 'Bright',
+      text: 'I do not recall any discussion of invoice 8812. That is not ringing a bell.',
+      marker: 'gap',
+      tone: 'warn',
+    },
+    {
+      id: 'tr4',
+      at: '00:22:18',
+      speaker: 'Bright',
+      text: 'The clerk said the badge export for that night went missing the next morning.',
+      marker: 'lead',
+      tone: 'sensor',
+    },
+  ],
+};
+
+export const legalProcess: LegalProcessModel = {
+  title: 'Legal process',
+  description: 'Warrants, subpoenas, and process tracking for this case.',
+  meta: '4 open',
+  items: [
+    {
+      id: 'lg1',
+      title: 'Bank records subpoena',
+      summary: 'Served 14 Feb · production rolling',
+      kind: 'subpoena',
+      status: 'in production',
+      tone: 'ok',
+    },
+    {
+      id: 'lg2',
+      title: 'Device warrant — laptop NR-2291',
+      summary: 'Affidavit draft ready · human sign-off required',
+      kind: 'warrant',
+      status: 'awaiting signature',
+      tone: 'warn',
+      due: '2 days',
+    },
+    {
+      id: 'lg3',
+      title: 'Municipal email subpoena',
+      summary: 'Draft assertions source-cited · not yet served',
+      kind: 'subpoena',
+      status: 'draft',
+      tone: 'muted',
+      due: 'this week',
+    },
+    {
+      id: 'lg4',
+      title: 'Preservation letter — badge system',
+      summary: 'Sent to township IT · acknowledgment received',
+      kind: 'preservation',
+      status: 'acknowledged',
+      tone: 'ok',
+    },
+  ],
+};
+
+export const approvalsModel: ApprovalsModel = {
+  title: 'Approvals',
+  description: 'Technique and process approvals awaiting a human signature.',
+  meta: '2 pending on you',
+  items: [
+    {
+      id: 'ap1',
+      title: 'Role elevation — Osei → subject',
+      summary: 'Requires written factual basis before role change.',
+      requester: 'you',
+      due: 'today',
+      tone: 'warn',
+      decisionNote: 'Assistants may draft the basis; only a human can elevate.',
+    },
+    {
+      id: 'ap2',
+      title: 'Warrant affidavit — laptop',
+      summary: 'All assertions source-cited · SSA co-signature required.',
+      requester: 'SSA',
+      due: '2 days',
+      tone: 'warn',
+      decisionNote: 'No assistant-authored facts appear in the affidavit body.',
+    },
+  ],
+};
+
+export const sceneDiagram: SceneDiagramModel = {
+  title: 'Scene diagram',
+  description: 'Council chamber layout with measurement lock and photo anchors.',
+  location: 'Northridge Township Hall — council chamber',
+  meta: 'v3 · measurements locked',
+  layers: [
+    {
+      id: 'sc1',
+      title: 'Floor plan v3',
+      summary: 'Locked measurements · 14 photo anchors',
+      status: 'primary',
+      tone: 'ok',
+    },
+    {
+      id: 'sc2',
+      title: 'Movement overlay',
+      summary: 'Subject path from badge events — provisional',
+      status: 'overlay',
+      tone: 'warn',
+    },
+    {
+      id: 'sc3',
+      title: 'Camera coverage',
+      summary: 'Lobby cam FOV · hall cam FOV',
+      status: 'reference',
+      tone: 'muted',
+    },
+  ],
+  anchors: [
+    { id: 'a1', label: 'Anchor A', note: 'Dais / awards table' },
+    { id: 'a2', label: 'Anchor B', note: 'East door · badge reader' },
+    { id: 'a3', label: 'Anchor C', note: 'Public gallery rail' },
+  ],
+};
+
+export const reportsModel: ReportsModel = {
+  title: 'Reports & statistics',
+  description: 'Squad workload, SLA, and assistant run metrics — no case facts in aggregates.',
+  meta: 'Week of 24 Feb',
+  metrics: [
+    {
+      id: 's1',
+      label: 'Open cases',
+      value: '61',
+      detail: '14 on your squad · +2 this week',
+      tone: 'ok',
+    },
+    {
+      id: 's2',
+      label: 'Human-only decisions',
+      value: '18',
+      detail: '27 cleared · remaining in your queue',
+      tone: 'warn',
+    },
+    {
+      id: 's3',
+      label: 'Assistant denials',
+      value: '112',
+      detail: 'Records denied overnight for need-to-know',
+      tone: 'muted',
+    },
+    {
+      id: 's4',
+      label: 'Intake backlog',
+      value: '24',
+      detail: 'Tips awaiting triage classification',
+      tone: 'warn',
+    },
+  ],
+  notes: [
+    {
+      id: 'n1',
+      title: 'SLA watch — Brady accept',
+      summary: 'Northridge finding still awaiting human accept before AUSA brief',
+      kind: 'SLA',
+      status: 'watch',
+      tone: 'danger',
+      href: `/console/cases/${DEFAULT_CASE_ID}/approvals`,
+    },
+    {
+      id: 'n2',
+      title: 'Run volume',
+      summary: '12 overnight runs · 0 unsupported assertions in drafted affidavits',
+      kind: 'Assistants',
+      status: 'healthy',
+      tone: 'ok',
+    },
+  ],
+};
+
+export const oversightModel: DirectoryModel = {
+  title: 'Oversight & audit',
+  description: 'Query logs, technique use, and access justifications for inspector-general review.',
+  meta: 'Session 4c81·ff20',
+  filters: ['All', 'Query', 'Block', 'Technique'],
+  entries: [
+    {
+      id: 'o1',
+      title: 'Session 4c81·ff20',
+      summary: 'SA Okonjo-Ramirez queried Northridge bank records — justification on file',
+      kind: 'Query',
+      status: '07:12',
+      tone: 'ok',
+    },
+    {
+      id: 'o2',
+      title: 'Technique block',
+      summary: 'Foreign intel lane requested on Halstead — blocked · no clearance',
+      kind: 'Block',
+      status: '06:40',
+      tone: 'danger',
+    },
+    {
+      id: 'o3',
+      title: 'Technique use — contradiction sweep',
+      summary: 'RUN 8841 · 41 read · 4 denied · logged for IG',
+      kind: 'Technique',
+      status: 'overnight',
+      tone: 'sensor',
+      href: `/console/cases/${DEFAULT_CASE_ID}/overview`,
+    },
+  ],
+};
+
+export const recordsModel: DirectoryModel = {
+  title: 'Records & retention',
+  description: 'Retention schedules, legal holds, and destruction holds across systems of record.',
+  meta: '2 active holds',
+  filters: ['All', 'Hold', 'Freeze'],
+  entries: [
+    {
+      id: 'h1',
+      title: 'Northridge — litigation hold',
+      summary: 'Municipal email + financial systems · expires review 01 Apr',
+      kind: 'Hold',
+      status: 'active',
+      tone: 'warn',
+    },
+    {
+      id: 'h2',
+      title: 'Cortland Wire — discovery freeze',
+      summary: 'Defense production window · no destruction authorized',
+      kind: 'Freeze',
+      status: 'active',
+      tone: 'danger',
+    },
+    {
+      id: 'h3',
+      title: 'Halstead Transit — retention schedule',
+      summary: 'Standard 7-year financial retention · no special hold',
+      kind: 'Hold',
+      status: 'schedule',
+      tone: 'muted',
+    },
+  ],
+};
+
+export const administrationModel: DirectoryModel = {
+  title: 'Administration',
+  description: 'Roles, clearances, technique catalogs, and agency configuration.',
+  meta: 'Chicago field office',
+  filters: ['All', 'RBAC', 'Policy', 'Catalog'],
+  entries: [
+    {
+      id: 'ad1',
+      title: 'Clearance matrix',
+      summary: 'Federal · Local · Crim-intel · Foreign intel · IG',
+      kind: 'RBAC',
+      status: 'configured',
+      tone: 'ok',
+    },
+    {
+      id: 'ad2',
+      title: 'Technique catalog',
+      summary: '42 techniques · 6 blocked at this clearance',
+      kind: 'Catalog',
+      status: 'current',
+      tone: 'muted',
+    },
+    {
+      id: 'ad3',
+      title: 'Need-to-know policy',
+      summary: 'Assistants never invent access · denials are audited',
+      kind: 'Policy',
+      status: 'enforced',
+      tone: 'ok',
+    },
+  ],
+};
+
+export const localModeModel: LocalModeModel = {
+  title: 'Local mode',
+  description: 'Disconnected / air-gapped operation. Sync queues hold until network returns.',
+  meta: 'Simulated online',
+  networkLabel: 'Connected',
+  networkTone: 'ok',
+  lastSync: '07:04',
+  queue: [
+    {
+      id: 'lm1',
+      title: 'Outbound mutations',
+      summary: '0 mutations waiting',
+      kind: 'Queue',
+      status: 'clear',
+      tone: 'ok',
+    },
+    {
+      id: 'lm2',
+      title: 'Audit buffer',
+      summary: '2 audit events buffered for next sync',
+      kind: 'Queue',
+      status: 'buffered',
+      tone: 'muted',
+    },
+    {
+      id: 'lm3',
+      title: 'Media packages',
+      summary: 'Field capture package staged locally · not yet uploaded',
+      kind: 'Media',
+      status: 'staged',
+      tone: 'warn',
+      href: '/console/media/field-capture',
+    },
+  ],
+};
+
+export const handoffModel: DirectoryModel = {
+  title: 'Handoff',
+  description: 'Shift and squad handoff notes with explicit open decisions.',
+  meta: '2 open handoffs',
+  filters: ['All', 'Critical', 'Intake'],
+  entries: [
+    {
+      id: 'ho1',
+      title: 'Night → day · Northridge',
+      summary: 'Brady finding awaiting accept · do not brief AUSA until confirmed',
+      kind: 'Critical',
+      status: 'open',
+      tone: 'danger',
+      href: `/console/cases/${DEFAULT_CASE_ID}/overview`,
+    },
+    {
+      id: 'ho2',
+      title: 'Squad desk',
+      summary: 'Intake tip 1184 needs federal nexus review',
+      kind: 'Intake',
+      status: 'open',
+      tone: 'warn',
+      href: '/console/intake',
+    },
+  ],
+};
+
+export const courtProductionModel: DirectoryModel = {
+  title: 'Court production',
+  description: 'Assemble productions with redaction confirmation gates.',
+  meta: '1 pending production',
+  filters: ['All', 'Pending', 'Ready'],
+  entries: [
+    {
+      id: 'cp1',
+      title: 'Northridge · defense set B',
+      summary: '14 docs · 3 proposed redactions awaiting human confirm',
+      kind: 'Pending',
+      status: 'pending',
+      tone: 'warn',
+      href: `/console/cases/${DEFAULT_CASE_ID}/discovery`,
+    },
+    {
+      id: 'cp2',
+      title: 'Halstead · PC package exhibit list',
+      summary: 'Exhibit index drafted · not released',
+      kind: 'Ready',
+      status: 'draft',
+      tone: 'muted',
+    },
+  ],
+};
+
+export const foundationsDocs: DocsPageModel = {
+  title: 'Foundations',
+  description: 'Console design tokens, type, density, and component principles (docs route).',
+  meta: 'Product docs',
+  principles: [
+    {
+      id: 'fd1',
+      title: 'Ink on ground',
+      summary: 'Four greys, no more',
+      detail: '#111111 on #FFFFFF · hairline #ECECEC · muted floor #6B6B6B · body #3D3D3D',
+      tone: 'muted',
+    },
+    {
+      id: 'fd2',
+      title: 'Geist / Geist Mono',
+      summary: 'UI sans + mono for identifiers',
+      detail: 'Case numbers, classification, hashes, and times always use mono.',
+      tone: 'muted',
+    },
+    {
+      id: 'fd3',
+      title: 'Shell chrome is shared',
+      summary: 'Pages fill main (+ optional rail) only',
+      detail: 'Classification, top bar, sidebar, and case tabs are never re-rendered by pages.',
+      tone: 'ok',
+    },
+  ],
+};
+
+export const motionDocs: DocsPageModel = {
+  title: 'Motion & interaction',
+  description:
+    'Press feedback, menus, side panels, indeterminate agent bar — honor reduced motion.',
+  meta: 'Product docs',
+  principles: [
+    {
+      id: 'mo1',
+      title: 'Press / focus',
+      summary: 'Allowed',
+      detail: 'Buttons and rows may use short opacity or background changes only.',
+      tone: 'ok',
+    },
+    {
+      id: 'mo2',
+      title: 'No decorative reshuffles',
+      summary: 'Forbidden',
+      detail: 'Lists do not animate reordering for delight. Prefer reduced-motion safe patterns.',
+      tone: 'danger',
+    },
+    {
+      id: 'mo3',
+      title: 'Indeterminate agent bar',
+      summary: 'Allowed when running',
+      detail: 'Show progress only while an assistant run is active; never fake completion.',
+      tone: 'sensor',
+    },
+  ],
+};
+
+export const digitalEvidenceQueue: CaseQueueModel = {
+  title: 'Digital evidence',
+  description: 'Devices, extractions, and hash-verified artifacts.',
+  meta: '2 digital items',
+  items: [
+    {
+      id: 'de1',
+      title: 'Dell Latitude NR-2291',
+      summary: 'Seal E-88417 · hash pending lab',
+      kind: 'device',
+      status: 'pending hash',
+      tone: 'warn',
+      href: `/console/cases/${DEFAULT_CASE_ID}/evidence`,
+    },
+    {
+      id: 'de2',
+      title: 'Badge-access export',
+      summary: 'CSV · SHA-256 verified · lab',
+      kind: 'records',
+      status: 'verified',
+      tone: 'ok',
+    },
+    {
+      id: 'de3',
+      title: 'Hall lobby cam clip',
+      summary: 'Bookmark 18:52 · chain locked',
+      kind: 'media',
+      status: 'reviewed',
+      tone: 'ok',
+      href: '/console/media/video-review',
+    },
+  ],
+};
+
+export const forensicsQueue: CaseQueueModel = {
+  title: 'Forensics',
+  description: 'Lab requests and results tied to custody items.',
+  meta: '1 queued · 1 n/a',
+  items: [
+    {
+      id: 'fs1',
+      title: 'Disk image — NR-2291',
+      summary: 'Queued · estimated 5 days',
+      kind: 'digital',
+      status: 'queued',
+      tone: 'warn',
+      due: '5 days',
+    },
+    {
+      id: 'fs2',
+      title: 'Paper invoice ink analysis',
+      summary: 'Not requested — no physical original',
+      kind: 'n/a',
+      status: 'not requested',
+      tone: 'muted',
+    },
+  ],
+};
+
+export const discoveryQueue: CaseQueueModel = {
+  title: 'Discovery & disclosure',
+  description: 'Brady / Giglio tracking and defense productions.',
+  meta: '1 Brady · 1 produce',
+  items: [
+    {
+      id: 'di1',
+      title: 'Potentially exculpatory contradiction',
+      summary: 'Assistant finding — human accept required before AUSA brief',
+      kind: 'Brady',
+      status: 'awaiting accept',
+      tone: 'danger',
+      href: `/console/cases/${DEFAULT_CASE_ID}/approvals`,
+    },
+    {
+      id: 'di2',
+      title: 'Bright statement 08-B',
+      summary: 'Marked for production set B',
+      kind: 'produce',
+      status: 'set B',
+      tone: 'ok',
+      href: `/console/cases/${DEFAULT_CASE_ID}/interview`,
+    },
+    {
+      id: 'di3',
+      title: 'Proposed redactions — set B',
+      summary: '3 redactions awaiting human confirm in court production',
+      kind: 'redaction',
+      status: 'pending',
+      tone: 'warn',
+      href: '/console/court-production',
+    },
+  ],
+};
+
+export const closureModel: ClosureModel = {
+  title: 'Case closure',
+  description: 'Checklist for closing or referring the case — nothing auto-closes.',
+  meta: '2 incomplete · 1 ok',
+  items: [
+    {
+      id: 'cl1',
+      title: 'Evidence disposition',
+      summary: '3 items sealed · 1 in lab — incomplete',
+      status: 'open',
+      tone: 'warn',
+      complete: false,
+    },
+    {
+      id: 'cl2',
+      title: 'Prosecution handoff',
+      summary: 'Brady index incomplete',
+      status: 'blocked',
+      tone: 'danger',
+      complete: false,
+    },
+    {
+      id: 'cl3',
+      title: 'Retention holds',
+      summary: 'Litigation hold active through Apr review',
+      status: 'ok',
+      tone: 'ok',
+      complete: true,
     },
   ],
 };

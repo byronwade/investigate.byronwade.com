@@ -1,19 +1,19 @@
 import { createFileRoute, notFound } from '@tanstack/react-router';
 
-import { getCase, getCaseWorkspacePage } from '#/features/console/data';
-import { WorkspacePage } from '#/features/console/pages/workspace-page';
+import { getCase, getLegalProcess } from '#/features/console/data';
+import { LegalPage } from '#/features/console/pages/legal-page';
 
 export const Route = createFileRoute('/console/cases/$caseId/legal')({
   component: Page,
   head: ({ params }) => {
     const caseRecord = getCase(params.caseId);
-    const model = getCaseWorkspacePage(params.caseId, 'legal');
+    const model = getLegalProcess(params.caseId);
     return {
       meta: [
         {
           title: caseRecord
-            ? `${model?.title ?? 'legal'} · ${caseRecord.title} · Investigation Console`
-            : 'legal · Investigation Console',
+            ? `${model?.title ?? 'Legal'} · ${caseRecord.title} · Investigation Console`
+            : 'Legal · Investigation Console',
         },
       ],
     };
@@ -22,9 +22,9 @@ export const Route = createFileRoute('/console/cases/$caseId/legal')({
 
 function Page() {
   const { caseId } = Route.useParams();
-  const model = getCaseWorkspacePage(caseId, 'legal');
+  const model = getLegalProcess(caseId);
   if (!model) {
     throw notFound();
   }
-  return <WorkspacePage model={model} />;
+  return <LegalPage caseId={caseId} />;
 }
