@@ -36,6 +36,46 @@ function caseHrefForTip(item: IntakeQueueItem): string {
   return `/console/cases/${DEFAULT_CASE_ID}/overview`;
 }
 
+function TipActions({
+  item,
+  onRefer,
+  onDecline,
+  onOpen,
+}: {
+  item: IntakeQueueItem;
+  onRefer: () => void;
+  onDecline: () => void;
+  onOpen: () => void;
+}): React.JSX.Element {
+  return (
+    <div className="console-actions">
+      <Button type="button" size="sm" className={consoleActionClass} asChild>
+        <ConsoleLink to={caseHrefForTip(item)} onClick={onOpen}>
+          Open case
+        </ConsoleLink>
+      </Button>
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        className={consoleActionClass}
+        onClick={onRefer}
+      >
+        Refer
+      </Button>
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        className={consoleActionClass}
+        onClick={onDecline}
+      >
+        Decline
+      </Button>
+    </div>
+  );
+}
+
 export function IntakePage(): React.JSX.Element {
   const model = getIntake();
   const { push } = useConsoleToast();
@@ -59,28 +99,15 @@ export function IntakePage(): React.JSX.Element {
         title={model.title}
         hideTitleOnMobile
         description={model.description}
-        meta={
-          <span className="inline-flex flex-wrap items-center gap-x-2 gap-y-1">
-            <span>{queue.length} awaiting triage</span>
-            <span aria-hidden="true" className="text-[var(--console-hairline)]">
-              ·
-            </span>
-            <ConsoleLink
-              to="/console/command-center"
-              className="text-[var(--console-muted)] underline-offset-4 hover:text-[var(--console-ink)] hover:underline"
-            >
-              Command center
-            </ConsoleLink>
-          </span>
-        }
+        meta={`${queue.length} awaiting triage`}
       />
 
       <Tabs
         value={filter}
         onValueChange={(value) => setFilter(value as QueueFilter)}
-        className="gap-4"
+        className="gap-3"
       >
-        <TabsList className="h-auto w-full flex-wrap justify-start rounded-md bg-[var(--console-strip)] p-1">
+        <TabsList className="h-auto w-full justify-start overflow-x-auto rounded-md bg-[var(--console-strip)] p-1">
           <TabsTrigger value="all" className="min-h-10 flex-none px-3 text-[13px]">
             All ({queue.length})
           </TabsTrigger>
@@ -114,28 +141,49 @@ export function IntakePage(): React.JSX.Element {
                     className={cn('console-row', isSelected && 'console-row-active')}
                     aria-pressed={isSelected}
                   >
-                    <div className="flex min-w-0 items-center gap-2.5">
+                    <div className="flex min-w-0 items-center gap-2">
                       <StatusDot tone={item.tone} />
                       <span className="console-meta !text-[var(--console-ink)] !font-medium">
                         {item.tipId}
                       </span>
+                      <span className="ml-auto text-[12px] text-[var(--console-muted)]">
+                        {item.priority}
+                      </span>
                     </div>
-                    <span className="min-w-0 flex-1 pl-5 text-[13px] text-[var(--console-ink)] sm:pl-0">
+                    <p className="text-[13px] leading-5 text-[var(--console-ink)]">
                       {item.summary}
-                    </span>
-                    <span className="pl-5 text-[12px] text-[var(--console-muted)] sm:w-[120px] sm:shrink-0 sm:pl-0 sm:text-right">
-                      {item.classification}
-                    </span>
-                    <span className="pl-5 text-[12px] text-[var(--console-muted)] sm:w-20 sm:shrink-0 sm:pl-0 sm:text-right">
-                      {item.priority}
-                    </span>
+                    </p>
+                    <p className="text-[12px] text-[var(--console-muted)]">{item.classification}</p>
                   </button>
+                  {isSelected ? (
+                    <div className="space-y-3 border-b border-[var(--console-strip)] px-1 pt-1 pb-4 xl:hidden">
+                      <p className="text-[12px] text-[var(--console-muted)]">
+                        {item.submittedLabel}
+                      </p>
+                      <dl className="space-y-2">
+                        {item.extractedFields.slice(0, 2).map((field) => (
+                          <div key={field.label} className="space-y-0.5">
+                            <dt className="text-[11px] font-medium tracking-wide text-[var(--console-muted)] uppercase">
+                              {field.label}
+                            </dt>
+                            <dd className="text-[13px] text-[var(--console-ink)]">{field.value}</dd>
+                          </div>
+                        ))}
+                      </dl>
+                      <TipActions
+                        item={item}
+                        onOpen={() => push(`Opening case from ${item.tipId}`, 'ok')}
+                        onRefer={() => dismiss(item, 'referred')}
+                        onDecline={() => dismiss(item, 'declined')}
+                      />
+                    </div>
+                  ) : null}
                 </li>
               );
             })}
           </ul>
 
-          <DetailPanel>
+          <DetailPanel className="hidden xl:flex">
             {selected ? (
               <>
                 <div className="space-y-1">
@@ -167,34 +215,12 @@ export function IntakePage(): React.JSX.Element {
                   ))}
                 </dl>
                 <Separator className="bg-[var(--console-hairline)]" />
-                <div className="flex flex-wrap gap-2">
-                  <Button type="button" size="sm" className={consoleActionClass} asChild>
-                    <ConsoleLink
-                      to={caseHrefForTip(selected)}
-                      onClick={() => push(`Opening case from ${selected.tipId}`, 'ok')}
-                    >
-                      Open case
-                    </ConsoleLink>
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className={consoleActionClass}
-                    onClick={() => dismiss(selected, 'referred')}
-                  >
-                    Refer
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className={consoleActionClass}
-                    onClick={() => dismiss(selected, 'declined')}
-                  >
-                    Decline
-                  </Button>
-                </div>
+                <TipActions
+                  item={selected}
+                  onOpen={() => push(`Opening case from ${selected.tipId}`, 'ok')}
+                  onRefer={() => dismiss(selected, 'referred')}
+                  onDecline={() => dismiss(selected, 'declined')}
+                />
                 <p className="text-[11px] text-[var(--console-muted)]">
                   No tip auto-opens. Open / refer / decline are human-only decisions.
                 </p>

@@ -16,19 +16,21 @@ export function FilterBar({
   className?: string;
 }): React.JSX.Element {
   return (
-    <fieldset className={cn('flex flex-wrap gap-2 border-0 p-0', className)}>
+    <fieldset className={cn('-mx-1 border-0 p-0', className)}>
       <legend className="sr-only">{legend}</legend>
-      {options.map((option) => (
-        <button
-          key={option}
-          type="button"
-          onClick={() => onChange(option)}
-          className="console-filter"
-          aria-pressed={value === option}
-        >
-          {option}
-        </button>
-      ))}
+      <div className="flex gap-2 overflow-x-auto px-1 pb-1">
+        {options.map((option) => (
+          <button
+            key={option}
+            type="button"
+            onClick={() => onChange(option)}
+            className="console-filter shrink-0"
+            aria-pressed={value === option}
+          >
+            {option}
+          </button>
+        ))}
+      </div>
     </fieldset>
   );
 }

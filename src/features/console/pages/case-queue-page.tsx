@@ -37,7 +37,7 @@ export function CaseQueuePage({ model }: { model: CaseQueueModel }): React.JSX.E
                     <p className="text-[13px] text-[var(--console-body)]">{item.summary}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 pl-5 sm:pl-0">
+                <div className="flex flex-wrap items-center gap-3">
                   {item.due ? (
                     <span className="text-[12px] text-[var(--console-muted)]">{item.due}</span>
                   ) : null}

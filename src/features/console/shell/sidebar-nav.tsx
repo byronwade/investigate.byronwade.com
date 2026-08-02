@@ -28,53 +28,59 @@ export function SidebarNav({
   const ReferenceIcon = paperReferenceNav.icon;
 
   return (
-    <div className={cn('flex h-full min-h-0 flex-1 flex-col', className)}>
+    <div className={cn('flex h-full min-h-0 w-full flex-col', className)}>
       <nav
-        className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain px-0.5 pb-6"
+        className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 py-3"
         aria-label="Primary"
       >
-        {groups.map((group) => (
-          <div key={group.id} className="flex flex-col gap-0.5">
-            <div className="flex h-7 items-center px-3">
-              <span className="text-[11px] font-semibold tracking-[0.04em] text-[var(--console-muted)] uppercase">
-                {group.label}
-              </span>
+        <div className="flex flex-col gap-4">
+          {groups.map((group) => (
+            <div key={group.id} className="flex flex-col gap-0.5">
+              <div className="flex h-7 items-center px-3">
+                <span className="text-[11px] font-semibold tracking-[0.04em] text-[var(--console-muted)] uppercase">
+                  {group.label}
+                </span>
+              </div>
+              {group.items.map((item) => {
+                const Icon = item.icon;
+                const href = resolveCaseNavTo(item.to, caseId);
+                return (
+                  <ConsoleLink
+                    key={`${group.id}-${item.label}`}
+                    to={href}
+                    activeOptions={{ exact: true }}
+                    {...(onNavigate ? { onClick: onNavigate } : {})}
+                    className={cn(
+                      'flex min-h-11 items-center gap-3 rounded-[10px] px-3 text-[15px] text-[var(--console-body)] lg:h-7 lg:min-h-0 lg:gap-2.5 lg:rounded-md lg:px-2 lg:text-[13px]',
+                      'hover:bg-[var(--console-row-active)] hover:text-[var(--console-ink)]',
+                      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]',
+                    )}
+                    activeProps={{
+                      className:
+                        'bg-[var(--console-row-active)] font-medium text-[var(--console-ink)]',
+                      'aria-current': 'page',
+                    }}
+                  >
+                    <Icon
+                      aria-hidden="true"
+                      weight="duotone"
+                      className="size-5 shrink-0 lg:size-3"
+                    />
+                    <span className="min-w-0 flex-1 truncate">{item.label}</span>
+                    {item.badge ? (
+                      <span className="shrink-0 rounded-md bg-[var(--console-strip)] px-1.5 py-0.5 font-[family-name:var(--console-font-mono)] text-[11px] text-[var(--console-muted)]">
+                        {item.badge}
+                      </span>
+                    ) : null}
+                  </ConsoleLink>
+                );
+              })}
             </div>
-            {group.items.map((item) => {
-              const Icon = item.icon;
-              const href = resolveCaseNavTo(item.to, caseId);
-              return (
-                <ConsoleLink
-                  key={`${group.id}-${item.label}`}
-                  to={href}
-                  activeOptions={{ exact: true }}
-                  {...(onNavigate ? { onClick: onNavigate } : {})}
-                  className={cn(
-                    'flex min-h-12 items-center gap-3 rounded-[10px] px-3 text-[15px] text-[var(--console-body)] lg:h-7 lg:min-h-0 lg:gap-2.5 lg:rounded-md lg:px-2 lg:text-[13px]',
-                    'hover:bg-[var(--console-row-active)] hover:text-[var(--console-ink)]',
-                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]',
-                  )}
-                  activeProps={{
-                    className:
-                      'bg-[var(--console-row-active)] font-medium text-[var(--console-ink)]',
-                    'aria-current': 'page',
-                  }}
-                >
-                  <Icon aria-hidden="true" weight="duotone" className="size-5 shrink-0 lg:size-3" />
-                  <span className="min-w-0 flex-1 truncate">{item.label}</span>
-                  {item.badge ? (
-                    <span className="shrink-0 rounded-md bg-[var(--console-strip)] px-1.5 py-0.5 font-[family-name:var(--console-font-mono)] text-[11px] text-[var(--console-muted)]">
-                      {item.badge}
-                    </span>
-                  ) : null}
-                </ConsoleLink>
-              );
-            })}
-          </div>
-        ))}
+          ))}
+        </div>
       </nav>
 
-      <div className="shrink-0 border-t border-[var(--console-hairline)] bg-[var(--console-ground)] px-1 pt-3 pb-2">
+      <div className="relative z-10 shrink-0 border-t border-[var(--console-hairline)] bg-[var(--console-ground)] px-2 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))]">
         {variant === 'agency' ? (
           <div className="space-y-1 px-3 pb-2">
             <div className="flex items-center gap-2">
@@ -91,12 +97,12 @@ export function SidebarNav({
             </p>
           </div>
         ) : null}
-        <Separator className="mb-2 bg-[var(--console-hairline)]" />
+        {variant === 'agency' ? <Separator className="mb-2 bg-[var(--console-hairline)]" /> : null}
         <ConsoleLink
           to={paperReferenceNav.to}
           {...(onNavigate ? { onClick: onNavigate } : {})}
           className={cn(
-            'flex min-h-12 items-center gap-3 rounded-[10px] px-3 text-[15px] text-[var(--console-muted)] lg:h-7 lg:min-h-0 lg:gap-2.5 lg:rounded-md lg:px-2 lg:text-[13px]',
+            'flex min-h-11 items-center gap-3 rounded-[10px] px-3 text-[15px] text-[var(--console-muted)] lg:h-7 lg:min-h-0 lg:gap-2.5 lg:rounded-md lg:px-2 lg:text-[13px]',
             'hover:bg-[var(--console-row-active)] hover:text-[var(--console-ink)]',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--console-ink)]',
           )}

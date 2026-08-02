@@ -32,10 +32,10 @@ export function WorkspaceSections({
                         {row.primary}
                       </div>
                     </div>
-                    <div className="min-w-0 pl-5 text-[13px] text-[var(--console-ink)] sm:flex-1 sm:pl-0">
+                    <div className="min-w-0 text-[13px] leading-5 text-[var(--console-ink)] sm:flex-1">
                       {row.secondary}
                     </div>
-                    <div className="flex items-center gap-3 pl-5 sm:contents sm:pl-0">
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 sm:contents">
                       {row.meta ? (
                         <div className="text-[12px] text-[var(--console-muted)] sm:w-[130px] sm:shrink-0 sm:text-right">
                           {row.meta}

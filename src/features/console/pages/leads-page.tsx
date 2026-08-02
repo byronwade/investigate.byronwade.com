@@ -32,14 +32,14 @@ export function LeadsPage({ caseId }: { caseId: string }): React.JSX.Element {
         }
       />
 
-      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+      <div className="-mx-1 flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-2 md:mx-0 md:grid md:snap-none md:grid-cols-2 md:overflow-visible md:px-0 xl:grid-cols-4">
         {COLUMNS.map((column) => {
           const columnLeads = byColumn[column.id];
           return (
             <section
               key={column.id}
               aria-labelledby={`leads-${column.id}`}
-              className="min-w-0 space-y-2"
+              className="w-[78%] shrink-0 snap-start space-y-2 md:w-auto md:min-w-0"
             >
               <SectionHeader
                 title={column.label}
@@ -47,12 +47,12 @@ export function LeadsPage({ caseId }: { caseId: string }): React.JSX.Element {
                 hint={`${columnLeads.length}`}
                 inlineHint
               />
-              <ul className="console-list">
+              <ul className="console-list rounded-lg border border-[var(--console-hairline)] px-2 md:rounded-none md:border-0 md:px-0">
                 {columnLeads.length === 0 ? (
                   <li className="console-row text-[12px] text-[var(--console-muted)]">Empty</li>
                 ) : (
                   columnLeads.map((lead) => (
-                    <li key={lead.id} className="console-row !items-start !py-3">
+                    <li key={lead.id} className="console-row !items-start">
                       <div className="min-w-0 space-y-1">
                         <p className="text-[13px] leading-5 text-[var(--console-ink)]">
                           {lead.title}

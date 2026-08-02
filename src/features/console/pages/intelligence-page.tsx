@@ -26,6 +26,7 @@ export function IntelligencePage(): React.JSX.Element {
     <ConsolePage>
       <PageHeader
         title={model.title}
+        hideTitleOnMobile
         description={model.description}
         meta={model.meta}
         actions={
@@ -53,25 +54,49 @@ export function IntelligencePage(): React.JSX.Element {
                     className={cn('console-row', isSelected && 'console-row-active')}
                     aria-pressed={isSelected}
                   >
-                    <div className="flex min-w-0 items-center gap-2.5 sm:w-[220px] sm:shrink-0">
+                    <div className="flex min-w-0 items-center gap-2">
                       <StatusDot tone={item.tone} />
                       <span className="truncate text-[13px] font-medium text-[var(--console-ink)]">
                         {item.title}
                       </span>
+                      <span className="ml-auto shrink-0 text-[12px] text-[var(--console-muted)]">
+                        {item.status}
+                      </span>
                     </div>
-                    <span className="min-w-0 flex-1 pl-5 text-[13px] text-[var(--console-body)] sm:pl-0">
+                    <p className="text-[13px] leading-5 text-[var(--console-body)]">
                       {item.summary}
-                    </span>
-                    <span className="pl-5 text-[12px] text-[var(--console-muted)] sm:w-28 sm:shrink-0 sm:pl-0 sm:text-right">
-                      {item.status}
-                    </span>
+                    </p>
                   </button>
+                  {isSelected ? (
+                    <div className="space-y-3 border-b border-[var(--console-strip)] px-1 pt-1 pb-4 xl:hidden">
+                      <div className="flex flex-wrap gap-2">
+                        <Badge variant="secondary" className="rounded-md">
+                          {item.lane}
+                        </Badge>
+                        <Badge variant="outline" className="rounded-md">
+                          {item.status}
+                        </Badge>
+                      </div>
+                      <ul className="space-y-1">
+                        {item.entities.slice(0, 3).map((entity) => (
+                          <li key={entity} className="text-[13px] text-[var(--console-ink)]">
+                            {entity}
+                          </li>
+                        ))}
+                      </ul>
+                      {item.href ? (
+                        <Button type="button" size="sm" className={consoleActionClass} asChild>
+                          <ConsoleLink to={item.href}>Open analysis board</ConsoleLink>
+                        </Button>
+                      ) : null}
+                    </div>
+                  ) : null}
                 </li>
               );
             })}
           </ul>
 
-          <DetailPanel>
+          <DetailPanel className="hidden xl:block">
             {selected ? (
               <>
                 <div className="space-y-2">

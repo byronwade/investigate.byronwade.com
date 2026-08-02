@@ -42,6 +42,7 @@ export function SearchPage(): React.JSX.Element {
     <ConsolePage>
       <PageHeader
         title={model.title}
+        hideTitleOnMobile
         description={model.description}
         meta={`${model.visibleCount} visible · ${model.hiddenCount} hidden by clearance`}
       />
