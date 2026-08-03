@@ -83,7 +83,7 @@
     "@vitejs/plugin-react": "6.0.4",
     "@vitest/coverage-v8": "4.1.10",
     "jsdom": "30.0.1",
-    "knip": "6.29.0",
+    "knip": "6.31.0",
     "lefthook": "2.1.10",
     "madge": "8.0.0",
     "msw": "2.15.0",
